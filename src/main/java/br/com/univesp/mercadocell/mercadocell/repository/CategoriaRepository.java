@@ -2,6 +2,7 @@ package br.com.univesp.mercadocell.mercadocell.repository;
 
 import br.com.univesp.mercadocell.mercadocell.model.Categoria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -21,14 +22,18 @@ public class CategoriaRepository {
     }
 
     public Categoria buscarCategoriaPorId(int idCategoria) {
-        return jdbcTemplate.queryForObject("SELECT * FROM `CATEGORIA` WHERE `COD_CATEGORIA` = ?"
-                , (rs, rowNum) ->
-                        new Categoria(
-                                rs.getInt("COD_CATEGORIA"),
-                                rs.getString("NME_CATEGORIA")
-                        ),
-                new Object[]{idCategoria}
-        );
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM `CATEGORIA` WHERE `COD_CATEGORIA` = ?"
+                    , (rs, rowNum) ->
+                            new Categoria(
+                                    rs.getInt("COD_CATEGORIA"),
+                                    rs.getString("NME_CATEGORIA")
+                            ),
+                    new Object[]{idCategoria}
+            );
+        }catch(EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     public List<Categoria> listarCategorias() {
