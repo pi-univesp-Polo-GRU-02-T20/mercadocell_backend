@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotEmpty;
 
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 

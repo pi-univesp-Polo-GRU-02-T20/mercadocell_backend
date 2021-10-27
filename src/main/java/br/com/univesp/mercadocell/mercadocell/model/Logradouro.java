@@ -2,7 +2,7 @@ package br.com.univesp.mercadocell.mercadocell.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

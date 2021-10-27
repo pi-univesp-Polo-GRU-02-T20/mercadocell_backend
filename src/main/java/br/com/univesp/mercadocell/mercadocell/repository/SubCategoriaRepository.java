@@ -3,7 +3,6 @@ package br.com.univesp.mercadocell.mercadocell.repository;
 import br.com.univesp.mercadocell.mercadocell.model.Categoria;
 import br.com.univesp.mercadocell.mercadocell.model.SubCategoria;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -10,10 +10,14 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @AllArgsConstructor
 public class Estado {
+    public Estado(int i, String string) {
+    }
+    public Estado(int i, String string, Estado estado) {
+    }
     private Integer codEstado;
 
     @NotEmpty(message = "O nome do Estado deve ser preenchido")
-    private String nomeEstado;
+    private String NomeEstado;
     @NotEmpty(message = "A Sigla deve ser preenchida")
     private String siglaUF;
 
