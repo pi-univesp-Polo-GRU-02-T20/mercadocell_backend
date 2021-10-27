@@ -7,10 +7,8 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Calendar;
 import java.util.Date;
 
-@Getter
-@Setter
-@AllArgsConstructor
-public class PessoaFisica {
+
+public class PessoaFisica extends Pessoa {
     private Integer codPessoaFisica;
     @NotEmpty(message = "O nome da pessoa Física deve ser preenchido")
     private String nomePessoaFisca;
@@ -19,4 +17,12 @@ public class PessoaFisica {
     @NotEmpty(message = "O sexo da pessoa Física deve ser preenchido")
     private TipoSexo tipoSexo;
 
+    public PessoaFisica(Integer codPessoa, String nomeUsuario, String login, String senha, Boolean ativo, Integer codPessoaFisica, String nomePessoaFisca, Date dataNascimento, String estadoNaturalidade, TipoSexo tipoSexo) {
+        super(codPessoa, nomeUsuario, login, senha, ativo);
+        this.codPessoaFisica = codPessoaFisica;
+        this.nomePessoaFisca = nomePessoaFisca;
+        this.dataNascimento = dataNascimento;
+        this.estadoNaturalidade = estadoNaturalidade;
+        this.tipoSexo = tipoSexo;
+    }
 }

@@ -11,26 +11,26 @@ import java.util.List;
 public class CategoriaService {
 
     @Autowired
-    private CategoriaRepository repository;
+    private CategoriaRepository categoriaRepository;
 
     public void cadastrarCategoria(Categoria categoria) {
-        repository.cadastrarCategoria(categoria);
+        categoriaRepository.cadastrarCategoria(categoria);
     }
 
     public Categoria buscarCategoriaPorId(int idCategoria) {
-        return repository.buscarCategoriaPorId(idCategoria);
+        return categoriaRepository.buscarCategoriaPorId(idCategoria);
     }
 
     public List<Categoria> listarCategorias() {
-        return repository.listarCategorias();
+        return categoriaRepository.listarCategorias();
     }
 
     public void atualizarCategoria(Categoria categoria) {
-        repository.atualizarCategoria(categoria);
+        categoriaRepository.atualizarCategoria(categoria);
     }
 
     public void deletarCategoria(int idCategoria) {
-        repository.deletarCategoria(idCategoria);
+        categoriaRepository.deletarCategoria(idCategoria);
     }
 
 }

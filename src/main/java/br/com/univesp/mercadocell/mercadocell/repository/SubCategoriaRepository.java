@@ -5,23 +5,33 @@ import br.com.univesp.mercadocell.mercadocell.model.SubCategoria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class SubCategoriaRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-    
+
     ////todo ADICIONAR TRATAMENTO DE EXCEÇÕES DE BANCO
-    public void cadastrarSubCategoria(SubCategoria subcategoria) {
+    public void cadastrarSubCategoria(SubCategoria subcategoria, CategoriaRepository categoriaRepository) {
+        Optional<Categoria> categoriaOpt = Optional.ofNullable( categoriaRepository.buscarCategoriaPorId(subcategoria.getCategoria().getCodCategoria()));
+
+        if (categoriaOpt.isPresent()){
            jdbcTemplate.update("CALL SP_CADASTRAR_SUBCATEGORIA(?, ?)",
                     subcategoria.getNomeSubCategoria(), subcategoria.getCategoria().getCodCategoria()
             );
+        }else {
+            // todo lançar exeption customizada (categoria não cadastrada)
+        }
     }
+
     public SubCategoria buscarSubCategoriaPorId(int idSubCategoria) {
         try {
             return jdbcTemplate.queryForObject("SELECT * FROM `VW_SUBCATEGORIA` WHERE `COD_SUBCATEGORIA` = ?"

@@ -5,7 +5,6 @@ import br.com.univesp.mercadocell.mercadocell.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,7 +19,7 @@ public class CategoriaController {
     private CategoriaService categoriaService;
 
     @PostMapping
-    public ResponseEntity<?> cadastrarCategoria(@Valid @RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> cadastrarCategoria(@Valid @RequestBody Categoria categoria) {
         categoriaService.cadastrarCategoria(categoria);
         return ResponseEntity.accepted().body(categoria);
     }

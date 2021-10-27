@@ -13,6 +13,6 @@ public class UnidadeMedida {
     private Integer codUnidadeMedida;
     @NotEmpty(message = "A Unidade de Medida deve ser preenchida")
     private String nomeUnidadeMedida;
-    private String descricaoUnidadeMedida;
+    private String siglaUnidadeMedida;
 
 }
