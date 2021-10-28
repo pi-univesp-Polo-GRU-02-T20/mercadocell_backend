@@ -14,4 +14,9 @@ public class Bairro {
     @NotEmpty(message = "O nome do bairro deve ser preenchido")
     private String nomeBairro;
     private Municipio municipio;
+    public Bairro getBairro() {
+        return null;
+    }
+    public Bairro(int i, String string) {
+    }
 }
