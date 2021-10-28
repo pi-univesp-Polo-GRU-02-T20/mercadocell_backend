@@ -11,9 +11,15 @@ import javax.validation.constraints.NotEmpty;
 public class Produto {
 
     private Integer codProduto;
-    @NotEmpty(message = "O nome do Produto deve ser preenchidos")
+    //@NotEmpty(message = "O nome do Produto deve ser preenchido")
     private String nomeProduto;
     private String descricaoProduto;
     private SubCategoria subCategoria;
     private UnidadeMedida unidadeMedida;
+
+  /*  public Produto(final Integer codProduto, final String nomeProduto) {
+        this.codProduto = codProduto;
+        this.nomeProduto = nomeProduto;
+    }
+*/
 }

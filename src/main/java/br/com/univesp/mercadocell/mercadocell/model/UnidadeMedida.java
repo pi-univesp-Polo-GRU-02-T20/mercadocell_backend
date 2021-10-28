@@ -11,8 +11,11 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class UnidadeMedida {
     private Integer codUnidadeMedida;
-    @NotEmpty(message = "A Unidade de Medida deve ser preenchida")
+    //@NotEmpty(message = "A Unidade de Medida deve ser preenchida")
     private String nomeUnidadeMedida;
     private String siglaUnidadeMedida;
 
+    public UnidadeMedida(Integer codUnidadeMedida) {
+        this.codUnidadeMedida = codUnidadeMedida;
+    }
 }

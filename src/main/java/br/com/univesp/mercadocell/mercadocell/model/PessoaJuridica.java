@@ -1,46 +1,22 @@
 package br.com.univesp.mercadocell.mercadocell.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
-
+@Data
 public class PessoaJuridica extends Pessoa{
     private Integer codPessoaJuridica;
     @NotEmpty(message = "A Razão Social deve ser preenchida")
     private String nomeRazaoSocial;
-    private String nomeFantasia;
 
-    public PessoaJuridica(Integer codPessoa, String nomeUsuario, String login, String senha, Boolean ativo, Integer codPessoaJuridica, String nomeRazaoSocial, String nomeFantasia) {
-        super(codPessoa, nomeUsuario, login, senha, ativo);
+    public PessoaJuridica(Integer codPessoa, String nomePessoa, String login, String senha, Boolean ativo) {
+        super(codPessoa, nomePessoa, login, senha, ativo);
+    }
+
+    public PessoaJuridica(final Integer codPessoa,final  String nomePessoa, final String login, String senha, Boolean ativo, Integer codPessoaJuridica, String nomeRazaoSocial, String nomeFantasia) {
+        super(codPessoa, nomePessoa, login, senha, ativo);
         this.codPessoaJuridica = codPessoaJuridica;
         this.nomeRazaoSocial = nomeRazaoSocial;
-        this.nomeFantasia = nomeFantasia;
-    }
-
-    public Integer getCodPessoaJuridica() {
-        return codPessoaJuridica;
-    }
-
-    public void setCodPessoaJuridica(Integer codPessoaJuridica) {
-        this.codPessoaJuridica = codPessoaJuridica;
-    }
-
-    public String getNomeRazaoSocial() {
-        return nomeRazaoSocial;
-    }
-
-    public void setNomeRazaoSocial(String nomeRazaoSocial) {
-        this.nomeRazaoSocial = nomeRazaoSocial;
-    }
-
-    public String getNomeFantasia() {
-        return nomeFantasia;
-    }
-
-    public void setNomeFantasia(String nomeFantasia) {
-        this.nomeFantasia = nomeFantasia;
     }
 }

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class SubCategoria {
     private Integer  codSubCategoria;
-    @NotEmpty(message = "O nome da Subcategoria deve ser preenchida")
+    //@NotEmpty(message = "O nome da Subcategoria deve ser preenchida")
     private String  nomeSubCategoria;
     private Categoria Categoria;
 

@@ -1,25 +1,22 @@
 package br.com.univesp.mercadocell.mercadocell.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
-
+@Data
 public class PessoaFisica extends Pessoa {
     private Integer codPessoaFisica;
-    @NotEmpty(message = "O nome da pessoa Física deve ser preenchido")
-    private String nomePessoaFisca;
     private Date dataNascimento;
     private String estadoNaturalidade;
     @NotEmpty(message = "O sexo da pessoa Física deve ser preenchido")
+    @NotEmpty(message = "O sexo da pessoa Física deve ser preenchido")
     private TipoSexo tipoSexo;
 
-    public PessoaFisica(Integer codPessoa, String nomeUsuario, String login, String senha, Boolean ativo, Integer codPessoaFisica, String nomePessoaFisca, Date dataNascimento, String estadoNaturalidade, TipoSexo tipoSexo) {
-        super(codPessoa, nomeUsuario, login, senha, ativo);
+    public PessoaFisica(Integer codPessoa, String nomePessoa, String Login, String senha, Boolean ativo, Integer codPessoaFisica, Date dataNascimento, String estadoNaturalidade, TipoSexo tipoSexo) {
+        super(codPessoa, nomePessoa, Login, senha, ativo);
         this.codPessoaFisica = codPessoaFisica;
-        this.nomePessoaFisca = nomePessoaFisca;
         this.dataNascimento = dataNascimento;
         this.estadoNaturalidade = estadoNaturalidade;
         this.tipoSexo = tipoSexo;
