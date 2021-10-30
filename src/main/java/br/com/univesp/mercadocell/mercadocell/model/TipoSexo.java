@@ -4,14 +4,14 @@ public enum TipoSexo {
 
     MASCULINO('M'), FEMININO('F'), NEUTRO('N');
 
-    private final char tipoSexo;
+    private final char sglTipoSexo;
 
-    TipoSexo(char tipoSexo) {
-        this.tipoSexo = tipoSexo;
+    TipoSexo(char sglTipoSexo) {
+        this.sglTipoSexo = sglTipoSexo;
     }
 
-    public char getTipoSexo() {
-        return tipoSexo;
+    public char getSglTipoSexo() {
+        return sglTipoSexo;
     }
 
 }

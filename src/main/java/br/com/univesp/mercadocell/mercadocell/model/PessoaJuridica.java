@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class PessoaJuridica extends Pessoa{
+public class PessoaJuridica extends Usuario {
     private Integer codPessoaJuridica;
     @NotEmpty(message = "A Razão Social deve ser preenchida")
     private String nomeRazaoSocial;
@@ -14,7 +14,7 @@ public class PessoaJuridica extends Pessoa{
         super(codPessoa, nomePessoa, login, senha, ativo);
     }
 
-    public PessoaJuridica(final Integer codPessoa,final  String nomePessoa, final String login, String senha, Boolean ativo, Integer codPessoaJuridica, String nomeRazaoSocial, String nomeFantasia) {
+    public PessoaJuridica(final Integer codPessoa, final  String nomePessoa, final String login, String senha, Boolean ativo, Integer codPessoaJuridica, String nomeRazaoSocial, String nomeFantasia) {
         super(codPessoa, nomePessoa, login, senha, ativo);
         this.codPessoaJuridica = codPessoaJuridica;
         this.nomeRazaoSocial = nomeRazaoSocial;

@@ -2,6 +2,7 @@ package br.com.univesp.mercadocell.mercadocell.model;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,7 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class Operacao {
     private Integer codOperacao;
@@ -22,7 +22,7 @@ public class Operacao {
     private Integer codNotaFiscal;
     private Float valorTotal;
     private Integer quantidadeParcela;
-    private Pessoa pessoa;
+    private Usuario usuario;
     private boolean pago;
     private TipoOperacao tipoOperacao;
     private TipoStatusOperacao tipoStatusOperacao;
