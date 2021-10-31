@@ -38,7 +38,7 @@ public class UsuarioController {
             return new ResponseEntity<Usuario>(usuarioOpt.get(), HttpStatus.OK);
         }else {
             return new ResponseEntity<Usuario>(
-                    new Usuario(0, "Não Encontrado",null, null, null
+                    new Usuario(0, "Não Encontrado"
                     ), HttpStatus.OK
             );
         }

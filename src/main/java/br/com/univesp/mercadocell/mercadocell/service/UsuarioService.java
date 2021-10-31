@@ -1,5 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
+import br.com.univesp.mercadocell.mercadocell.model.Pessoa;
 import br.com.univesp.mercadocell.mercadocell.model.Usuario;
 import br.com.univesp.mercadocell.mercadocell.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,7 @@ public class UsuarioService {
         usuarioRepository.atualizarUsuario(usuario);
     }
 
-    public void deletarUsuario(int idPessoa) {
-        usuarioRepository.deletarUsuario(idPessoa);
+    public void deletarUsuario(int idUsuario) {
+        usuarioRepository.deletarUsuario(idUsuario);
     }
-
 }

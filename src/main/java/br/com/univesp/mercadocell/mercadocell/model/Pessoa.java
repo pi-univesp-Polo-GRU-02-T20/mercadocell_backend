@@ -1,16 +1,24 @@
 package br.com.univesp.mercadocell.mercadocell.model;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Pessoa extends Usuario{
+@Data
+public class Pessoa {
 
-    @Autowired
-    private  List<Endereco> listaEndereco ;
 
-    public Pessoa(Integer codPessoa, String nomePessoa, String Login, String senha, Boolean ativo) {
-        super(codPessoa, nomePessoa, Login, senha, ativo);
+    private Integer codPessoa;
+    private String nomePessoa;
+
+    public Pessoa(Integer codPessoa, String nomePessoa) {
+        this.codPessoa = codPessoa;
+        this.nomePessoa = nomePessoa;
+    }
+
+
+    public Pessoa(){
+
     }
 }

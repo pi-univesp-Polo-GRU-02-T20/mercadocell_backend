@@ -1,18 +1,19 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
-import br.com.univesp.mercadocell.mercadocell.model.Categoria;
-import br.com.univesp.mercadocell.mercadocell.model.Pessoa;
 import br.com.univesp.mercadocell.mercadocell.model.PessoaFisica;
 import br.com.univesp.mercadocell.mercadocell.model.TipoSexo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -21,119 +22,125 @@ public class PessoaFisicaRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-    KeyHolder keyHolder = new GeneratedKeyHolder();
-    private static final String queryPessoaFisica =
-            " SELECT PF.COD_PESSOA_FISICA, U.NME_PESSOA, PF.SGL_UF_NATURALIDADE, PF.DTA_NASCIMENTO, PF.TPO_SEXO \n" +
-            " FROM USUARIO U INNER JOIN PESSOA_FISICA PF WHERE U.COD_USUARIO = PF.COD_USUARIO";
+    KeyHolder keyHolder ;// = new GeneratedKeyHolder();
+    //KeyHolder keyHolder = new GeneratedKeyHolder();
 
+    private static final String SELECT_PESSOA_FISICA =
+            "SELECT P.COD_PESSOA, P.NME_PESSOA, PF.SGL_UF_NATURALIDADE, PF.DTA_NASCIMENTO, PF.TPO_SEXO " +
+                " FROM PESSOA P INNER JOIN PESSOA_FISICA PF WHERE P.COD_PESSOA = PF.COD_PESSOA ";
+   /*
     public void cadastrarPessoaFisica(PessoaFisica  pessoaFisica) {
-        final String stmtCadPessoaFisica = "INSERT INTO USUARIO (NME_PESSOA, DSC_LOGIN, DSC_SENHA, FLG_ATIVO) " +
-                " VALUES (?, ?, ?, ?);" +
-                " select LAST_INSERT_ID(); ";
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(stmtCadPessoaFisica,
-                    Statement.RETURN_GENERATED_KEYS);
-            return ps;
-        }, keyHolder);
-
-        int codUsuario  = keyHolder.getKey().intValue();
 
         jdbcTemplate.update(
                 "INSERT INTO `PESSOA_FISICA` (COD_USUARIO, SGL_UF_NATURALIDADE, DTA_NASCIMENTO, TPO_SEXO ) " +
                         " VALUES (?, ?, ?, ?)",
-                        codUsuario,
+                null,
+                pessoaFisica.getEstadoNaturalidade(),
+                pessoaFisica.getDataNascimento(),
+                pessoaFisica.getTipoSexo().getSglTipoSexo()
+        );
+    }*/
+    //todo ajustar trecho de cadastro de pessoa física - > erro ao retornar ID de PESSOA, para cadastrar na tb filha
+
+    @Transactional
+    public void cadastrarPessoaFisica(PessoaFisica  pessoaFisica) {
+
+        final String INSERT_PESSOA_FISICA = "INSERT INTO PESSOA (NME_PESSOA) VALUES (?); ";
+/*
+        https://stackoverflow.com/questions/35088885/how-to-get-inserted-id-using-spring-jdbctemplate-updatestring-sql-obj-args
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        //final String INSERT_PESSOA_FISICA = "INSERT INTO PESSOA (NME_PESSOA) VALUES (?);select LAST_INSERT_ID(); ";
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(
+                        INSERT_PESSOA_FISICA, new String[] { "COD_PESSOA" }
+                );
+                ps.setString(1, pessoaFisica.getNomePessoa());
+                return ps;
+            }
+        }, keyHolder);
+*/
+
+         GeneratedKeyHolder holder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement statement = con.prepareStatement(INSERT_PESSOA_FISICA, Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, pessoaFisica.getNomePessoa());
+                return statement;
+            }
+        }, holder);
+        int codPessoa  = keyHolder.getKey().intValue();
+
+        jdbcTemplate.update(
+                "INSERT INTO `PESSOA_FISICA` (COD_PESSOA, SGL_UF_NATURALIDADE, DTA_NASCIMENTO, TPO_SEXO ) " +
+                        " VALUES (?, ?, ?, ?)",
+                        codPessoa,
                         pessoaFisica.getEstadoNaturalidade(),
                         pessoaFisica.getDataNascimento(),
-                        pessoaFisica.getTipoSexo().getSglTipoSexo()
+                        pessoaFisica.getTipoSexo()//.getSglTipoSexo()
         );
-
-        /*
-        * final String SQL = "INSERT INTO ... RETUNING id";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(SQL,
-                                   Statement.RETURN_GENERATED_KEYS);
-
-            return ps;
-        }, keyHolder);
-
-        return keyHolder.getKey().intValue()
-        *
-        * */
-
-        /**
-         * COD_USUARIO	int	NO	PRI		auto_increment
-         * NME_PESSOA	varchar(50)	YES
-         * DSC_LOGIN	varchar(20)	YES	UNI
-         * DSC_SENHA	varchar(128)	YES
-         * FLG_ATIVO	tinyint	YES
-         *
-         */
-
-        /*
-            COD_PESSOA_FISICA	int	NO	PRI		auto_increment
-            COD_PESSOA	int	NO	PRI
-            SGL_UF_NATURALIDADE	char(2)	YES
-            DTA_NASCIMENTO	date	NO
-            TPO_SEXO	enum('M','F','N')	YES
-        */
     }
 
     public PessoaFisica buscarPessoaFisicaPorId(int idPessoaFisica) {
         try {
-        return jdbcTemplate.queryForObject(
-                queryPessoaFisica + "WHERE COD_PESSOA_FISICA = ? "
+            return jdbcTemplate.queryForObject(
+                    SELECT_PESSOA_FISICA + "WHERE COD_PESSOA = ? "
                     , (rs, rowNum) ->
                             new PessoaFisica(
-                                    rs.getInt("COD_PESSOA_FISICA"),
+                                    rs.getInt("COD_PESSOA"),
                                     rs.getString("NME_PESSOA"),
-                                    rs.getString("SGL_UF_NATURALIDADE"),
                                     rs.getDate("DTA_NASCIMENTO"),
-                                    TipoSexo.valueOf(rs.getString("TPO_SEXO"))
+                                    rs.getString("SGL_UF_NATURALIDADE"),
+                                    rs.getString("TPO_SEXO").charAt(0)//TipoSexo.valueOf(rs.getString("TPO_SEXO"))
                             ),
                     new Object[]{idPessoaFisica}
             );
-        }catch(EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
 
     public List<PessoaFisica> listarPessoasFisicas() {
-        return jdbcTemplate.query(queryPessoaFisica
+        return jdbcTemplate.query(SELECT_PESSOA_FISICA
                 , (rs, rowNum) ->
                         new PessoaFisica(
-                                rs.getInt("COD_PESSOA_FISICA"),
+                                rs.getInt("COD_PESSOA"),
                                 rs.getString("NME_PESSOA"),
-                                rs.getString("SGL_UF_NATURALIDADE"),
                                 rs.getDate("DTA_NASCIMENTO"),
-                                TipoSexo.valueOf(rs.getString("TPO_SEXO"))
+                                rs.getString("SGL_UF_NATURALIDADE"),
+                                rs.getString("TPO_SEXO").charAt(0)//TipoSexo.valueOf(rs.getString("TPO_SEXO"))
                         )
         );
     }
 
-    public void atualizarCategoria(PessoaFisica pessoaFisica) {
+    @Transactional
+    public void atualizarPessoaFisica(PessoaFisica pessoaFisica) {
         jdbcTemplate.update(
-                "UPDATE PESSOA_FISICA SET SGL_UF_NATURALIDADE = ?, DTA_NASCIMENTO = ?, TPO_SEXO = ?" +
-                        " WHERE COD_PESSOA_FISICA = ?",
-                    pessoaFisica.getEstadoNaturalidade(),
-                    pessoaFisica.getDataNascimento(),
-                    pessoaFisica.getTipoSexo().getSglTipoSexo(),
-                    pessoaFisica.getCodPessoaFisica()
-        );
-        jdbcTemplate.update(
-                "UPDATE USUARIO SET NME_PESSOA = ?" +
+                "UPDATE PESSOA SET NME_PESSOA = ?" +
                         " WHERE COD_USUARIO = ?",
                 pessoaFisica.getNomePessoa(),
-                pessoaFisica.getCodUsuario()
+                pessoaFisica.getCodPessoa()
+        );
+        jdbcTemplate.update(
+                "UPDATE PESSOA_FISICA SET SGL_UF_NATURALIDADE = ?, DTA_NASCIMENTO = ?, TPO_SEXO = ?" +
+                        " WHERE COD_PESSOA = ?",
+                    pessoaFisica.getEstadoNaturalidade(),
+                    pessoaFisica.getDataNascimento(),
+                    pessoaFisica.getTipoSexo(),//getTipoSexo().getSglTipoSexo(),
+                    pessoaFisica.getCodPessoa()
         );
     }
 
-    public void deletarCategoria(int idPessoaFisica) {
+    @Transactional
+    public void deletarPessoaFisica(int idPessoaFisica) {
         jdbcTemplate.update(
-                "DELETE FROM `PESSOA_FISICA` WHERE `COD_PESSOA_FISICA` = ?",
+                "DELETE FROM `PESSOA` WHERE `COD_PESSOA` = ? ",
+                idPessoaFisica
+        );
+        jdbcTemplate.update(
+                "DELETE FROM `PESSOA_FISICA` WHERE `COD_PESSOA` = ? ",
                 idPessoaFisica
         );
     }

@@ -1,7 +1,14 @@
 package br.com.univesp.mercadocell.mercadocell.model;
 
-public enum TipoSexo {
+import java.util.Arrays;
 
+public class TipoSexo {
+
+    public static final char FEMININO = 'F';
+    public static final char MASCULINO = 'M';
+    public static final char NEUTRO = 'N';
+
+    /*
     MASCULINO('M'), FEMININO('F'), NEUTRO('N');
 
     private final char sglTipoSexo;
@@ -13,5 +20,5 @@ public enum TipoSexo {
     public char getSglTipoSexo() {
         return sglTipoSexo;
     }
-
+*/
 }
