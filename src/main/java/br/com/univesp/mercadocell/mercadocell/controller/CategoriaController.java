@@ -40,7 +40,7 @@ public class CategoriaController {
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarCategoria(@Valid @RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> atualizarCategoria(@Valid @RequestBody Categoria categoria) {
         categoriaService.atualizarCategoria(categoria);
         return ResponseEntity.accepted().build();
     }

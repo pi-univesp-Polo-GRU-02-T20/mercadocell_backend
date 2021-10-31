@@ -12,26 +12,25 @@ import br.com.univesp.mercadocell.mercadocell.repository.EstadoRepository;
 public class EstadoService {
 
     @Autowired
-    private EstadoRepository repository;
+    private EstadoRepository estadoRepository;
 
     public void cadastrarEstado(Estado estado) {
-        repository.cadastrarEstado(estado);
+        estadoRepository.cadastrarEstado(estado);
     }
 
-    public Object buscarEstadoPorId(int idEstado) {
-        return null;
+    public Estado  buscarEstadoPorId(int idEstado) {
+        return estadoRepository.buscarEstadoPorId(idEstado);
     }
 
     public List<Estado> listarEstados() {
-        return repository.listarEstados();
+        return estadoRepository.listarEstados();
     }
     
-    public void atualizarEstados(Estado estado) {
-        repository.atualizarEstados(estado);
+    public void atualizarEstado(Estado estado) {
+        estadoRepository.atualizarEstados(estado);
     }
 
     public void deletarEstado(int idEstado) {
-        repository.deletarEstado(idEstado);
+        estadoRepository.deletarEstado(idEstado);
     }
-
 }

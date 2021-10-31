@@ -16,11 +16,11 @@ import java.util.Optional;
 public class BairroController {
 
     @Autowired
-    private BairroService categoriaService;
+    private BairroService bairroService;
 
     @PostMapping
     public ResponseEntity<Bairro> cadastrarBairro(@Valid @RequestBody Bairro bairro) {
-        categoriaService.cadastrarBairro(bairro);
+        bairroService.cadastrarBairro(bairro);
         return ResponseEntity.accepted().body(bairro);
     }
 

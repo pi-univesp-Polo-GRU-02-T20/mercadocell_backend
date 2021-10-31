@@ -20,20 +20,18 @@ public class EstadoController {
     private EstadoService estadoService;
 
     @PostMapping // Mapeamento HTTP
-    public ResponseEntity<?> cadastrarEstado(@Valid @RequestBody Estado estado) {
+    public ResponseEntity<Estado> cadastrarEstado(@Valid @RequestBody Estado estado) {
         estadoService.cadastrarEstado(estado);
         return ResponseEntity.accepted().body(estado);
     }   
 
     @GetMapping(path="/{idEstado}")
     public ResponseEntity<Estado> buscarEstadoPorId(@PathVariable int idEstado) {
-        Optional<Object> estadoOpt = Optional.ofNullable(estadoService.buscarEstadoPorId(idEstado));
+        Optional<Estado> estadoOpt = Optional.ofNullable(estadoService.buscarEstadoPorId(idEstado));
         if (estadoOpt.isPresent()){
-            return new ResponseEntity<Estado>(HttpStatus.OK);
+            return new ResponseEntity<Estado>(estadoOpt.get(), HttpStatus.OK);
         }else {
-            return new ResponseEntity<Estado>(new Estado(0,"Não Encontrado",
-                                                                        new Estado(0, "Não Encontrado")
-                    ), HttpStatus.OK);
+            return new ResponseEntity<Estado>(new Estado(0,"Não Encontrado"), HttpStatus.OK);
         }
     }
 
@@ -43,13 +41,13 @@ public class EstadoController {
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarEstados(@Valid @RequestBody Estado estado) {
-        estadoService.atualizarEstados(estado);
+    public ResponseEntity<Estado> atualizarEstado(@Valid @RequestBody Estado estado) {
+        estadoService.atualizarEstado(estado);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idEstado}")
-    public ResponseEntity<?> deletarEstado(@PathVariable int idEstado) {
+    public ResponseEntity<Estado> deletarEstado(@PathVariable int idEstado) {
         estadoService.deletarEstado(idEstado);
         return ResponseEntity.noContent().build();
     }

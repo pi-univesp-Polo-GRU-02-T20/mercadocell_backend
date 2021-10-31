@@ -15,8 +15,9 @@ public class BairroRepository {
     JdbcTemplate jdbcTemplate;
 
     ////todo ADICIONAR TRATAMENTO DE EXCEÇÕES DE BANCO
-    public void cadastrarBairro(Bairro bairro, BairroRepository bairroRepository) {    
-}
+    public void cadastrarBairro(Bairro bairro, BairroRepository bairroRepository) {
+
+    }
     public Object buscarBairroPorId(Integer codBairro) {
         return null;
 }
