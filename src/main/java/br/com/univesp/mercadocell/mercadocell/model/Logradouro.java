@@ -13,6 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class Logradouro {
+    public Logradouro(int i, String string) {
+    }
     private Integer codCEP;
     private Bairro bairro;
     private String descricaoLogradouro;

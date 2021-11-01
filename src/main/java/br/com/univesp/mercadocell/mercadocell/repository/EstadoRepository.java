@@ -1,14 +1,13 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
-import br.com.univesp.mercadocell.mercadocell.model.Categoria;
-import br.com.univesp.mercadocell.mercadocell.model.Estado;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import br.com.univesp.mercadocell.mercadocell.model.Estado;
 
 @Repository
 public class EstadoRepository {
