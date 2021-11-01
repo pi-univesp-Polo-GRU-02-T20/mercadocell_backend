@@ -20,7 +20,9 @@ public class PessoaFisicaService {
     public PessoaFisica buscarPessoaFisicaPorId(int idPessoaFisica) {
         return pessoaFisicaRepository.buscarPessoaFisicaPorId(idPessoaFisica);
     }
-
+    public PessoaFisica buscarPessoaFisicaPorNome(String nomePessoaFisica) {
+        return pessoaFisicaRepository.buscarPessoaFisicaPorNome(nomePessoaFisica);
+    }
     public List<PessoaFisica> listarPessoasFisicas() {
         return pessoaFisicaRepository.listarPessoasFisicas();
     }
@@ -32,4 +34,6 @@ public class PessoaFisicaService {
     public void deletarPessoaFisica(int idPessoaFisica) {
         pessoaFisicaRepository.deletarPessoaFisica(idPessoaFisica);
     }
+
+
 }

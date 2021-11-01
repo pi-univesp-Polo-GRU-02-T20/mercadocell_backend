@@ -35,19 +35,19 @@ public class PessoaJuridicaController {
     }
 
     @GetMapping
-    public List<PessoaJuridica> listarPessoaJuridicas() {
+    public List<PessoaJuridica> listarPessoasJuridicas() {
         return pessoaJuridicaService.listarPessoasJuridicas();
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarPessoaJuridica(@Valid @RequestBody PessoaJuridica pessoaJuridica) {
+    public ResponseEntity<PessoaJuridica> atualizarPessoaJuridica(@Valid @RequestBody PessoaJuridica pessoaJuridica) {
         pessoaJuridicaService.atualizarPessoaJuridica(pessoaJuridica);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idPessoaJuridica}")
-    public ResponseEntity<?> deletarPessoaJuridica(@PathVariable int idpessoaJuridica) {
-        pessoaJuridicaService.deletarPessoaJuridica(idpessoaJuridica);
+    public ResponseEntity<PessoaJuridica> deletarPessoaJuridica(@PathVariable int idPessoaJuridica) {
+        pessoaJuridicaService.deletarPessoaJuridica(idPessoaJuridica);
         return ResponseEntity.noContent().build();
     }
 }

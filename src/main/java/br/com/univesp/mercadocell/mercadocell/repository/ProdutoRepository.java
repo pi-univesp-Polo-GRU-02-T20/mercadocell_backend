@@ -14,7 +14,7 @@ public class ProdutoRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-    protected static String queryVwProduto ="SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO "+
+    protected static String SELECT_PRODUTO ="SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO "+
             ", SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA "+
             ", CT.COD_CATEGORIA, CT.NME_CATEGORIA "+
             ", UM.COD_UNIDADE_MEDIDA, UM.NME_UNIDADE_MEDIDA, UM.SGL_UNIDADE_MEDIDA "+
@@ -22,7 +22,7 @@ public class ProdutoRepository {
             " INNER JOIN SUBCATEGORIA 	    SC ON PR.COD_SUBCATEGORIA 	=	SC.COD_SUBCATEGORIA "+
             " INNER JOIN CATEGORIA 		    CT ON CT.COD_CATEGORIA 		= 	SC.COD_CATEGORIA "+
             " INNER JOIN UNIDADE_MEDIDA 	UM ON UM.COD_UNIDADE_MEDIDA = 	PR.COD_UNIDADE_MEDIDA ";
-    protected static String queryFiltroProduto = " WHERE `COD_PRODUTO` = ?";
+    protected static String FILTRO_PRODUTO = " WHERE `COD_PRODUTO` = ?";
 
     public void cadastrarProduto(Produto produto){
         jdbcTemplate.update("INSERT INTO PRODUTO " + 
@@ -34,13 +34,11 @@ public class ProdutoRepository {
                 produto.getUnidadeMedida().getCodUnidadeMedida()
         );
     }
-    
-
 
     public Produto buscarProdutoPorId(int idProduto){
         try {
             return jdbcTemplate.queryForObject(
-                    queryVwProduto + queryFiltroProduto
+                    SELECT_PRODUTO + FILTRO_PRODUTO
                     , (rs, rowNum) ->
                             new Produto(
                                     rs.getInt("COD_PRODUTO"),
@@ -68,7 +66,7 @@ public class ProdutoRepository {
     }
 
     public List<Produto> listarProdutos(){
-        return jdbcTemplate.query(queryVwProduto
+        return jdbcTemplate.query(SELECT_PRODUTO
                 , (rs, rowNum) ->
                         new Produto(
                                 rs.getInt("COD_PRODUTO"),
@@ -94,7 +92,7 @@ public class ProdutoRepository {
     public void atualizarProduto(Produto produto){
         String update = "UPDATE `PRODUTO` SET `NME_PRODUTO` = ? , DSC_PRODUTO = ?, "
                 + " COD_SUBCATEGORIA = ? , COD_UNIDADE_MEDIDA = ? "
-                + queryFiltroProduto;
+                + FILTRO_PRODUTO;
         jdbcTemplate.update(
                     update,
                 produto.getNomeProduto(),
@@ -107,7 +105,7 @@ public class ProdutoRepository {
 
     public void deletarProduto(int idProduto){
         jdbcTemplate.update(
-                "DELETE FROM `PRODUTO` " + queryFiltroProduto,
+                "DELETE FROM `PRODUTO` " + FILTRO_PRODUTO,
                 idProduto
         );
     }

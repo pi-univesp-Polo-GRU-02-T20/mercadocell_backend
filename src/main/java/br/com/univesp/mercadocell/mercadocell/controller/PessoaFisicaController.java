@@ -15,18 +15,32 @@ import java.util.Optional;
 public class PessoaFisicaController {
 
     @Autowired
-    private PessoaFisicaService PessoaFisicaService;
+    private PessoaFisicaService pessoaFisicaService;
 
     @PostMapping
     public ResponseEntity<PessoaFisica> cadastrarPessoaFisica(@Valid @RequestBody PessoaFisica pessoaFisica) {
-        PessoaFisicaService.cadastrarPessoaFisica(pessoaFisica);
+        pessoaFisicaService.cadastrarPessoaFisica(pessoaFisica);
         return ResponseEntity.accepted().body(pessoaFisica);
     }
 
     @GetMapping(path="/{idPessoaFisica}")
     public ResponseEntity<PessoaFisica> buscarPessoaFisicaPorId(@PathVariable int idPessoaFisica) {
         Optional<PessoaFisica> PessoaFisicaOpt =
-                    Optional.ofNullable(PessoaFisicaService.buscarPessoaFisicaPorId(idPessoaFisica));
+                    Optional.ofNullable(pessoaFisicaService.buscarPessoaFisicaPorId(idPessoaFisica));
+        if (PessoaFisicaOpt.isPresent()){
+            return new ResponseEntity<PessoaFisica>(PessoaFisicaOpt.get(), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<PessoaFisica>(
+                    new PessoaFisica(0, "Não Encontrado"),
+                    HttpStatus.OK
+            );
+        }
+    }
+
+    @GetMapping(path="/buscar/{nomePessoaFisica}")
+    public ResponseEntity<PessoaFisica> buscarPessoaFisicaPorNome(@PathVariable String nomePessoaFisica) {
+        Optional<PessoaFisica> PessoaFisicaOpt =
+                Optional.ofNullable(pessoaFisicaService.buscarPessoaFisicaPorNome(nomePessoaFisica));
         if (PessoaFisicaOpt.isPresent()){
             return new ResponseEntity<PessoaFisica>(PessoaFisicaOpt.get(), HttpStatus.OK);
         }else {
@@ -38,19 +52,19 @@ public class PessoaFisicaController {
     }
 
     @GetMapping
-    public List<PessoaFisica> listarPessoaFisicas() {
-        return PessoaFisicaService.listarPessoasFisicas();
+    public List<PessoaFisica> listarPessoasFisicas() {
+        return pessoaFisicaService.listarPessoasFisicas();
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarPessoaFisica(@Valid @RequestBody PessoaFisica pessoaFisica) {
-        PessoaFisicaService.atualizarPessoaFisica(pessoaFisica);
+    public ResponseEntity<PessoaFisica> atualizarPessoaFisica(@Valid @RequestBody PessoaFisica pessoaFisica) {
+        pessoaFisicaService.atualizarPessoaFisica(pessoaFisica);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idPessoaFisica}")
-    public ResponseEntity<?> deletarPessoaFisica(@PathVariable int idPessoaFisica) {
-        PessoaFisicaService.deletarPessoaFisica(idPessoaFisica);
+    public ResponseEntity<PessoaFisica> deletarPessoaFisica(@PathVariable int idPessoaFisica) {
+        pessoaFisicaService.deletarPessoaFisica(idPessoaFisica);
         return ResponseEntity.noContent().build();
     }
 }
