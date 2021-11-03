@@ -14,7 +14,7 @@
     <name>mercadocell</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <java.version>8</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -98,17 +98,19 @@
                         <exclude>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+
                             <groupId>com.heroku.sdk</groupId>
                             <artifactId>heroku-maven-plugin</artifactId>
                             <version>3.0.3</version>
+
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-compiler-plugin</artifactId>
                             <version>3.8.1</version>   
                             <configuration>
-                                <release>11</release>
-                                <compilerArgs>--enable-preview</compilerArgs>
+                                <release>11</release>                                
                             </configuration>         
-                            <type>maven-plugin</type>                            
+                            <type>maven-plugin</type>  
+                                                      
                         </exclude>
                     </excludes>
                 </configuration>
