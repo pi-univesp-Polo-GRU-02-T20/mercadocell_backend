@@ -101,9 +101,14 @@
                             <groupId>com.heroku.sdk</groupId>
                             <artifactId>heroku-maven-plugin</artifactId>
                             <version>3.0.3</version>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <version>3.8.1</version>   
                             <configuration>
-                                <release>11</release>  <!--or <release>10</release>-->
-                            </configuration>
+                                <release>11</release>
+                                <compilerArgs>--enable-preview</compilerArgs>
+                            </configuration>         
+                            <type>maven-plugin</type>                            
                         </exclude>
                     </excludes>
                 </configuration>
