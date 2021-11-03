@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -15,7 +16,7 @@ public class PagamentoOperacao {
     @NotEmpty(message = "O valor do pagamento deve ser preenchido")
     private Float valorPagamento;
     @NotEmpty(message = "A data do pagamento deve ser preenchida")
-    private Date dataPagamento;
+    private LocalDateTime dataPagamento;
     @NotEmpty(message = "A data do vencimento deve ser preenchida")
     private Operacao operacao;
     private TipoPagamento tipoPagamento;
