@@ -13,7 +13,6 @@ public class OperacaoService {
 
     @Autowired
     private OperacaoRepository operacaoRepository;
-    private OperacaoItemProdutoRepository operacaoItemProdutoRepository;
 
     public void cadastrarOperacao(Operacao operacao){
         operacaoRepository.cadastrarOperacao(operacao);
