@@ -13,6 +13,5 @@ public class Municipio {
     private Integer codMunicipio;
     @NotEmpty(message = "O nome do município deve ser preenchido")
     private String nomeMunicipio;
-    private Estado estado;
-
+    private Integer codEstado;
 }

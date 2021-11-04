@@ -14,7 +14,7 @@ public class BairroService {
     private static BairroRepository bairroRepository;
 
     public void cadastrarBairro(Bairro bairro) {
-        bairroRepository.cadastrarBairro(bairro, bairroRepository);
+        bairroRepository.cadastrarBairro(bairro);
     }
 
     public static Bairro buscarBairroPorId(int idBairro) {

@@ -14,7 +14,7 @@ public class ProdutoRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-    protected static String SELECT_PRODUTO ="SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO "+
+    private static String SELECT_PRODUTO ="SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO "+
             ", SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA "+
             ", CT.COD_CATEGORIA, CT.NME_CATEGORIA "+
             ", UM.COD_UNIDADE_MEDIDA, UM.NME_UNIDADE_MEDIDA, UM.SGL_UNIDADE_MEDIDA "+
@@ -22,7 +22,7 @@ public class ProdutoRepository {
             " INNER JOIN SUBCATEGORIA 	    SC ON PR.COD_SUBCATEGORIA 	=	SC.COD_SUBCATEGORIA "+
             " INNER JOIN CATEGORIA 		    CT ON CT.COD_CATEGORIA 		= 	SC.COD_CATEGORIA "+
             " INNER JOIN UNIDADE_MEDIDA 	UM ON UM.COD_UNIDADE_MEDIDA = 	PR.COD_UNIDADE_MEDIDA ";
-    protected static String FILTRO_PRODUTO = " WHERE `COD_PRODUTO` = ?";
+    private static String FILTRO_PRODUTO = " WHERE `COD_PRODUTO` = ?";
 
     public void cadastrarProduto(Produto produto){
         jdbcTemplate.update("INSERT INTO PRODUTO " + 

@@ -1,4 +1,4 @@
-package br.com.univesp.mercadocell.mercadocell.model;
+package br.com.univesp.mercadocell.mercadocell.old;
 
 public enum TipoOperacao {
     COMPRA('C'), VENDA('V');

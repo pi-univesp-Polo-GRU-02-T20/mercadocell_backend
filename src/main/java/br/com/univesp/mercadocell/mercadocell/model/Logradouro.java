@@ -16,11 +16,9 @@ public class Logradouro {
     public Logradouro(int i, String string) {
     }
     private Integer codCEP;
-    private Bairro bairro;
+    private Integer codBairro;
     private String descricaoLogradouro;
-    @Autowired
-    private List<Endereco> listaEnderecos; // = new ArrayList<>();
-
+    private String descricaoComplemento;
 
 }
 

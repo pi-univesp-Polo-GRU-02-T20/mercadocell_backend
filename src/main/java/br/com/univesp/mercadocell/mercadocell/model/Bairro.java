@@ -13,8 +13,7 @@ public class Bairro {
     private Integer codBairro;
     @NotEmpty(message = "O nome do bairro deve ser preenchido")
     private String nomeBairro;
-    private Municipio municipio;
-    private Integer codEstado;
+    private Integer codMunicipio;
 
     public Bairro(Integer codBairro, String nomeBairro) {
         this.codBairro = codBairro;

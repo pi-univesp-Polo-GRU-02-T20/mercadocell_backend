@@ -1,7 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.model.Operacao;
-import br.com.univesp.mercadocell.mercadocell.repository.OperacaoItemProdutoRepository;
 import br.com.univesp.mercadocell.mercadocell.repository.OperacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,10 +46,4 @@ public class OperacaoService {
         return operacaoRepository.listarOperacoesPorPeriodo(dataInicio, dataTermino);
     }
 
-    public List<Operacao> listarOperacoesPorCategoria(String nomeCategoria, String tipoOperacao) {
-        return operacaoItemProdutoRepository.listarOperacoesPorCategoria(nomeCategoria, tipoOperacao);
-    }
-    public List<Operacao> buscarOperacaoPorProduto(String nomeProduto, String tipoOperacao) {
-        return operacaoItemProdutoRepository.listarOperacoesPorProduto(nomeProduto, tipoOperacao);
-    }
 }

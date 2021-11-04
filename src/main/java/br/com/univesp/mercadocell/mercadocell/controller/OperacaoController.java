@@ -36,25 +36,6 @@ public class OperacaoController {
         }
     }
 
-    @GetMapping(path="/relatorios/operacao/categoria")
-    public List<Operacao>  listarOperacoesPorCategoria(@RequestParam String nomeCategoria,
-                                                       @RequestParam String tipoOperacao) {
-        return operacaoService.listarOperacoesPorCategoria(nomeCategoria, tipoOperacao);
-    }
-
-    @GetMapping(path="/relatorios/operacao/periodo")
-    public List<Operacao>  listarOperacoesPorPeriodo(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                                LocalDate dataInicio,
-                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                                LocalDate dataTermino) {
-        return operacaoService.listarOperacoesPorPeriodo( dataInicio, dataTermino);
-    }
-
-    @GetMapping(path="/relatorios/operacao/pessoa")
-    public List<Operacao>  listarOperacaoPorPessoa(@PathVariable int codPessoa, String tipoOperacao) {
-        return operacaoService.listarOperacoesPorPessoa(codPessoa, tipoOperacao);
-    }
-
     @GetMapping
     public List<Operacao> listarOperacoes() {
         return operacaoService.listarOperacoes();
@@ -71,4 +52,19 @@ public class OperacaoController {
         operacaoService.deletarOperacao(idOperacao);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(path="/relatorios/operacao/pessoa")
+    public List<Operacao>  listarOperacaoPorPessoa(@PathVariable int codPessoa, String tipoOperacao) {
+        return operacaoService.listarOperacoesPorPessoa(codPessoa, tipoOperacao);
+    }
+
+    @GetMapping(path="/relatorios/operacao/periodo")
+    public List<Operacao>  listarOperacoesPorPeriodo(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                             LocalDate dataInicio,
+                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                             LocalDate dataTermino) {
+        return operacaoService.listarOperacoesPorPeriodo( dataInicio, dataTermino);
+    }
+
+
 }
