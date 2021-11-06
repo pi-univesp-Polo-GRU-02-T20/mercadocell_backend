@@ -1,14 +1,16 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
-import java.util.List;
-
 import br.com.univesp.mercadocell.mercadocell.model.Bairro;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import br.com.univesp.mercadocell.mercadocell.model.Bairro;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 
 @Repository
 public class BairroRepository {
@@ -26,39 +28,65 @@ public class BairroRepository {
 
     public Bairro buscarBairroPorId(int idBairro) {
         try {
-            return jdbcTemplate.queryForObject("SELECT * FROM BAIRRO WHERE `COD_BAIRRO` = ?"
+            return jdbcTemplate.queryForObject("SELECT COD_BAIRRO, NME_BAIRRO, COD_MUNICIPIO FROM BAIRRO WHERE `COD_BAIRRO` = ?"
                     , (resultSet, rowNum) ->
                             new Bairro(
-                                    resultSet.getInt("COD_Bairro"),
+                                    resultSet.getInt("COD_BAIRRO"),
                                     resultSet.getString("NME_BAIRRO"),
                                     resultSet.getInt("COD_MUNICIPIO")
                             ),
                     new Object[]{idBairro}
             );
-        }catch(EmptyResultDataAccessException e){
+        } catch(EmptyResultDataAccessException e){
+            throw  new EntityNotFoundException("Código de Bairro não encontrado: " + idBairro);
+        }
+    }
+
+    public Bairro buscarBairroPorNome(String nomeBairro) {
+        try {
+            return jdbcTemplate.queryForObject(
+                        "SELECT COD_BAIRRO, NME_BAIRRO, COD_MUNICIPIO FROM BAIRRO WHERE `NME_BAIRRO` = ?"
+                    , (resultSet, rowNum) ->
+                            new Bairro(
+                                    resultSet.getInt("COD_BAIRRO"),
+                                    resultSet.getString("NME_BAIRRO"),
+                                    resultSet.getInt("COD_MUNICIPIO")
+                            ),
+                    new Object[]{nomeBairro}
+            );
+        } catch(EmptyResultDataAccessException e){
             return null;
         }
     }
 
     public List<Bairro> listarBairros() {
-        return jdbcTemplate.query("SELECT COD_BAIRRO, NME_BAIRRO, COD_MUNICIPIO FROM `Bairro`"
-                , (resultSet, rowNum) ->
-                        new Bairro(
-                                resultSet.getInt("COD_BAIRRO"),
-                                resultSet.getString("NME_BAIRRO"),
-                                resultSet.getInt("COD_MUNICIPIO")
-                        )
-        );
+        try{
+            return jdbcTemplate.query("SELECT COD_BAIRRO, NME_BAIRRO, COD_MUNICIPIO FROM `BAIRRO`"
+                    , (resultSet, rowNum) ->
+                            new Bairro(
+                                    resultSet.getInt("COD_BAIRRO"),
+                                    resultSet.getString("NME_BAIRRO"),
+                                    resultSet.getInt("COD_MUNICIPIO")
+                            )
+            );
+        } catch(EmptyResultDataAccessException e){
+            throw  new EntityNotFoundException("Nenhum bairro encontrado");
+        }
     }
 
     public void atualizarBairro(Bairro bairro) {
-        jdbcTemplate.update(
-                "UPDATE `BAIRRO` SET `NME_BAIRRO` = ?, COD_MUNICIPIO = ? " +
-                        " WHERE `COD_BAIRRO` = ?",
-                bairro.getNomeBairro(),
-                bairro.getCodMunicipio(),
-                bairro.getCodBairro()
-        );
+        try {
+            jdbcTemplate.update(
+                    "UPDATE `BAIRRO` SET `NME_BAIRRO` = ?, COD_MUNICIPIO = ? " +
+                            " WHERE `COD_BAIRRO` = ?",
+                    bairro.getNomeBairro(),
+                    bairro.getCodMunicipio(),
+                    bairro.getCodBairro()
+            );
+            // TODO -> verificar como capturar erro de FK
+        }catch(DataIntegrityViolationException e){
+            throw  new EntityIntegrityViolationException("Código de Município não cadastrado");
+        }
     }
 
     public void deletarBairro(int idBairro) {

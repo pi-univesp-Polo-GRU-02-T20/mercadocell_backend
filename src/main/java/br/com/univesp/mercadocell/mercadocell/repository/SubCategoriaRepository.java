@@ -16,23 +16,18 @@ public class SubCategoriaRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+    private static final String SELECT_SUBCATEGORIA= "SELECT CT.COD_CATEGORIA,CT.NME_CATEGORIA,SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA " +
+                                    " FROM DB_COMERCIO.CATEGORIA CT JOIN DB_COMERCIO.SUBCATEGORIA SC " +
+                                    " ON SC.COD_CATEGORIA = CT.COD_CATEGORIA ";
 
-    ////todo ADICIONAR TRATAMENTO DE EXCEÇÕES DE BANCO
     public void cadastrarSubCategoria(SubCategoria subcategoria, CategoriaRepository categoriaRepository) {
-        Optional<Categoria> categoriaOpt = Optional.ofNullable( categoriaRepository.buscarCategoriaPorId(subcategoria.getCategoria().getCodCategoria()));
-
-        if (categoriaOpt.isPresent()){
-           jdbcTemplate.update("CALL SP_CADASTRAR_SUBCATEGORIA(?, ?)",
+           jdbcTemplate.update("INSERT INTO SUBCATEGORIA (NME_SUBCATEGORIA, COD_CATEGORIA ) VALUES (?, ?)",
                     subcategoria.getNomeSubCategoria(), subcategoria.getCategoria().getCodCategoria()
             );
-        }else {
-            // todo lançar exeption customizada (categoria não cadastrada)
-        }
     }
 
     public SubCategoria buscarSubCategoriaPorId(int idSubCategoria) {
-        try {
-            return jdbcTemplate.queryForObject("SELECT * FROM `VW_SUBCATEGORIA` WHERE `COD_SUBCATEGORIA` = ?"
+            return jdbcTemplate.queryForObject( SELECT_SUBCATEGORIA+ " WHERE `COD_SUBCATEGORIA` = ?"
                     , (rs, rowNum) ->
                             new SubCategoria(
                             rs.getInt("COD_SUBCATEGORIA"),
@@ -44,13 +39,10 @@ public class SubCategoriaRepository {
                     ),
                     new Object[]{idSubCategoria}
             );
-        }catch(EmptyResultDataAccessException e){
-            return null;
-        }
     }
 
     public List<SubCategoria> listarSubCategorias() {
-        return jdbcTemplate.query("SELECT * FROM `VW_SUBCATEGORIA`"
+        return jdbcTemplate.query(  SELECT_SUBCATEGORIA
                 , (rs, rowNum) ->
                         new SubCategoria(
                                 rs.getInt("COD_SUBCATEGORIA"),
@@ -66,16 +58,15 @@ public class SubCategoriaRepository {
 
     public void atualizarSubCategoria(SubCategoria subCategoria) {
         jdbcTemplate.update(
-                "CALL SP_ALTERAR_SUBCATEGORIA (?, ?,?)",
-                subCategoria.getCodSubCategoria(),
+                "UPDATE SUBCATEGORIA SET NME_SUBCATEGORIA = ? , COD_CATEGORIA = ? WHERE COD_SUBCATEGORIA = ?",
                 subCategoria.getNomeSubCategoria(),
-                subCategoria.getCategoria().getCodCategoria()
+                subCategoria.getCategoria().getCodCategoria(),
+                subCategoria.getCodSubCategoria()
             );
     }
 
     public void deletarSubCategoria(int idSubCategoria) {
-        jdbcTemplate.update(
-                "CAll SP_EXCLUIR_SUBCATEGORIA(?)",
+        jdbcTemplate.update("DELETE FROM SUBCATEGORIA WHERE COD_SUBCATEGORIA = ?",
                 idSubCategoria
         );
     }

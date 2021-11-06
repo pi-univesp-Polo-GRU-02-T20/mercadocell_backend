@@ -2,6 +2,8 @@ package br.com.univesp.mercadocell.mercadocell.repository;
 
 import java.util.List;
 
+import br.com.univesp.mercadocell.mercadocell.model.Categoria;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,21 +37,25 @@ public class EstadoRepository {
                             ),
                     new Object[]{idEstado}
             );
-        }catch(EmptyResultDataAccessException e){
-            return null;
+        } catch(EmptyResultDataAccessException e){
+            throw  new EntityNotFoundException("Código de Estado não encontrada: " + idEstado);
         }
     }
 
     public List<Estado> listarEstados() {
-        return jdbcTemplate.query(
-                "SELECT COD_ESTADO,NME_ESTADO, SGL_UF FROM `ESTADO`"
-                , (rs, rowNum) ->
-                        new Estado(
-                                rs.getInt("COD_ESTADO"),
-                                rs.getString("NME_ESTADO"),
-                                rs.getString("SGL_UF")
-                        )
-        );
+        try{
+            return jdbcTemplate.query(
+                    "SELECT COD_ESTADO,NME_ESTADO, SGL_UF FROM `ESTADO`"
+                    , (rs, rowNum) ->
+                            new Estado(
+                                    rs.getInt("COD_ESTADO"),
+                                    rs.getString("NME_ESTADO"),
+                                    rs.getString("SGL_UF")
+                            )
+            );
+        } catch(EmptyResultDataAccessException e){
+            throw  new EntityNotFoundException("Nenhuma estado encontrado");
+        }
     }
 
     public void atualizarEstados(Estado estado) {

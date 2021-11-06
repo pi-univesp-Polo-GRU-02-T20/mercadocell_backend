@@ -2,10 +2,13 @@ package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.model.Categoria;
 import br.com.univesp.mercadocell.mercadocell.repository.CategoriaRepository;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoriaService {
@@ -14,7 +17,13 @@ public class CategoriaService {
     private CategoriaRepository categoriaRepository;
 
     public void cadastrarCategoria(Categoria categoria) {
-        categoriaRepository.cadastrarCategoria(categoria);
+        Optional<Categoria> categoriaBuscaOpt  =
+                Optional.ofNullable(categoriaRepository.buscarCategoriaPorNome(categoria.getNomeCategoria()));
+        if (categoriaBuscaOpt.isEmpty()){
+            categoriaRepository.cadastrarCategoria(categoria);
+        } else {
+            throw new EntityIntegrityViolationException("Categoria já cadastrada");
+        }
     }
 
     public Categoria buscarCategoriaPorId(int idCategoria) {

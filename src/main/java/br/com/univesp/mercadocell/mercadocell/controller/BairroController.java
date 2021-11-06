@@ -26,28 +26,24 @@ public class BairroController {
 
     @GetMapping(path="/{idBairro}")
     public ResponseEntity<Bairro> buscarBairroPorId(@PathVariable int idBairro) {
-        Optional<Bairro> bairroOpt = Optional.ofNullable(BairroService.buscarBairroPorId(idBairro));
-        if (bairroOpt.isPresent()){
-            return new ResponseEntity<Bairro>(bairroOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<Bairro>(new Bairro(0, "Não Encontrado"), HttpStatus.OK);
-        }
+        Bairro bairro = bairroService.buscarBairroPorId(idBairro);
+        return ResponseEntity.ok().body(bairro);
     }
 
     @GetMapping
     public List<Bairro> listarBairros() {
-        return BairroService.listarBairros();
+        return bairroService.listarBairros();
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarBairro(@Valid @RequestBody Bairro bairroOpt) {
-        BairroService.atualizarBairro(bairroOpt);
+    public ResponseEntity<?> atualizarBairro(@Valid @RequestBody Bairro bairro) {
+        bairroService.atualizarBairro(bairro);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idBairro}")
     public ResponseEntity<?> deletarBairro(@PathVariable int idBairro) {
-        BairroService.deletarBairro(idBairro);
+        bairroService.deletarBairro(idBairro);
         return ResponseEntity.noContent().build();
     }
 

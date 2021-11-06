@@ -1,6 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
 import br.com.univesp.mercadocell.mercadocell.model.Categoria;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,7 +24,7 @@ public class CategoriaRepository {
 
     public Categoria buscarCategoriaPorId(int idCategoria) {
         try {
-            return jdbcTemplate.queryForObject("SELECT * FROM `CATEGORIA` WHERE `COD_CATEGORIA` = ?"
+            return jdbcTemplate.queryForObject("SELECT COD_CATEGORIA FROM `CATEGORIA` WHERE `COD_CATEGORIA` = ?"
                     , (rs, rowNum) ->
                             new Categoria(
                                     rs.getInt("COD_CATEGORIA"),
@@ -31,19 +32,39 @@ public class CategoriaRepository {
                             ),
                     new Object[]{idCategoria}
             );
-        }catch(EmptyResultDataAccessException e){
+        } catch(EmptyResultDataAccessException e){
+            throw  new EntityNotFoundException("Código de categoria não encontrada: " + idCategoria);
+        }
+    }
+
+    public Categoria buscarCategoriaPorNome(String nomeCategoria) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT COD_CATEGORIA, NME_CATEGORIA FROM CATEGORIA WHERE NME_CATEGORIA = ?"
+                    , (rs, rowNum) ->
+                            new Categoria(
+                                    rs.getInt("COD_CATEGORIA"),
+                                    rs.getString("NME_CATEGORIA")
+                            ),
+                    new Object[]{nomeCategoria}
+            );
+        } catch(EmptyResultDataAccessException e){
             return null;
         }
     }
 
     public List<Categoria> listarCategorias() {
-        return jdbcTemplate.query("SELECT * FROM `CATEGORIA`"
-                , (rs, rowNum) ->
-                        new Categoria(
-                                rs.getInt("COD_CATEGORIA"),
-                                rs.getString("NME_CATEGORIA")
-                        )
-        );
+        try{
+            return jdbcTemplate.query("SELECT COD_CATEGORIA, NME_CATEGORIA FROM `CATEGORIA`"
+                    , (rs, rowNum) ->
+                            new Categoria(
+                                    rs.getInt("COD_CATEGORIA"),
+                                    rs.getString("NME_CATEGORIA")
+                            )
+            );
+        } catch(EmptyResultDataAccessException e){
+            throw  new EntityNotFoundException("Nenhuma categoria encontrada");
+        }
     }
 
     public void atualizarCategoria(Categoria categoria) {

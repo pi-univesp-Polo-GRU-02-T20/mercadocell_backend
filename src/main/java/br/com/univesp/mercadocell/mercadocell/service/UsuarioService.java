@@ -12,7 +12,6 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
     public void cadastrarUsuario(Usuario usuario) {
         usuarioRepository.cadastrarUsuario(usuario);
     }

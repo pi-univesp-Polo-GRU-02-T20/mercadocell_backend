@@ -2,6 +2,7 @@ package br.com.univesp.mercadocell.mercadocell.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Bairro {
     private Integer codBairro;
     @NotEmpty(message = "O nome do bairro deve ser preenchido")
@@ -19,4 +21,5 @@ public class Bairro {
         this.codBairro = codBairro;
         this.nomeBairro = nomeBairro;
     }
+
 }

@@ -3,13 +3,11 @@ package br.com.univesp.mercadocell.mercadocell.controller;
 import br.com.univesp.mercadocell.mercadocell.model.Categoria;
 import br.com.univesp.mercadocell.mercadocell.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("categoria")
@@ -26,12 +24,8 @@ public class CategoriaController {
 
     @GetMapping(path="/{idCategoria}")
     public ResponseEntity<Categoria> buscarCategoriaPorId(@PathVariable int idCategoria) {
-        Optional<Categoria> categoriaOpt = Optional.ofNullable(categoriaService.buscarCategoriaPorId(idCategoria));
-        if (categoriaOpt.isPresent()){
-            return new ResponseEntity<Categoria>(categoriaOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<Categoria>(new Categoria(0, "Não Encontrado"), HttpStatus.OK);
-        }
+        Categoria categoria = categoriaService.buscarCategoriaPorId(idCategoria);
+            return ResponseEntity.ok().body(categoria);
     }
 
     @GetMapping
