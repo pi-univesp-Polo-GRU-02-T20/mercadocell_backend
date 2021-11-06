@@ -17,7 +17,7 @@ public class SubCategoriaRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
     private static final String SELECT_SUBCATEGORIA= "SELECT CT.COD_CATEGORIA,CT.NME_CATEGORIA,SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA " +
-                                    " FROM DB_COMERCIO.CATEGORIA CT JOIN DB_COMERCIO.SUBCATEGORIA SC " +
+                                    " FROM CATEGORIA CT JOIN SUBCATEGORIA SC " +
                                     " ON SC.COD_CATEGORIA = CT.COD_CATEGORIA ";
 
     public void cadastrarSubCategoria(SubCategoria subcategoria, CategoriaRepository categoriaRepository) {
