@@ -28,14 +28,8 @@ public class SubCategoriaController {
 
     @GetMapping(path="/{idSubCategoria}")
     public ResponseEntity<SubCategoria> buscarSubCategoriaPorId(@PathVariable int idSubCategoria) {
-        Optional<SubCategoria> subCategoriaOpt = Optional.ofNullable(subCategoriaService.buscarSubCategoriaPorId(idSubCategoria));
-        if (subCategoriaOpt.isPresent()){
-            return new ResponseEntity<SubCategoria>(subCategoriaOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<SubCategoria>(new SubCategoria(0,"Não Encontrado",
-                                                                        new Categoria(0, "Não Encontrado")
-                    ), HttpStatus.OK);
-        }
+        SubCategoria subCategoria = subCategoriaService.buscarSubCategoriaPorId(idSubCategoria);
+        return ResponseEntity.ok().body(subCategoria);
     }
 
     @GetMapping

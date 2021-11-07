@@ -5,8 +5,11 @@ import br.com.univesp.mercadocell.mercadocell.repository.CategoriaRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,21 +20,28 @@ public class CategoriaService {
     private CategoriaRepository categoriaRepository;
 
     public void cadastrarCategoria(Categoria categoria) {
-        Optional<Categoria> categoriaBuscaOpt  =
-                Optional.ofNullable(categoriaRepository.buscarCategoriaPorNome(categoria.getNomeCategoria()));
-        if (categoriaBuscaOpt.isEmpty()){
+        try {
+            categoriaRepository.buscarCategoriaPorNome(categoria.getNomeCategoria());
+            throw new EntityIntegrityViolationException("Categoria já cadastrada: " + categoria.toString());
+        }catch (EmptyResultDataAccessException e){
             categoriaRepository.cadastrarCategoria(categoria);
-        } else {
-            throw new EntityIntegrityViolationException("Categoria já cadastrada");
         }
     }
 
     public Categoria buscarCategoriaPorId(int idCategoria) {
-        return categoriaRepository.buscarCategoriaPorId(idCategoria);
+        try{
+            return categoriaRepository.buscarCategoriaPorId(idCategoria);
+        } catch(EmptyResultDataAccessException e){
+            throw  new EntityNotFoundException("Código de categoria não encontrada: " + idCategoria);
+        }
     }
 
     public List<Categoria> listarCategorias() {
-        return categoriaRepository.listarCategorias();
+        try{
+            return categoriaRepository.listarCategorias();
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException("Nenhum registro encontrado");
+        }
     }
 
     public void atualizarCategoria(Categoria categoria) {
@@ -39,7 +49,12 @@ public class CategoriaService {
     }
 
     public void deletarCategoria(int idCategoria) {
-        categoriaRepository.deletarCategoria(idCategoria);
+        try {
+            categoriaRepository.deletarCategoria(idCategoria);
+        } catch ( DataIntegrityViolationException  dataException) {
+            throw new EntityIntegrityViolationException(
+                    "Categoria utilizada no cadastro de subcategorias: "+ idCategoria);
+        }
     }
 
 }

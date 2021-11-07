@@ -3,7 +3,10 @@ package br.com.univesp.mercadocell.mercadocell.service;
 import br.com.univesp.mercadocell.mercadocell.model.Bairro;
 import br.com.univesp.mercadocell.mercadocell.repository.BairroRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -17,33 +20,47 @@ public class BairroService {
     private BairroRepository bairroRepository;
 
     public void cadastrarBairro(Bairro bairro) {
-        Optional<Bairro> bairroOpt =
-                Optional.ofNullable(bairroRepository.buscarBairroPorNome(bairro.getNomeBairro()));
-        if (bairroOpt.isEmpty()){
+        try {
+            bairroRepository.buscarBairroPorNome(bairro.getNomeBairro());
+            throw new EntityIntegrityViolationException("Bairro já cadastrado: " + bairro.toString());
+        }catch (EmptyResultDataAccessException e){
             bairroRepository.cadastrarBairro(bairro);
-        }else{
-            throw new EntityIntegrityViolationException("Bairro já cadastrado");
         }
     }
 
     public Bairro buscarBairroPorId(int idBairro) {
-        return  bairroRepository.buscarBairroPorId(idBairro);
+        try{
+            return  bairroRepository.buscarBairroPorId(idBairro);
+        } catch(EmptyResultDataAccessException e){
+            throw  new EntityNotFoundException("Código de Bairro não encontrado: " + idBairro);
+        }
     }
 
     public List<Bairro> listarBairros() {
-        return bairroRepository.listarBairros();
+        try{
+            return bairroRepository.listarBairros();
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException("Nenhum registro encontrado");
+        }
     }
 
     public void atualizarBairro(Bairro bairro) {
         try {
             bairroRepository.atualizarBairro(bairro);
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new EntityIntegrityViolationException("Bairro vinculado a um municipio não cadastrado");
+        }catch(DataIntegrityViolationException e){
+            throw  new EntityIntegrityViolationException(
+                "O Municipio informado não foi cadastrado na base: " +  bairro.getCodMunicipio());
         }
     }
 
     public void deletarBairro(int idBairro) {
-        bairroRepository.deletarBairro(idBairro);
+        try {
+            bairroRepository.deletarBairro(idBairro);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityIntegrityViolationException(
+                    "Bairro utilizado no cadastro de logradouros: : " + idBairro
+            );
+        }
     }
 
 }

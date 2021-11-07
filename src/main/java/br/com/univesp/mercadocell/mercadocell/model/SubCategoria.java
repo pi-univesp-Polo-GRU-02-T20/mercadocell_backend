@@ -1,15 +1,18 @@
 package br.com.univesp.mercadocell.mercadocell.model;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class SubCategoria {
     private Integer  codSubCategoria;
     //@NotEmpty(message = "O nome da Subcategoria deve ser preenchida")
     private String  nomeSubCategoria;
     private Categoria Categoria;
+
+    public SubCategoria(Integer codSubCategoria, String nomeSubCategoria) {
+        this.codSubCategoria = codSubCategoria;
+        this.nomeSubCategoria = nomeSubCategoria;
+    }
 
 }

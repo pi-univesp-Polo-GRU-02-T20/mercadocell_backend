@@ -21,4 +21,8 @@ public class Pessoa {
     public Pessoa(){
 
     }
+
+    public Pessoa(Integer codPessoa) {
+        this.codPessoa = codPessoa;
+    }
 }

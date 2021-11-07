@@ -13,6 +13,7 @@ public class TipoPagamentoService {
     @Autowired
     private TipoPagamentoRepository tipoPagamentoRepository;
 
+    //TODO ADD VERIFICAÇÃO DE TIPO PGTO EXISTENTE NA BASE ANTES DE CADASTRAR
     public void cadastrarTipoPagamento(TipoPagamento tipoPagamento) {
         tipoPagamentoRepository.cadastrarTipoPagamento(tipoPagamento);
     }
@@ -28,7 +29,7 @@ public class TipoPagamentoService {
     public void atualizarTipoPagamento(TipoPagamento tipoPagamento) {
         tipoPagamentoRepository.atualizarTipoPagamento(tipoPagamento);
     }
-
+    // TODO ADD VERIFICAÇÃO DE ERRO DE FK ( COMPRA/VENDA VINCULADA AO TIPO DE PGTO A SER APAGADO)
     public void deletarTipoPagamento(int idTipoPagamento) {
         tipoPagamentoRepository.deletarTipoPagamento(idTipoPagamento);
     }

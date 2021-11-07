@@ -1,14 +1,14 @@
 package br.com.univesp.mercadocell.mercadocell.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 
+@Data
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Categoria {
 
     private Integer codCategoria;

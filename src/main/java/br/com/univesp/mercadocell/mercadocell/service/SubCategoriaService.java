@@ -1,39 +1,72 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
+import br.com.univesp.mercadocell.mercadocell.model.Categoria;
 import br.com.univesp.mercadocell.mercadocell.model.SubCategoria;
 import br.com.univesp.mercadocell.mercadocell.repository.CategoriaRepository;
 import br.com.univesp.mercadocell.mercadocell.repository.SubCategoriaRepository;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubCategoriaService {
 
     @Autowired
     private SubCategoriaRepository subCategoriaRepository;
-    @Autowired
-    private CategoriaRepository categoriaRepository;
 
     public void cadastrarSubCategoria(SubCategoria subCategoria) {
-        subCategoriaRepository.cadastrarSubCategoria(subCategoria, categoriaRepository);
+        try {
+            subCategoriaRepository.buscarSubCategoriaPorNome(subCategoria.getNomeSubCategoria());
+            throw new EntityIntegrityViolationException("Subcategoria já cadastrada");
+        }catch (EmptyResultDataAccessException e){
+            subCategoriaRepository.cadastrarSubCategoria(subCategoria);
+        }catch(DataIntegrityViolationException e ){
+            throw new EntityIntegrityViolationException(
+                    "A Categoria informada não foi cadastrada na base: " + subCategoria.getCategoria().toString());
+        }
     }
 
     public SubCategoria buscarSubCategoriaPorId(int idSubCategoria) {
-        return subCategoriaRepository.buscarSubCategoriaPorId(idSubCategoria);
+        try{
+            return subCategoriaRepository.buscarSubCategoriaPorId(idSubCategoria);
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException(
+                    "Código de subCategoria não encontrado: =" + idSubCategoria
+            );
+        }
     }
 
     public List<SubCategoria> listarSubCategorias() {
-        return subCategoriaRepository.listarSubCategorias();
+        try{
+            return subCategoriaRepository.listarSubCategorias();
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException("Nenhum registro encontrado");
+        }
     }
 
     public void atualizarSubCategoria(SubCategoria subCategoria) {
-        subCategoriaRepository.atualizarSubCategoria(subCategoria);
+        try{
+            subCategoriaRepository.atualizarSubCategoria(subCategoria);
+        }catch(DataIntegrityViolationException e ){
+            throw new EntityIntegrityViolationException(
+                    "A Categoria informada não foi cadastrada na base: " + subCategoria.getCategoria().toString());
+        }
     }
 
     public void deletarSubCategoria(int idSubCategoria) {
-        subCategoriaRepository.deletarSubCategoria(idSubCategoria);
+        try {
+            subCategoriaRepository.deletarSubCategoria(idSubCategoria);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityIntegrityViolationException(
+                    "Subcategoria utilizada no cadastro de produtos: " + idSubCategoria
+            );
+        }
     }
-
 }

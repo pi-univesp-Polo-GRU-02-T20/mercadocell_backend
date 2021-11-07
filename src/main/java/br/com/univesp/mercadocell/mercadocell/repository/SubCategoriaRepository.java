@@ -1,9 +1,11 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,11 +18,12 @@ public class SubCategoriaRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-    private static final String SELECT_SUBCATEGORIA= "SELECT CT.COD_CATEGORIA,CT.NME_CATEGORIA,SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA " +
+    private static final String
+            SELECT_SUBCATEGORIA= "SELECT CT.COD_CATEGORIA,CT.NME_CATEGORIA,SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA " +
                                     " FROM CATEGORIA CT JOIN SUBCATEGORIA SC " +
                                     " ON SC.COD_CATEGORIA = CT.COD_CATEGORIA ";
 
-    public void cadastrarSubCategoria(SubCategoria subcategoria, CategoriaRepository categoriaRepository) {
+    public void cadastrarSubCategoria(SubCategoria subcategoria) {
            jdbcTemplate.update("INSERT INTO SUBCATEGORIA (NME_SUBCATEGORIA, COD_CATEGORIA ) VALUES (?, ?)",
                     subcategoria.getNomeSubCategoria(), subcategoria.getCategoria().getCodCategoria()
             );
@@ -56,19 +59,31 @@ public class SubCategoriaRepository {
     }
 
 
-    public void atualizarSubCategoria(SubCategoria subCategoria) {
-        jdbcTemplate.update(
-                "UPDATE SUBCATEGORIA SET NME_SUBCATEGORIA = ? , COD_CATEGORIA = ? WHERE COD_SUBCATEGORIA = ?",
-                subCategoria.getNomeSubCategoria(),
-                subCategoria.getCategoria().getCodCategoria(),
-                subCategoria.getCodSubCategoria()
+    public void atualizarSubCategoria(SubCategoria subCategoria) throws DataIntegrityViolationException {
+            jdbcTemplate.update(
+                    "UPDATE SUBCATEGORIA SET NME_SUBCATEGORIA = ? , COD_CATEGORIA = ? WHERE COD_SUBCATEGORIA = ?",
+                    subCategoria.getNomeSubCategoria(),
+                    subCategoria.getCategoria().getCodCategoria(),
+                    subCategoria.getCodSubCategoria()
             );
     }
 
-    public void deletarSubCategoria(int idSubCategoria) {
+    public void deletarSubCategoria(int idSubCategoria) throws DataIntegrityViolationException {
         jdbcTemplate.update("DELETE FROM SUBCATEGORIA WHERE COD_SUBCATEGORIA = ?",
                 idSubCategoria
         );
     }
 
+    public SubCategoria buscarSubCategoriaPorNome(String nomeCategoria){
+            return jdbcTemplate.queryForObject(
+                    "SELECT COD_SUBCATEGORIA, NME_SUBCATEGORIA " +
+                            " FROM SUBCATEGORIA WHERE NME_SUBCATEGORIA = ?"
+                    , (resultSet, rowNum) ->
+                            new SubCategoria(
+                                    resultSet.getInt("COD_SUBCATEGORIA"),
+                                    resultSet.getString("NME_SUBCATEGORIA")
+                            ),
+                    new Object[]{nomeCategoria}
+            );
+    }
 }

@@ -24,24 +24,14 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<Usuario> cadastrarUsuario(@Valid @RequestBody Usuario usuario) {
-        usuario.setSenha(psEncoder.encode(usuario.getSenha())); // encriptação da senha
-        usuarioService.cadastrarUsuario(usuario);
-        usuario.setSenha(UsuarioRepository.mascaraSenha);
+        usuario = usuarioService.cadastrarUsuario(usuario);
         return ResponseEntity.accepted().body(usuario);
     }
 
     @GetMapping(path="/{idUsuario}")
     public ResponseEntity<Usuario> buscarUsuarioPorId(@PathVariable int idUsuario) {
-        Optional<Usuario> usuarioOpt =
-                Optional.ofNullable(usuarioService.buscarUsuarioPorId(idUsuario));
-        if (usuarioOpt.isPresent()){
-            return new ResponseEntity<Usuario>(usuarioOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<Usuario>(
-                    new Usuario(0, "Não Encontrado"
-                    ), HttpStatus.OK
-            );
-        }
+        Usuario usuario = usuarioService.buscarUsuarioPorId(idUsuario);
+        return ResponseEntity.ok().body(usuario);
     }
 
     @GetMapping
@@ -65,6 +55,11 @@ public class UsuarioController {
     // todo terminar validação de senha
     @PostMapping("validarSenha")
     public ResponseEntity<Boolean> validarSenha(@Valid @RequestBody Usuario usuario) {
+        boolean valido = usuarioService.validarSenha(usuario);
+        HttpStatus statusSenha = valido ? HttpStatus.OK: HttpStatus.UNAUTHORIZED;
+        return ResponseEntity.status(statusSenha).body(valido);
+
+        /* versão antiga de validação de senha
         Optional<Usuario> usuarioOpt = Optional.ofNullable(usuarioService.buscarUsuarioPorLogin(usuario.getLogin()));
         if(usuarioOpt.isEmpty()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
@@ -73,5 +68,6 @@ public class UsuarioController {
         boolean valido = psEncoder.matches( usuario.getSenha(), usuarioBd.getSenha());
         HttpStatus statusSenha = (valido)? HttpStatus.OK: HttpStatus.UNAUTHORIZED;
         return ResponseEntity.status(statusSenha).body(valido);
+         */
     }
 }

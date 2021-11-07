@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Usuario extends Pessoa{
 
@@ -20,15 +19,35 @@ public class Usuario extends Pessoa{
     }
 
     public Usuario(Integer codUsuario, String login) {
-        this.codUsuario = codUsuario;
+        super.setCodPessoa(codUsuario);
         this.login = login;
     }
 
-    public Usuario(Integer codPessoa, String nomePessoa, Integer codUsuario, String login, String senha, Boolean ativo) {
+    public Usuario(Integer codUsuario,  String nomePessoa,
+                   String login, String senha, Boolean ativo, Integer codPessoa) {
         super(codPessoa, nomePessoa);
         this.codUsuario = codUsuario;
         this.login = login;
         this.senha = senha;
         this.ativo = ativo;
+    }
+
+    public Usuario(Integer codUsuario, String login, String senha, Boolean ativo, Integer codPessoa) {
+        super(codPessoa);
+        this.codUsuario = codUsuario;
+        this.login = login;
+        this.senha = senha;
+        this.ativo = ativo;
+    }
+    public Usuario(Integer codUsuario,  String login, String senha, Boolean ativo) {
+        this.codUsuario = codUsuario;
+        this.login = login;
+        this.senha = senha;
+        this.ativo = ativo;
+    }
+
+    public String toString() {
+        return "Usuario(codUsuario=" + this.getCodUsuario() + ", login=" +   this.getLogin() +
+                ", ativo=" + this.getAtivo() + ", codPessoa="+ super.getCodPessoa() + ")";
     }
 }

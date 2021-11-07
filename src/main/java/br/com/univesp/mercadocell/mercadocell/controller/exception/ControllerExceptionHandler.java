@@ -29,7 +29,7 @@ public class ControllerExceptionHandler {
     public ResponseEntity<StandardError> entityIntegrityViolation(EntityIntegrityViolationException e, HttpServletRequest request){
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
-        err.setStatus(HttpStatus.NOT_FOUND.value());
+        err.setStatus(HttpStatus.BAD_REQUEST.value());
         err.setError("Problema na integridade dos dados");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());

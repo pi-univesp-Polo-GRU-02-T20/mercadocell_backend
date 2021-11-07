@@ -74,8 +74,7 @@ public class BairroRepository {
         }
     }
 
-    public void atualizarBairro(Bairro bairro) throws SQLIntegrityConstraintViolationException {
-        try {
+    public void atualizarBairro(Bairro bairro) throws DataIntegrityViolationException {
             jdbcTemplate.update(
                     "UPDATE `BAIRRO` SET `NME_BAIRRO` = ?, COD_MUNICIPIO = ? " +
                             " WHERE `COD_BAIRRO` = ?",
@@ -83,13 +82,9 @@ public class BairroRepository {
                     bairro.getCodMunicipio(),
                     bairro.getCodBairro()
             );
-            // TODO -> verificar como capturar erro de FK
-        }catch(DataIntegrityViolationException e){
-            throw  new EntityIntegrityViolationException("Código de Município não cadastrado");
-        }
     }
 
-    public void deletarBairro(int idBairro) {
+    public void deletarBairro(int idBairro) throws DataIntegrityViolationException{
         jdbcTemplate.update(
                 "DELETE FROM `Bairro` WHERE `COD_BAIRRO` = ?",
                 idBairro
