@@ -12,8 +12,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-@RestController // Anotação de Serviços Rest
-@RequestMapping("/estado") //Define a url que quando for requisitada chamará o método a seguir
+//@RestController // Anotação de Serviços Rest
+//@RequestMapping("/estado") //Define a url que quando for requisitada chamará o método a seguir
 public class EstadoController {
 
     @Autowired // Anotação para a Injeção automática de Dependências

@@ -11,8 +11,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("tipoPagamento")
+//@RestController
+//@RequestMapping("tipoPagamento")
 public class TipoPagamentoController {
 
     @Autowired

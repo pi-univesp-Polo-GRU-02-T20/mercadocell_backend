@@ -74,7 +74,7 @@ public class BairroRepository {
         }
     }
 
-    public void atualizarBairro(Bairro bairro) {
+    public void atualizarBairro(Bairro bairro) throws SQLIntegrityConstraintViolationException {
         try {
             jdbcTemplate.update(
                     "UPDATE `BAIRRO` SET `NME_BAIRRO` = ?, COD_MUNICIPIO = ? " +

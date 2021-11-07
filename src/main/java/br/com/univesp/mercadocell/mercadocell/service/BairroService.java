@@ -6,6 +6,7 @@ import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityV
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,11 @@ public class BairroService {
     }
 
     public void atualizarBairro(Bairro bairro) {
-        bairroRepository.atualizarBairro(bairro);
+        try {
+            bairroRepository.atualizarBairro(bairro);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new EntityIntegrityViolationException("Bairro vinculado a um municipio não cadastrado");
+        }
     }
 
     public void deletarBairro(int idBairro) {
