@@ -2,7 +2,11 @@ package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.model.Operacao;
 import br.com.univesp.mercadocell.mercadocell.repository.OperacaoRepository;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,30 +23,63 @@ public class OperacaoService {
     }
 
     public Operacao buscarOperacaoPorId(int idOperacao) {
-        return operacaoRepository.buscarOperacaoPorId(idOperacao);
+        try{
+            return operacaoRepository.buscarOperacaoPorId(idOperacao);
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException(
+                    "Código de operação não encontrado: =" + idOperacao
+            );
+        }
     }
 
     public List<Operacao> listarOperacoes() {
-        return operacaoRepository.listarOperacoes();
+        try{
+            return operacaoRepository.listarOperacoes();
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException("Nenhum registro encontrado");
+        }
     }
 
     public void atualizarOperacao(Operacao operacao) {
-        operacaoRepository.atualizarOperacao(operacao);
+        try{
+            operacaoRepository.atualizarOperacao(operacao);
+        }catch(DataIntegrityViolationException e ){
+            throw new EntityIntegrityViolationException(
+                    "A pessoa informada não foi cadastrada na base: " + operacao.toString());
+        }
     }
 
     public void deletarOperacao(int idOperacao) {
-        operacaoRepository.deletarOperacao(idOperacao);
+        try {
+            operacaoRepository.deletarOperacao(idOperacao);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityIntegrityViolationException(
+                    "Operação vinculada a itens e pagamentos: " + idOperacao
+            );
+        }
     }
 
     public List<Operacao> listarOperacoesPorPessoa(int idPessoa, String tipoOperacao) {
-        return operacaoRepository.listarOperacoesPorPessoa(idPessoa, tipoOperacao);
+        try{
+            return operacaoRepository.listarOperacoesPorPessoa(idPessoa, tipoOperacao);
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException("Nenhum registro encontrado");
+        }
     }
 
-    public List<Operacao> listarOperacoesPagas(boolean pago) {
-        return operacaoRepository.listarOperacoesPagas(pago);
+    public List<Operacao> listarOperacoesPagas(boolean pago, String tipoIOperacao) {
+        try{
+            return operacaoRepository.listarOperacoesPagas(pago, tipoIOperacao);
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException("Nenhum registro encontrado");
+        }
     }
-    public List<Operacao> listarOperacoesPorPeriodo(LocalDate dataInicio, LocalDate dataTermino) {
-        return operacaoRepository.listarOperacoesPorPeriodo(dataInicio, dataTermino);
+    public List<Operacao> listarOperacoesPorPeriodo(LocalDate dataInicio, LocalDate dataTermino, String tipoOperacao) {
+        try{
+            return operacaoRepository.listarOperacoesPorPeriodo(dataInicio, dataTermino, tipoOperacao);
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException("Nenhum registro encontrado");
+        }
     }
 
 }

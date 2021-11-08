@@ -1,13 +1,12 @@
 package br.com.univesp.mercadocell.mercadocell.controller;
 
 import br.com.univesp.mercadocell.mercadocell.model.ItemOperacao;
+import br.com.univesp.mercadocell.mercadocell.model.dto.ItemOperacaoDTO;
 import br.com.univesp.mercadocell.mercadocell.service.ItemOperacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,22 +16,30 @@ public class ItemOperacaoController {
     @Autowired
     ItemOperacaoService itemOperacaoService;
 
-    @GetMapping(path="/relatorios/operacao/categoria")
-    public List<ItemOperacao> listarItensOperacaoPorCategoria(@RequestParam String nomeCategoria,
+    @GetMapping(path="/relatorios/categoria")
+    public List<ItemOperacaoDTO> listarItensOperacaoPorCategoria(@RequestParam String nomeCategoria,
                                                           @RequestParam String tipoOperacao) {
-        List<ItemOperacao> listaItensCategoria =itemOperacaoService.listarItensOperacaoPorCategoria(nomeCategoria, tipoOperacao);
-        return listaItensCategoria;
+        return itemOperacaoService.listarItensOperacaoPorCategoria(nomeCategoria, tipoOperacao);
     }
-    @GetMapping(path="/relatorios/operacao/produto")
-    public List<ItemOperacao> listarItensOperacaoPorProduto(@RequestParam String nomeProduto,
-                                                          @RequestParam String tipoOperacao) {
-        List<ItemOperacao> listaItensCategoria =itemOperacaoService.listarItensOperacaoPorProduto(nomeProduto, tipoOperacao);
-        return listaItensCategoria;
+    @GetMapping(path="/relatorios/produto")
+    public List<ItemOperacaoDTO> listarItensOperacaoPorProduto(@RequestParam String nomeProduto,
+                                                               @RequestParam String tipoOperacao) {
+        return  itemOperacaoService.listarItensOperacaoPorProduto(nomeProduto, tipoOperacao);
     }
 
-    @GetMapping(path="/operacao/incluirItem")
-    public void incluirItensOperacao(@RequestParam List<ItemOperacao> listaItensOperacao) {
+    @GetMapping(path="/relatorios/tipoOperacao")
+    public List<ItemOperacaoDTO> listarItensOperacaoPorTipoOperacao(@RequestParam String tipoOperacao) {
+        return itemOperacaoService.listarItensOperacaoPorTipoOperacao(tipoOperacao);
+    }
+
+    @PostMapping
+    public void incluirItensOperacao(@Valid @RequestBody List<ItemOperacao> listaItensOperacao) {
         itemOperacaoService.incluirItensOperacao(listaItensOperacao);
+    }
+
+    @DeleteMapping
+    public void removerItensOperacao(@Valid @RequestBody List<ItemOperacao> listaItensOperacao) {
+        itemOperacaoService.removerItensOperacao(listaItensOperacao);
     }
 
 }

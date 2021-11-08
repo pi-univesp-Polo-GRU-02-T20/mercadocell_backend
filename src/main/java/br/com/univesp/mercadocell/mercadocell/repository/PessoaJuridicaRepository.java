@@ -2,6 +2,7 @@ package br.com.univesp.mercadocell.mercadocell.repository;
 
 import br.com.univesp.mercadocell.mercadocell.model.PessoaJuridica;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -50,25 +51,21 @@ public class PessoaJuridicaRepository {
     }
 
     public PessoaJuridica buscarPessoaJuridicaPorId(int idPessoaJuridica) {
-        try {
-            return jdbcTemplate.queryForObject(
-                    SELECT_PESSOA_JURIDICA + " WHERE P.COD_PESSOA = ? "
-                    , (resultSet, rowNum) ->
-                            new PessoaJuridica(
-                                    resultSet.getInt("COD_PESSOA"), // codPessoa
-                                    resultSet.getString("NME_PESSOA"),
-                                    resultSet.getInt("COD_PESSOA"), // codPessoaJuridica
-                                    resultSet.getString("NME_RAZAO_SOCIAL"),
-                                    resultSet.getString("COD_CNPJ")
-                            ),
-                    new Object[]{idPessoaJuridica}
-            );
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return jdbcTemplate.queryForObject(
+                SELECT_PESSOA_JURIDICA + " WHERE P.COD_PESSOA = ? "
+                , (resultSet, rowNum) ->
+                        new PessoaJuridica(
+                                resultSet.getInt("COD_PESSOA"), // codPessoa
+                                resultSet.getString("NME_PESSOA"),
+                                resultSet.getInt("COD_PESSOA"), // codPessoaJuridica
+                                resultSet.getString("NME_RAZAO_SOCIAL"),
+                                resultSet.getString("COD_CNPJ")
+                        ),
+                new Object[]{idPessoaJuridica}
+        );
     }
+
     public PessoaJuridica buscarPessoaJuridicaPorNome(String nomePessoaJuridica) {
-        try {
             return jdbcTemplate.queryForObject(
                     SELECT_PESSOA_JURIDICA + " WHERE P.COD_PESSOA = ? "
                     , (resultSet, rowNum) ->
@@ -85,10 +82,6 @@ public class PessoaJuridicaRepository {
                             ),
                     new Object[]{"%" + nomePessoaJuridica + "%"}
             );
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-
     }
     public List<PessoaJuridica> listarPessoasJuridicas() {
         return jdbcTemplate.query(SELECT_PESSOA_JURIDICA
@@ -123,7 +116,7 @@ public class PessoaJuridicaRepository {
     }
 
     @Transactional
-    public void deletarPessoaJuridica(int idPessoaJuridica) {
+    public void deletarPessoaJuridica(int idPessoaJuridica) throws DataIntegrityViolationException {
         jdbcTemplate.update(
                 "DELETE FROM `PESSOA_JURIDICA` WHERE `COD_PESSOA` = ? ",
                 idPessoaJuridica

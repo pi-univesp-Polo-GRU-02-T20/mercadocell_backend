@@ -34,13 +34,13 @@ public class CategoriaController {
     }
 
     @PutMapping
-    public ResponseEntity<Categoria> atualizarCategoria(@Valid @RequestBody Categoria categoria) {
+    public ResponseEntity<?> atualizarCategoria(@Valid @RequestBody Categoria categoria) {
         categoriaService.atualizarCategoria(categoria);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idCategoria}")
-    public ResponseEntity<Categoria> deletarCategoria(@PathVariable int idCategoria) {
+    public ResponseEntity<?> deletarCategoria(@PathVariable int idCategoria) {
         categoriaService.deletarCategoria(idCategoria);
         return ResponseEntity.noContent().build();
     }

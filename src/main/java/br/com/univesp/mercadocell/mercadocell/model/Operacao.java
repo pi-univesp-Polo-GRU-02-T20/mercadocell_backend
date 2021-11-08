@@ -28,13 +28,11 @@ public class Operacao {
     private boolean pago;
     private String tipoOperacao;
     private String tipoStatusOperacao;
-    private Integer codPessoa;
-    @Autowired
-    //private List<PagamentoOperacao> listaPagamentoOperacao; // = new ArrayList<>();
+    private Pessoa pessoa;
 
     public Operacao(Integer codOperacao, LocalDateTime dataOperacao, String codNotaFiscal, Float valorTotal,
                     Integer quantidadeParcela, boolean pago, String tipoOperacao,
-                    String tipoStatusOperacao, Integer codPessoa) {
+                    String tipoStatusOperacao, Pessoa pessoa) {
         this.codOperacao = codOperacao;
         this.dataOperacao = dataOperacao;
         this.codNotaFiscal = codNotaFiscal;
@@ -43,6 +41,17 @@ public class Operacao {
         this.pago = pago;
         this.tipoOperacao = tipoOperacao;
         this.tipoStatusOperacao = tipoStatusOperacao;
-        this.codPessoa = codPessoa;
+        this.pessoa = pessoa;
     }
+      //OP.COD_OPERACAO, OP.DTA_OPERACAO, OP.VLR_TOTAL, OP.TPO_STATUS"+
+
+    public Operacao(Integer codOperacao, LocalDateTime dataOperacao, String codNotaFiscal,
+                    Float valorTotal, String tipoOperacao) {
+        this.codOperacao = codOperacao;
+        this.dataOperacao = dataOperacao;
+        this.codNotaFiscal = codNotaFiscal;
+        this.valorTotal = valorTotal;
+        this.tipoOperacao = tipoOperacao;
+    }
+
 }

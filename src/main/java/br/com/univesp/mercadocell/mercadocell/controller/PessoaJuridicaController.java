@@ -1,5 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.controller;
 
+import br.com.univesp.mercadocell.mercadocell.model.PessoaFisica;
 import br.com.univesp.mercadocell.mercadocell.model.PessoaJuridica;
 import br.com.univesp.mercadocell.mercadocell.service.PessoaJuridicaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,14 @@ public class PessoaJuridicaController {
 
     @GetMapping(path="/{idPessoaJuridica}")
     public ResponseEntity<PessoaJuridica> buscarPessoaJuridicaPorId(@PathVariable int idPessoaJuridica) {
-        Optional<PessoaJuridica> pessoaJuridicaOpt = Optional.ofNullable(pessoaJuridicaService.buscarPessoaJuridicaPorId(idPessoaJuridica));
-        if (pessoaJuridicaOpt.isPresent()){
-            return new ResponseEntity<PessoaJuridica>(pessoaJuridicaOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<PessoaJuridica>(new PessoaJuridica(0, "Não Encontrado"), HttpStatus.OK);
-        }
+        PessoaJuridica pessoaJuridica  = pessoaJuridicaService.buscarPessoaJuridicaPorId(idPessoaJuridica);
+        return ResponseEntity.ok().body(pessoaJuridica);
+    }
+
+    @GetMapping(path="/buscar/{nomePessoaJuridica}")
+    public ResponseEntity<PessoaJuridica> buscarPessoaJuridicaPorNome(@PathVariable String nomePessoaJuridica) {
+        PessoaJuridica pessoaJuridica = pessoaJuridicaService.buscarPessoaJuridicaPorNome(nomePessoaJuridica);
+        return ResponseEntity.ok().body(pessoaJuridica);
     }
 
     @GetMapping
@@ -40,13 +43,13 @@ public class PessoaJuridicaController {
     }
 
     @PutMapping
-    public ResponseEntity<PessoaJuridica> atualizarPessoaJuridica(@Valid @RequestBody PessoaJuridica pessoaJuridica) {
+    public ResponseEntity<?> atualizarPessoaJuridica(@Valid @RequestBody PessoaJuridica pessoaJuridica) {
         pessoaJuridicaService.atualizarPessoaJuridica(pessoaJuridica);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idPessoaJuridica}")
-    public ResponseEntity<PessoaJuridica> deletarPessoaJuridica(@PathVariable int idPessoaJuridica) {
+    public ResponseEntity<?> deletarPessoaJuridica(@PathVariable int idPessoaJuridica) {
         pessoaJuridicaService.deletarPessoaJuridica(idPessoaJuridica);
         return ResponseEntity.noContent().build();
     }

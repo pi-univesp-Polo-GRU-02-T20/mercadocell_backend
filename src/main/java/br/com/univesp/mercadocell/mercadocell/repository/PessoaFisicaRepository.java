@@ -2,6 +2,7 @@ package br.com.univesp.mercadocell.mercadocell.repository;
 
 import br.com.univesp.mercadocell.mercadocell.model.PessoaFisica;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -27,17 +28,12 @@ public class PessoaFisicaRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-
     private static final String SELECT_PESSOA_FISICA =
             "SELECT P.COD_PESSOA, P.NME_PESSOA, PF.SGL_UF_NATURALIDADE, PF.DTA_NASCIMENTO, PF.TPO_SEXO " +
                 " FROM PESSOA P INNER JOIN PESSOA_FISICA PF ON P.COD_PESSOA = PF.COD_PESSOA ";
-
-    //todo ajustar trecho de cadastro de pessoa física - > erro ao retornar ID de PESSOA, para cadastrar na tb filha
-
     @Transactional
     public void cadastrarPessoaFisica(PessoaFisica  pessoaFisica) {
         final String INSERT_PESSOA_FISICA = "INSERT INTO PESSOA (NME_PESSOA) VALUES (?); ";
-
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
@@ -49,8 +45,6 @@ public class PessoaFisicaRepository {
             }
         }, keyHolder);
         int codPessoa  = keyHolder.getKey().intValue();
-
-
        jdbcTemplate.update(
                 "INSERT INTO `PESSOA_FISICA` (COD_PESSOA, SGL_UF_NATURALIDADE, DTA_NASCIMENTO, TPO_SEXO ) " +
                         " VALUES (?, ?, ?, ?)",
@@ -62,50 +56,34 @@ public class PessoaFisicaRepository {
     }
 
     public PessoaFisica buscarPessoaFisicaPorId(int idPessoaFisica) {
-        try {
-            return jdbcTemplate.queryForObject(
-                    SELECT_PESSOA_FISICA + "WHERE PF.COD_PESSOA = ? "
-                    , (resultSet, rowNum) ->
-                            new PessoaFisica(
-                                    resultSet.getInt("COD_PESSOA"),
-                                    resultSet.getString("NME_PESSOA"),
-                                    resultSet.getObject("DTA_NASCIMENTO", LocalDate.class),
-                                    resultSet.getString("SGL_UF_NATURALIDADE"),
-                                    resultSet.getString("TPO_SEXO")
-                                    //TipoSexo.valueOf(rs.getString("TPO_SEXO"))
-                            ),
-                    new Object[]{idPessoaFisica}
-            );
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return jdbcTemplate.queryForObject(
+                SELECT_PESSOA_FISICA + "WHERE PF.COD_PESSOA = ? "
+                , (resultSet, rowNum) ->
+                        new PessoaFisica(
+                                resultSet.getInt("COD_PESSOA"),
+                                resultSet.getString("NME_PESSOA"),
+                                resultSet.getObject("DTA_NASCIMENTO", LocalDate.class),
+                                resultSet.getString("SGL_UF_NATURALIDADE"),
+                                resultSet.getString("TPO_SEXO")
+                                //TipoSexo.valueOf(rs.getString("TPO_SEXO"))
+                        ),
+                new Object[]{idPessoaFisica}
+        );
     }
     public PessoaFisica buscarPessoaFisicaPorNome(String nomePessoaFisica) {
-        try {
-            /*
-    public List<MyEntity> getMyEntityValuesBySearchText(String searchText) {
-
-    String query = "SELECT * FROM MY_ENTITY_TABLE WHERE NAME LIKE ?";
-    return this.getJdbcTemplate().query(query, new String[] { "%" + searchText + "%" },
-                (rs, rowNum) -> new MyEntity(rs.getLong("PK"), rs.getString("NAME")));
-
-    */
-            return jdbcTemplate.queryForObject(
-                    SELECT_PESSOA_FISICA + "WHERE P.NME_PESSOA LIKE ?"
-                    , (resultSet, rowNum) ->
-                            new PessoaFisica(
-                                    resultSet.getInt("COD_PESSOA"),
-                                    resultSet.getString("NME_PESSOA"),
-                                    resultSet.getObject("DTA_NASCIMENTO", LocalDate.class),
-                                    resultSet.getString("SGL_UF_NATURALIDADE"),
-                                    resultSet.getString("TPO_SEXO")
-                                    //TipoSexo.valueOf(rs.getString("TPO_SEXO"))
-                            ),
-                    new Object[]{"%" + nomePessoaFisica + "%"}
-            );
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return jdbcTemplate.queryForObject(
+                SELECT_PESSOA_FISICA + "WHERE P.NME_PESSOA LIKE ?"
+                , (resultSet, rowNum) ->
+                        new PessoaFisica(
+                                resultSet.getInt("COD_PESSOA"),
+                                resultSet.getString("NME_PESSOA"),
+                                resultSet.getObject("DTA_NASCIMENTO", LocalDate.class),
+                                resultSet.getString("SGL_UF_NATURALIDADE"),
+                                resultSet.getString("TPO_SEXO")
+                                //TipoSexo.valueOf(rs.getString("TPO_SEXO"))
+                        ),
+                new Object[]{"%" + nomePessoaFisica + "%"}
+        );
     }
     public List<PessoaFisica> listarPessoasFisicas() {
         return jdbcTemplate.query(SELECT_PESSOA_FISICA
@@ -139,7 +117,7 @@ public class PessoaFisicaRepository {
     }
 
     @Transactional
-    public void deletarPessoaFisica(int idPessoaFisica) {
+    public void deletarPessoaFisica(int idPessoaFisica) throws DataIntegrityViolationException {
         jdbcTemplate.update(
                 "DELETE FROM `PESSOA_FISICA` WHERE `COD_PESSOA` = ? ",
                 idPessoaFisica
@@ -148,8 +126,5 @@ public class PessoaFisicaRepository {
                 "DELETE FROM `PESSOA` WHERE `COD_PESSOA` = ? ",
                 idPessoaFisica
         );
-
     }
-
-
 }

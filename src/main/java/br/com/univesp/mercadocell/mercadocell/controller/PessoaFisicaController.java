@@ -25,30 +25,14 @@ public class PessoaFisicaController {
 
     @GetMapping(path="/{idPessoaFisica}")
     public ResponseEntity<PessoaFisica> buscarPessoaFisicaPorId(@PathVariable int idPessoaFisica) {
-        Optional<PessoaFisica> PessoaFisicaOpt =
-                    Optional.ofNullable(pessoaFisicaService.buscarPessoaFisicaPorId(idPessoaFisica));
-        if (PessoaFisicaOpt.isPresent()){
-            return new ResponseEntity<PessoaFisica>(PessoaFisicaOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<PessoaFisica>(
-                    new PessoaFisica(0, "Não Encontrado"),
-                    HttpStatus.OK
-            );
-        }
+        PessoaFisica pessoaFisica = pessoaFisicaService.buscarPessoaFisicaPorId(idPessoaFisica);
+        return ResponseEntity.ok().body(pessoaFisica);
     }
 
     @GetMapping(path="/buscar/{nomePessoaFisica}")
     public ResponseEntity<PessoaFisica> buscarPessoaFisicaPorNome(@PathVariable String nomePessoaFisica) {
-        Optional<PessoaFisica> PessoaFisicaOpt =
-                Optional.ofNullable(pessoaFisicaService.buscarPessoaFisicaPorNome(nomePessoaFisica));
-        if (PessoaFisicaOpt.isPresent()){
-            return new ResponseEntity<PessoaFisica>(PessoaFisicaOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<PessoaFisica>(
-                    new PessoaFisica(0, "Não Encontrado"),
-                    HttpStatus.OK
-            );
-        }
+        PessoaFisica pessoaFisica = pessoaFisicaService.buscarPessoaFisicaPorNome(nomePessoaFisica);
+        return ResponseEntity.ok().body(pessoaFisica);
     }
 
     @GetMapping
@@ -57,13 +41,13 @@ public class PessoaFisicaController {
     }
 
     @PutMapping
-    public ResponseEntity<PessoaFisica> atualizarPessoaFisica(@Valid @RequestBody PessoaFisica pessoaFisica) {
+    public ResponseEntity<?> atualizarPessoaFisica(@Valid @RequestBody PessoaFisica pessoaFisica) {
         pessoaFisicaService.atualizarPessoaFisica(pessoaFisica);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idPessoaFisica}")
-    public ResponseEntity<PessoaFisica> deletarPessoaFisica(@PathVariable int idPessoaFisica) {
+    public ResponseEntity<?> deletarPessoaFisica(@PathVariable int idPessoaFisica) {
         pessoaFisicaService.deletarPessoaFisica(idPessoaFisica);
         return ResponseEntity.noContent().build();
     }

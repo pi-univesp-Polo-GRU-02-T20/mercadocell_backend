@@ -1,7 +1,9 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
 import br.com.univesp.mercadocell.mercadocell.model.Operacao;
+import br.com.univesp.mercadocell.mercadocell.model.Pessoa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,10 +17,15 @@ public class OperacaoRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-    private static final String SELECT_OPERACAO = "SELECT COD_OPERACAO,DTA_OPERACAO,COD_NOTA_FISCAL,VLR_TOTAL,QTD_PARCELA," +
-            "TPO_STATUS,COD_PESSOA,FLG_PAGO,TPO_OPERACAO FROM `OPERACAO`";
+    private static final String SELECT_OPERACAO =
+            "SELECT OP.COD_OPERACAO,OP.DTA_OPERACAO,OP.COD_NOTA_FISCAL,OP.VLR_TOTAL,OP.QTD_PARCELA," +
+            " OP.TPO_STATUS,OP.FLG_PAGO,OP.TPO_OPERACAO, P.COD_PESSOA, P.NME_PESSOA " +
+            " FROM OPERACAO OP INNER JOIN PESSOA P ON " +
+            " OP.COD_PESSOA = P.COD_PESSOA "
+            ;
     private static final String FILTRO_RANGE_DATA_OPERACAO = " WHERE DATE_FORMAT(DTA_OPERACAO,'%Y-%m-%d') >= ? AND " +
-            " DATE_FORMAT(DTA_OPERACAO,'%Y-%m-%d') <= ?";
+            " DATE_FORMAT(DTA_OPERACAO,'%Y-%m-%d') <= ?" +
+            " AND TPO_OPERACAO = ?";
 
     public void cadastrarOperacao(Operacao operacao) {
         jdbcTemplate.update(
@@ -31,16 +38,15 @@ public class OperacaoRepository {
                     operacao.getValorTotal(),
                     operacao.getQuantidadeParcela(),
                     operacao.getTipoStatusOperacao(),
-                    operacao.getCodPessoa(),
+                    operacao.getPessoa().getCodPessoa(),
                     operacao.isPago(),
                     operacao.getTipoOperacao()
                 );
     }
 
     public Operacao buscarOperacaoPorId(int idOperacao) {
-        try {
             return jdbcTemplate.queryForObject(
-                    SELECT_OPERACAO + "  WHERE `COD_OPERACAO` = ?",
+                    SELECT_OPERACAO + "  WHERE COD_OPERACAO = ?",
                      (resultSet, rowNum) ->
                             new Operacao(
                                     resultSet.getInt("COD_OPERACAO"),
@@ -51,19 +57,18 @@ public class OperacaoRepository {
                                     resultSet.getBoolean("FLG_PAGO"),
                                     resultSet.getString("TPO_OPERACAO"), // C - Compra; V -- Venda
                                     resultSet.getString("TPO_STATUS"), // P - Pedido; O- orçamento
-                                    resultSet.getInt("COD_PESSOA")
+                                    new Pessoa(
+                                            resultSet.getInt("COD_PESSOA"),
+                                            resultSet.getString("NME_PESSOA")
+                                    )
                             ),
                     new Object[]{idOperacao}
             );
-        }catch(EmptyResultDataAccessException e){
-            return null;
-        }
     }
 
-    public List<Operacao> listarOperacoesPorPessoa(int codPessoa, String tipoOperacao) {
-        try {
+    public List<Operacao> listarOperacoesPorPessoa(int codPessoa, String tipoOperacao) throws EmptyResultDataAccessException{
             return jdbcTemplate.query(
-                    SELECT_OPERACAO + "  WHERE `COD_PESSOA` = ? and TPO_OPERACAO = ?",
+                    SELECT_OPERACAO + "  WHERE P.COD_PESSOA = ? and TPO_OPERACAO = ?",
                     (resultSet, rowNum) ->
                             new Operacao(
                                     resultSet.getInt("COD_OPERACAO"),
@@ -74,19 +79,18 @@ public class OperacaoRepository {
                                     resultSet.getBoolean("FLG_PAGO"),
                                     resultSet.getString("TPO_OPERACAO"), // C - Compra; V -- Venda
                                     resultSet.getString("TPO_STATUS"), // P - Pedido; O- orçamento
-                                    resultSet.getInt("COD_PESSOA")
+                                    new Pessoa(
+                                            resultSet.getInt("COD_PESSOA"),
+                                            resultSet.getString("NME_PESSOA")
+                                    )
                             ),
                     new Object[]{codPessoa, tipoOperacao}
             );
-        }catch(EmptyResultDataAccessException e){
-            return null;
-        }
     }
 
-    public List<Operacao> listarOperacoesPagas(boolean pago) {
-        try {
+    public List<Operacao> listarOperacoesPagas(boolean pago, String tipoOperacao) {
             return jdbcTemplate.query(
-                    SELECT_OPERACAO + "  WHERE `FLG_PAGO` = ?",
+                    SELECT_OPERACAO + "  WHERE FLG_PAGO = ? AND  TPO_OPERACAO = ?",
                     (resultSet, rowNum) ->
                             new Operacao(
                                     resultSet.getInt("COD_OPERACAO"),
@@ -97,16 +101,16 @@ public class OperacaoRepository {
                                     resultSet.getBoolean("FLG_PAGO"),
                                     resultSet.getString("TPO_OPERACAO"), // C - Compra; V -- Venda
                                     resultSet.getString("TPO_STATUS"), // P - Pedido; O- orçamento
-                                    resultSet.getInt("COD_PESSOA")
+                                    new Pessoa(
+                                            resultSet.getInt("COD_PESSOA"),
+                                            resultSet.getString("NME_PESSOA")
+                                    )
                             ),
-                    new Object[]{pago}
+                new Object[]{pago, tipoOperacao}
             );
-        }catch(EmptyResultDataAccessException e){
-            return null;
-        }
     }
-    public List<Operacao> listarOperacoesPorPeriodo(LocalDate dataInicio, LocalDate dataTermino) {
-        try {
+
+    public List<Operacao> listarOperacoesPorPeriodo(LocalDate dataInicio, LocalDate dataTermino, String tipoOperacao) {
             return jdbcTemplate.query(
                     SELECT_OPERACAO + FILTRO_RANGE_DATA_OPERACAO,
                     (resultSet, rowNum) ->
@@ -119,13 +123,13 @@ public class OperacaoRepository {
                                     resultSet.getBoolean("FLG_PAGO"),
                                     resultSet.getString("TPO_OPERACAO"), // C - Compra; V -- Venda
                                     resultSet.getString("TPO_STATUS"), // P - Pedido; O- orçamento
-                                    resultSet.getInt("COD_PESSOA")
+                                    new Pessoa(
+                                            resultSet.getInt("COD_PESSOA"),
+                                            resultSet.getString("NME_PESSOA")
+                                    )
                             ),
-                    new Object[]{dataInicio, dataTermino}
+                    new Object[]{dataInicio, dataTermino, tipoOperacao}
             );
-        }catch(EmptyResultDataAccessException e){
-            return null;
-        }
     }
 
 
@@ -142,40 +146,35 @@ public class OperacaoRepository {
                                 resultSet.getBoolean("FLG_PAGO"),
                                 resultSet.getString("TPO_OPERACAO"), // C - Compra; V -- Venda
                                 resultSet.getString("TPO_STATUS"), // P - Pedido; O- orçamento
-                                resultSet.getInt("COD_PESSOA")
+                                new Pessoa(
+                                        resultSet.getInt("COD_PESSOA"),
+                                        resultSet.getString("NME_PESSOA")
+                                )
                         )
         );
     }
 
-    public void atualizarOperacao(Operacao operacao) {
+    public void atualizarOperacao(Operacao operacao) throws DataIntegrityViolationException{
         jdbcTemplate.update(
-                //COD_OPERACAO,DTA_OPERACAO,COD_NOTA_FISCAL,VLR_TOTAL,QTD_PARCELA," +
-                //"TPO_STATUS,COD_PESSOA,FLG_PAGO,TPO_OPERACAO FROM `OPERACAO
                 "UPDATE `Operacao` SET `DTA_OPERACAO` = ?, COD_NOTA_FISCAL = ?, VLR_TOTAL = ?, QTD_PARCELA = ?, " +
                         " TPO_STATUS = ?, COD_PESSOA = ?, FLG_PAGO = ?, TPO_OPERACAO = ? "+
                         " WHERE `COD_OPERACAO` = ?",
-                //"COD_OPERACAO,DTA_OPERACAO,COD_NOTA_FISCAL,VLR_TOTAL,QTD_PARCELA," +
-                //"TPO_STATUS,COD_PESSOA,FLG_PAGO,TPO_OPERACAO FROM `OPERACAO
                 operacao.getDataOperacao().toString(),
                 operacao.getCodNotaFiscal(),
                 operacao.getValorTotal(),
                 operacao.getQuantidadeParcela(),
                 operacao.getTipoStatusOperacao(),
-                operacao.getCodPessoa(),
+                operacao.getPessoa().getCodPessoa(),
                 operacao.isPago(),
                 operacao.getTipoOperacao(),
                 operacao.getCodOperacao()
         );
     }
 
-    public void deletarOperacao(int codOperacao) {
+    public void deletarOperacao(int codOperacao) throws DataIntegrityViolationException {
         jdbcTemplate.update(
                 "DELETE FROM `OPERACAO` WHERE `COD_OPERACAO` = ?",
                 codOperacao
         );
     }
-
-
-
-
 }

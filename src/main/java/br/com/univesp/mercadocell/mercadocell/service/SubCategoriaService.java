@@ -25,11 +25,13 @@ public class SubCategoriaService {
         try {
             subCategoriaRepository.buscarSubCategoriaPorNome(subCategoria.getNomeSubCategoria());
             throw new EntityIntegrityViolationException("Subcategoria já cadastrada");
-        }catch (EmptyResultDataAccessException e){
-            subCategoriaRepository.cadastrarSubCategoria(subCategoria);
-        }catch(DataIntegrityViolationException e ){
-            throw new EntityIntegrityViolationException(
-                    "A Categoria informada não foi cadastrada na base: " + subCategoria.getCategoria().toString());
+        }catch (EmptyResultDataAccessException e) {
+            try {
+                subCategoriaRepository.cadastrarSubCategoria(subCategoria);
+            } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+                throw new EntityIntegrityViolationException(
+                        "A Categoria informada não foi cadastrada na base: " + subCategoria.getCategoria().toString());
+            }
         }
     }
 

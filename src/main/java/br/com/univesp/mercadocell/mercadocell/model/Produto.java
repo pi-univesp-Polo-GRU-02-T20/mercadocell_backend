@@ -16,9 +16,13 @@ public class Produto {
     private SubCategoria subCategoria;
     private UnidadeMedida unidadeMedida;
 
-  /*  public Produto(final Integer codProduto, final String nomeProduto) {
+    public Produto(final Integer codProduto, final String nomeProduto,
+                   final SubCategoria subCategoria, final UnidadeMedida unidadeMedida) {
         this.codProduto = codProduto;
         this.nomeProduto = nomeProduto;
+        this.descricaoProduto = descricaoProduto;
+        this.subCategoria = subCategoria;
+        this.unidadeMedida = unidadeMedida;
     }
-*/
+
 }

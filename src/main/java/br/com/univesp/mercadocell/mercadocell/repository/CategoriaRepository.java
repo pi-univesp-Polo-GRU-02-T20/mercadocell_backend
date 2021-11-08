@@ -36,7 +36,6 @@ public class CategoriaRepository {
     }
 
     public Categoria buscarCategoriaPorNome(String nomeCategoria) {
-        try {
             return jdbcTemplate.queryForObject(
                     "SELECT COD_CATEGORIA, NME_CATEGORIA FROM CATEGORIA WHERE NME_CATEGORIA = ?"
                     , (rs, rowNum) ->
@@ -46,13 +45,9 @@ public class CategoriaRepository {
                             ),
                     new Object[]{nomeCategoria}
             );
-        } catch(EmptyResultDataAccessException e){
-            return null;
-        }
     }
 
     public List<Categoria> listarCategorias() {
-        try{
             return jdbcTemplate.query("SELECT COD_CATEGORIA, NME_CATEGORIA FROM `CATEGORIA`"
                     , (rs, rowNum) ->
                             new Categoria(
@@ -60,9 +55,6 @@ public class CategoriaRepository {
                                     rs.getString("NME_CATEGORIA")
                             )
             );
-        } catch(EmptyResultDataAccessException e){
-            throw  new EntityNotFoundException("Nenhuma categoria encontrada");
-        }
     }
 
     public void atualizarCategoria(Categoria categoria) {

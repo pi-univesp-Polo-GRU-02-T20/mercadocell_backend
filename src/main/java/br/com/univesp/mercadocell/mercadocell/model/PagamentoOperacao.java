@@ -1,5 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,8 +17,10 @@ public class PagamentoOperacao {
     @NotEmpty(message = "O valor do pagamento deve ser preenchido")
     private Float valorPagamento;
     @NotEmpty(message = "A data do pagamento deve ser preenchida")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataPagamento;
     @NotEmpty(message = "A data do vencimento deve ser preenchida")
     private Operacao operacao;
-    private TipoPagamento tipoPagamento;
+    private String tipoPagamento;
+
 }

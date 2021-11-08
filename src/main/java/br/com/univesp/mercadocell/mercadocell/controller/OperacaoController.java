@@ -28,12 +28,8 @@ public class OperacaoController {
 
     @GetMapping(path="/relatorios/operacao/id/{idOperacao}")
     public ResponseEntity<Operacao> buscarOperacaoPorId(@PathVariable int idOperacao) {
-        Optional<Operacao> OperacaoOpt = Optional.ofNullable(operacaoService.buscarOperacaoPorId(idOperacao));
-        if (OperacaoOpt.isPresent()){
-            return new ResponseEntity<Operacao>(OperacaoOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<Operacao>(new Operacao(), HttpStatus.OK);
-        }
+        Operacao operacao = operacaoService.buscarOperacaoPorId(idOperacao);
+        return ResponseEntity.ok().body(operacao);
     }
 
     @GetMapping
@@ -54,7 +50,7 @@ public class OperacaoController {
     }
 
     @GetMapping(path="/relatorios/operacao/pessoa")
-    public List<Operacao>  listarOperacaoPorPessoa(@PathVariable int codPessoa, String tipoOperacao) {
+    public List<Operacao>  listarOperacaoPorPessoa(@RequestParam int codPessoa,  @RequestParam String tipoOperacao) {
         return operacaoService.listarOperacoesPorPessoa(codPessoa, tipoOperacao);
     }
 
@@ -62,9 +58,8 @@ public class OperacaoController {
     public List<Operacao>  listarOperacoesPorPeriodo(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                              LocalDate dataInicio,
                                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                             LocalDate dataTermino) {
-        return operacaoService.listarOperacoesPorPeriodo( dataInicio, dataTermino);
+                                                             LocalDate dataTermino,
+                                                     @RequestParam String tipoOperacao) {
+        return operacaoService.listarOperacoesPorPeriodo( dataInicio, dataTermino, tipoOperacao);
     }
-
-
 }

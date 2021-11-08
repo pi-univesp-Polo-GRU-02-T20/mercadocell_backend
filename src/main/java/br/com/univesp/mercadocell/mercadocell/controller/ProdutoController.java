@@ -27,16 +27,8 @@ public class ProdutoController {
 
     @GetMapping(path="/{idProduto}")
     public ResponseEntity<Produto> buscarProdutoPorId(@PathVariable int idProduto) {
-        Optional<Produto> produtoOpt =
-                Optional.ofNullable(produtoService.buscarProdutoPorId(idProduto));
-        if (produtoOpt.isPresent()){
-            return new ResponseEntity<Produto>(produtoOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<Produto>(
-                    new Produto(0, "Não Encontrado",null, null, null
-                            ), HttpStatus.OK
-            );
-        }
+        Produto produto = produtoService.buscarProdutoPorId(idProduto);
+        return ResponseEntity.ok().body(produto);
     }
 
     @GetMapping
@@ -45,13 +37,13 @@ public class ProdutoController {
     }
 
     @PutMapping
-    public ResponseEntity<Produto> atualizarProduto(@Valid @RequestBody Produto produto) {
+    public ResponseEntity<?> atualizarProduto(@Valid @RequestBody Produto produto) {
         produtoService.atualizarProduto(produto);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idProduto}")
-    public ResponseEntity<Produto> deletarProduto(@PathVariable int idProduto) {
+    public ResponseEntity<?> deletarProduto(@PathVariable int idProduto) {
         produtoService.deletarProduto(idProduto);
         return ResponseEntity.noContent().build();
     }

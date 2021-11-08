@@ -2,7 +2,11 @@ package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.model.PessoaFisica;
 import br.com.univesp.mercadocell.mercadocell.repository.PessoaFisicaRepository;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,18 +17,40 @@ public class PessoaFisicaService {
     @Autowired
     private PessoaFisicaRepository pessoaFisicaRepository;
 
-    public void cadastrarPessoaFisica(PessoaFisica PessoaFisica) {
-        pessoaFisicaRepository.cadastrarPessoaFisica(PessoaFisica);
+    public void cadastrarPessoaFisica(PessoaFisica pessoaFisica) {
+        try {
+            pessoaFisicaRepository.buscarPessoaFisicaPorNome(pessoaFisica.getNomePessoa());
+            throw new EntityIntegrityViolationException("Pessoa física já cadastrada");
+        }catch (EmptyResultDataAccessException e) {
+                pessoaFisicaRepository.cadastrarPessoaFisica(pessoaFisica);
+        }
     }
 
     public PessoaFisica buscarPessoaFisicaPorId(int idPessoaFisica) {
-        return pessoaFisicaRepository.buscarPessoaFisicaPorId(idPessoaFisica);
+        try{
+            return pessoaFisicaRepository.buscarPessoaFisicaPorId(idPessoaFisica);
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException(
+                    "Código de Pessoa Física não encontrado: " + idPessoaFisica
+            );
+        }
     }
     public PessoaFisica buscarPessoaFisicaPorNome(String nomePessoaFisica) {
-        return pessoaFisicaRepository.buscarPessoaFisicaPorNome(nomePessoaFisica);
+        try{
+            return pessoaFisicaRepository.buscarPessoaFisicaPorNome(nomePessoaFisica);
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException(
+                    "Nome de Pessoa Física não encontrado: " + nomePessoaFisica
+            );
+        }
     }
+
     public List<PessoaFisica> listarPessoasFisicas() {
-        return pessoaFisicaRepository.listarPessoasFisicas();
+        try{
+            return pessoaFisicaRepository.listarPessoasFisicas();
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException("Nenhum registro encontrado");
+        }
     }
 
     public void atualizarPessoaFisica(PessoaFisica PessoaFisica) {
@@ -32,8 +58,12 @@ public class PessoaFisicaService {
     }
 
     public void deletarPessoaFisica(int idPessoaFisica) {
-        pessoaFisicaRepository.deletarPessoaFisica(idPessoaFisica);
+        try {
+            pessoaFisicaRepository.deletarPessoaFisica(idPessoaFisica);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityIntegrityViolationException(
+                    "Pessoa física utilizada em cadastros do sistema: " + idPessoaFisica
+            );
+        }
     }
-
-
 }
