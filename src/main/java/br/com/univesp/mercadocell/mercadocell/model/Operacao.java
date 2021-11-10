@@ -2,37 +2,30 @@ package br.com.univesp.mercadocell.mercadocell.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.validation.constraints.NotEmpty;
-
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 public class Operacao {
     private Integer codOperacao;
 
-   // @NotEmpty(message = "A data da operação deve ser preenchida")
-    //@DateTimeFormat(pattern = "yyyy-MM-dd't'HH:mm:ss", shape = JsonFormat.Shape.STRING /* iso = DateTimeFormat.ISO.DATE_TIME*/)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataOperacao;
     private String codNotaFiscal;
-    private Float valorTotal;
+    private Double valorTotal;
     private Integer quantidadeParcela;
-    private boolean pago;
+    private Boolean pago;
     private String tipoOperacao;
     private String tipoStatusOperacao;
     private Pessoa pessoa;
+    private TipoPagamento tipoPagamento;
 
-    public Operacao(Integer codOperacao, LocalDateTime dataOperacao, String codNotaFiscal, Float valorTotal,
-                    Integer quantidadeParcela, boolean pago, String tipoOperacao,
-                    String tipoStatusOperacao, Pessoa pessoa) {
+    public Operacao(Integer codOperacao, LocalDateTime dataOperacao, String codNotaFiscal, Double valorTotal,
+                    Integer quantidadeParcela, Boolean pago, String tipoOperacao,
+                    String tipoStatusOperacao, Pessoa pessoa, TipoPagamento tipoPagamento) {
         this.codOperacao = codOperacao;
         this.dataOperacao = dataOperacao;
         this.codNotaFiscal = codNotaFiscal;
@@ -42,16 +35,43 @@ public class Operacao {
         this.tipoOperacao = tipoOperacao;
         this.tipoStatusOperacao = tipoStatusOperacao;
         this.pessoa = pessoa;
+        this.tipoPagamento = tipoPagamento;
     }
-      //OP.COD_OPERACAO, OP.DTA_OPERACAO, OP.VLR_TOTAL, OP.TPO_STATUS"+
 
     public Operacao(Integer codOperacao, LocalDateTime dataOperacao, String codNotaFiscal,
-                    Float valorTotal, String tipoOperacao) {
+                    Double valorTotal, Integer quantidadeParcela,
+                    Boolean pago, String tipoOperacao,String tipoStatusOperacao) {
         this.codOperacao = codOperacao;
         this.dataOperacao = dataOperacao;
         this.codNotaFiscal = codNotaFiscal;
         this.valorTotal = valorTotal;
+        this.quantidadeParcela = quantidadeParcela;
+        this.pago = pago;
         this.tipoOperacao = tipoOperacao;
+        this.tipoStatusOperacao = tipoStatusOperacao;
     }
 
+    public Operacao(Integer codOperacao, LocalDateTime dataOperacao, String codNotaFiscal,
+                    Double valorTotal, Integer quantidadeParcela, Boolean pago,
+                    String tipoOperacao, TipoPagamento tipoPagamento) {
+        this.codOperacao = codOperacao;
+        this.dataOperacao = dataOperacao;
+        this.codNotaFiscal = codNotaFiscal;
+        this.valorTotal = valorTotal;
+        this.quantidadeParcela = quantidadeParcela;
+        this.pago = pago;
+        this.tipoOperacao = tipoOperacao;
+        this.tipoPagamento = tipoPagamento;
+    }
+
+    public Operacao(Integer codOperacao, LocalDateTime dataOperacao,
+                    String codNotaFiscal, Double valorTotal, String tipoStatusOperacao, TipoPagamento tipoPagamento) {
+        this.codOperacao = codOperacao;
+        this.dataOperacao = dataOperacao;
+        this.codNotaFiscal = codNotaFiscal;
+        this.valorTotal = valorTotal;
+        this.tipoStatusOperacao = tipoStatusOperacao;
+        this.tipoPagamento = tipoPagamento;
+    }
 }
+

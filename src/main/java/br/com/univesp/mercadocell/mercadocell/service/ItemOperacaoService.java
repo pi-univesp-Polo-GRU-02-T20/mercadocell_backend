@@ -1,7 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.model.ItemOperacao;
-import br.com.univesp.mercadocell.mercadocell.model.dto.ItemOperacaoDTO;
 import br.com.univesp.mercadocell.mercadocell.repository.ItemOperacaoRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
@@ -11,6 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -19,7 +19,7 @@ public class ItemOperacaoService {
     @Autowired
     ItemOperacaoRepository itemOperacaoRepository;
 
-    public List<ItemOperacaoDTO> listarItensOperacaoPorCategoria(String nomeCategoria, String tipoOperacao) {
+    public List<ItemOperacao> listarItensOperacaoPorCategoria(String nomeCategoria, String tipoOperacao) {
         try{
             return itemOperacaoRepository.listarOperacoesPorCategoria(nomeCategoria, tipoOperacao);
         }catch (EmptyResultDataAccessException e ){
@@ -31,7 +31,7 @@ public class ItemOperacaoService {
         }
     }
 
-    public List<ItemOperacaoDTO> listarItensOperacaoPorProduto(String nomeProduto, String tipoOperacao) {
+    public List<ItemOperacao> listarItensOperacaoPorProduto(String nomeProduto, String tipoOperacao) {
         try{
             return itemOperacaoRepository.listarItensOperacaoPorProduto(nomeProduto, tipoOperacao);
         }catch (EmptyResultDataAccessException e ){
@@ -43,7 +43,7 @@ public class ItemOperacaoService {
         }
     }
 
-    public List<ItemOperacaoDTO> listarItensOperacaoPorTipoOperacao(String tipoOperacao) {
+    public List<ItemOperacao> listarItensOperacaoPorTipoOperacao(String tipoOperacao) {
         try{
             return itemOperacaoRepository.listarItensOperacaoPorTipoOperacao(tipoOperacao);
         }catch (EmptyResultDataAccessException e ){
@@ -55,7 +55,7 @@ public class ItemOperacaoService {
     }
 
     @Transactional
-    public void incluirItensOperacao(List<ItemOperacao> listaItensOperacao) {
+    public void incluirItensOperacao(@Valid List<ItemOperacao> listaItensOperacao) {
         for (ItemOperacao item : listaItensOperacao) {
             try {
                 itemOperacaoRepository.incluirItemOperacao(item);

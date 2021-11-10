@@ -38,7 +38,7 @@ public class OperacaoController {
     }
 
     @PutMapping
-    public ResponseEntity<Operacao> atualizarOperacao(@Valid @RequestBody Operacao Operacao) {
+    public ResponseEntity<Operacao> atualizarOperacao(@RequestBody Operacao Operacao) {
         operacaoService.atualizarOperacao(Operacao);
         return ResponseEntity.accepted().build();
     }

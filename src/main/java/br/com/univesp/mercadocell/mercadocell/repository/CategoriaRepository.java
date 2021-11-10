@@ -25,7 +25,8 @@ public class CategoriaRepository {
     }
 
     public Categoria buscarCategoriaPorId(int idCategoria) {
-            return jdbcTemplate.queryForObject("SELECT COD_CATEGORIA FROM `CATEGORIA` WHERE `COD_CATEGORIA` = ?"
+            return jdbcTemplate.queryForObject(
+                    "SELECT COD_CATEGORIA FROM `CATEGORIA` WHERE `COD_CATEGORIA` = ?"
                     , (rs, rowNum) ->
                             new Categoria(
                                     rs.getInt("COD_CATEGORIA"),

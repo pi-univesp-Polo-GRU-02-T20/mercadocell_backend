@@ -7,19 +7,20 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class ItemOperacao {
     private Integer codItemOperacao;
     private Float quantidadeItem;
     private Double valorItem;
-    private Integer codProduto;
-    private Integer codOperacao;
+    private Operacao operacao;
+    private Produto produto;
 
-    public ItemOperacao(Integer codItemOperacao, Float quantidadeItem, Double valorItem, Integer codProduto) {
+    public ItemOperacao(Integer codItemOperacao, Float quantidadeItem, Double valorItem,
+                           Operacao operacao, Produto produto) {
         this.codItemOperacao = codItemOperacao;
         this.quantidadeItem = quantidadeItem;
         this.valorItem = valorItem;
-        this.codProduto = codProduto;
+        this.operacao = operacao;
+        this.produto = produto;
     }
 }
