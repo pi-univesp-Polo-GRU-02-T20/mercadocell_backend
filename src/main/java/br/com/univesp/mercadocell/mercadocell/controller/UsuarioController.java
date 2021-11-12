@@ -1,7 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.controller;
 
 import br.com.univesp.mercadocell.mercadocell.model.Usuario;
-import br.com.univesp.mercadocell.mercadocell.repository.UsuarioRepository;
 import br.com.univesp.mercadocell.mercadocell.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping("usuario")
 public class UsuarioController {
 

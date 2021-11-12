@@ -4,16 +4,15 @@ import br.com.univesp.mercadocell.mercadocell.model.Operacao;
 import br.com.univesp.mercadocell.mercadocell.service.OperacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping("operacao")
 public class OperacaoController {
 

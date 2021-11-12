@@ -13,6 +13,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 //@RestController // Anotação de Serviços Rest
+//@CrossOrigin
 //@RequestMapping("/estado") //Define a url que quando for requisitada chamará o método a seguir
 public class EstadoController {
 
