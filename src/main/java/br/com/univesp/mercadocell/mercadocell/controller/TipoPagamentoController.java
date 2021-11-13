@@ -11,9 +11,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-//@RestController
-//@CrossOrigin
-//@RequestMapping("tipoPagamento")
+@RestController
+@CrossOrigin
+@RequestMapping("tipoPagamento")
 public class TipoPagamentoController {
 
     @Autowired
@@ -27,15 +27,8 @@ public class TipoPagamentoController {
 
     @GetMapping(path="/{idTipoPagamento}")
     public ResponseEntity<TipoPagamento> buscarTipoPagamentoPorId(@PathVariable int idTipoPagamento) {
-        Optional<TipoPagamento> TipoPagamentoOpt =
-                Optional.ofNullable(tipoPagamentoService.buscarTipoPagamentoPorId(idTipoPagamento));
-        if (TipoPagamentoOpt.isPresent()){
-            return new ResponseEntity<TipoPagamento>(TipoPagamentoOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<TipoPagamento>(
-                        new TipoPagamento(0, "Não Encontrado"), HttpStatus.OK
-            );
-        }
+        TipoPagamento  tipoPagamento = tipoPagamentoService.buscarTipoPagamentoPorId(idTipoPagamento);
+        return ResponseEntity.ok().body(tipoPagamento);
     }
 
     @GetMapping
@@ -44,8 +37,8 @@ public class TipoPagamentoController {
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarTipoPagamento(@Valid @RequestBody TipoPagamento TipoPagamento) {
-        tipoPagamentoService.atualizarTipoPagamento(TipoPagamento);
+    public ResponseEntity<?> atualizarTipoPagamento(@Valid @RequestBody TipoPagamento tipoPagamento) {
+        tipoPagamentoService.atualizarTipoPagamento(tipoPagamento);
         return ResponseEntity.accepted().build();
     }
 

@@ -3,17 +3,15 @@ package br.com.univesp.mercadocell.mercadocell.controller;
 import br.com.univesp.mercadocell.mercadocell.model.UnidadeMedida;
 import br.com.univesp.mercadocell.mercadocell.service.UnidadeMedidaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
-//@RestController
-//@CrossOrigin
-//@RequestMapping("unidadeMedida")
+@RestController
+@CrossOrigin
+@RequestMapping("unidadeMedida")
 public class UnidadeMedidaController {
 
     @Autowired
@@ -27,15 +25,8 @@ public class UnidadeMedidaController {
 
     @GetMapping(path="/{idUnidadeMedida}")
     public ResponseEntity<UnidadeMedida> buscarUnidadeMedidaPorId(@PathVariable int idUnidadeMedida) {
-        Optional<UnidadeMedida> unidadeMedidaOpt =
-                Optional.ofNullable(unidadeMedidaService.buscarUnidadeMedidaPorId(idUnidadeMedida));
-        if (unidadeMedidaOpt.isPresent()){
-            return new ResponseEntity<UnidadeMedida>(unidadeMedidaOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<UnidadeMedida>(
-                        new UnidadeMedida(0, "Não Encontrado",""
-                    ), HttpStatus.OK);
-        }
+        UnidadeMedida unidadeMedida = unidadeMedidaService.buscarUnidadeMedidaPorId(idUnidadeMedida);
+        return ResponseEntity.accepted().body(unidadeMedida);
     }
 
     @GetMapping
@@ -44,13 +35,13 @@ public class UnidadeMedidaController {
     }
 
     @PutMapping
-    public ResponseEntity<UnidadeMedida> atualizarUnidadeMedida(@Valid @RequestBody UnidadeMedida unidadeMedida) {
+    public ResponseEntity<?> atualizarUnidadeMedida(@Valid @RequestBody UnidadeMedida unidadeMedida) {
         unidadeMedidaService.atualizarUnidadeMedida(unidadeMedida);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idUnidadeMedida}")
-    public ResponseEntity<UnidadeMedida> deletarUnidadeMedida(@PathVariable int idUnidadeMedida) {
+    public ResponseEntity<?> deletarUnidadeMedida(@PathVariable int idUnidadeMedida) {
         unidadeMedidaService.deletarUnidadeMedida(idUnidadeMedida);
         return ResponseEntity.noContent().build();
     }

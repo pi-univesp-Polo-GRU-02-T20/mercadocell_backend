@@ -20,7 +20,6 @@ public class TipoPagamentoRepository {
     }
 
     public TipoPagamento buscarTipoPagamentoPorId(int idTipoPagamento){
-        try {
             return jdbcTemplate.queryForObject("SELECT COD_TIPO_PAGAMENTO, NME_TIPO_PAGAMENTO FROM `TIPO_PAGAMENTO` WHERE `COD_TIPO_PAGAMENTO` = ?"
                     , (rs, rowNum) ->
                             new TipoPagamento(
@@ -29,9 +28,6 @@ public class TipoPagamentoRepository {
                             ),
                     new Object[]{idTipoPagamento}
             );
-        }catch(EmptyResultDataAccessException e){
-            return null;
-        }
     }
 
     public List<TipoPagamento> listarTiposPagamento(){

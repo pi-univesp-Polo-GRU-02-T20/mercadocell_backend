@@ -1,6 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
 import br.com.univesp.mercadocell.mercadocell.model.Categoria;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -36,7 +37,8 @@ public class CategoriaRepository {
             );
     }
 
-    public Categoria buscarCategoriaPorNome(String nomeCategoria) {
+    public Categoria buscarCategoriaPorNome(String nomeCategoria)
+            throws EntityIntegrityViolationException {
             return jdbcTemplate.queryForObject(
                     "SELECT COD_CATEGORIA, NME_CATEGORIA FROM CATEGORIA WHERE NME_CATEGORIA = ?"
                     , (rs, rowNum) ->

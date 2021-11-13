@@ -2,7 +2,6 @@ package br.com.univesp.mercadocell.mercadocell.repository;
 
 import br.com.univesp.mercadocell.mercadocell.model.UnidadeMedida;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +21,6 @@ public class UnidadeMedidaRepository {
     }
 
     public UnidadeMedida buscarUnidadeMedidaPorId(int idUnidadeMedida){
-        try {
             return jdbcTemplate.queryForObject("SELECT COD_UNIDADE_MEDIDA, NME_UNIDADE_MEDIDA, SGL_UNIDADE_MEDIDA " +
                             "FROM `UNIDADE_MEDIDA` WHERE `COD_UNIDADE_MEDIDA` = ?"
                     , (rs, rowNum) ->
@@ -33,10 +31,21 @@ public class UnidadeMedidaRepository {
                             ),
                     new Object[]{idUnidadeMedida}
             );
-        }catch(EmptyResultDataAccessException e){
-            return null;
-        }
     }
+
+    public UnidadeMedida buscarUnidadeMedidaPorNome(String nomeUnidadeMedida){
+        return jdbcTemplate.queryForObject("SELECT COD_UNIDADE_MEDIDA, NME_UNIDADE_MEDIDA, SGL_UNIDADE_MEDIDA " +
+                        "FROM UNIDADE_MEDIDA WHERE NME_UNIDADE_MEDIDA = ?"
+                , (rs, rowNum) ->
+                        new UnidadeMedida(
+                                rs.getInt("COD_UNIDADE_MEDIDA"),
+                                rs.getString("NME_UNIDADE_MEDIDA"),
+                                rs.getString("SGL_UNIDADE_MEDIDA")
+                        ),
+                new Object[]{nomeUnidadeMedida}
+        );
+    }
+
     public List<UnidadeMedida> listarUnidadeMedida(){
         return jdbcTemplate.query("SELECT COD_UNIDADE_MEDIDA, NME_UNIDADE_MEDIDA, SGL_UNIDADE_MEDIDA " +
                         "FROM `UNIDADE_MEDIDA`"
