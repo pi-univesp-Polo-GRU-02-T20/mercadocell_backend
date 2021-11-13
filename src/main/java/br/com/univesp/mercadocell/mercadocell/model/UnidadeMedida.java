@@ -1,12 +1,10 @@
 package br.com.univesp.mercadocell.mercadocell.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class UnidadeMedida {
     private Integer codUnidadeMedida;
     //@NotEmpty(message = "A Unidade de Medida deve ser preenchida")

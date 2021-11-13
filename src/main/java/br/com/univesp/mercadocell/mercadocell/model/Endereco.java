@@ -2,13 +2,13 @@ package br.com.univesp.mercadocell.mercadocell.model;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class Endereco {
     private Integer codEndereco;

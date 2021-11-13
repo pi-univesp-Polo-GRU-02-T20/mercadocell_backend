@@ -1,12 +1,12 @@
 package br.com.univesp.mercadocell.mercadocell.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Produto {
 
     private Integer codProduto;

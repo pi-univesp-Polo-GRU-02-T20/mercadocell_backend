@@ -5,8 +5,6 @@ import lombok.*;
 import java.util.List;
 
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 public class ItemOperacao {
     private Integer codItemOperacao;

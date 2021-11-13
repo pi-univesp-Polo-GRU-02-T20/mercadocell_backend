@@ -22,7 +22,12 @@ public class ProdutoService {
             produtoRepository.buscarProdutoPorNome(produto.getNomeProduto());
             throw new EntityIntegrityViolationException("Produto já cadastrado: " + produto.toString());
         }catch (EmptyResultDataAccessException e){
-           produtoRepository.cadastrarProduto(produto);
+           try {
+               produtoRepository.cadastrarProduto(produto);
+           } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+               throw new EntityIntegrityViolationException(
+               "Subcategoria ou Unidade de Medida informada não foi cadastrada na base:" + produto.toString());
+           }
         }
     }
 

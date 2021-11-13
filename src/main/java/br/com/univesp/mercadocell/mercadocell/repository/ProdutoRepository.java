@@ -2,6 +2,7 @@ package br.com.univesp.mercadocell.mercadocell.repository;
 
 import br.com.univesp.mercadocell.mercadocell.model.*;
 import br.com.univesp.mercadocell.mercadocell.model.Produto;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,7 +27,7 @@ public class ProdutoRepository {
     private static String FILTRO_COD_PRODUTO = " WHERE COD_PRODUTO = ?";
     private static String FILTRO_NOME_PRODUTO = " WHERE NME_PRODUTO = ?";
 
-    public void cadastrarProduto(Produto produto){
+    public void cadastrarProduto(Produto produto) throws EntityIntegrityViolationException {
         jdbcTemplate.update("INSERT INTO PRODUTO " + 
                         "(NME_PRODUTO, DSC_PRODUTO, COD_SUBCATEGORIA, COD_UNIDADE_MEDIDA )" +
                         " VALUES (?, ?, ?, ?)",
