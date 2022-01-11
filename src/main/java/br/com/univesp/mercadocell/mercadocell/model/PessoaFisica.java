@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Builder

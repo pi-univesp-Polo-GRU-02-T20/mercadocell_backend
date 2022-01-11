@@ -2,7 +2,6 @@ package br.com.univesp.mercadocell.mercadocell.repository;
 
 import br.com.univesp.mercadocell.mercadocell.model.TipoPagamento;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +25,7 @@ public class TipoPagamentoRepository {
                                     rs.getInt("COD_TIPO_PAGAMENTO"),
                                     rs.getString("NME_TIPO_PAGAMENTO")
                             ),
-                    new Object[]{idTipoPagamento}
+                    idTipoPagamento
             );
     }
 

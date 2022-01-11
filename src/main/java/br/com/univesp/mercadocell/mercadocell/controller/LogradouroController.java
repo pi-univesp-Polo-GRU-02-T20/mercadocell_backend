@@ -12,9 +12,9 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-//@RestController // Anotação de Serviços Rest
-//@CrossOrigin
-//@RequestMapping("/logradouro") //Define a url que quando for requisitada chamará o método a seguir
+@RestController // Anotação de Serviços Rest
+@CrossOrigin
+@RequestMapping("/logradouro") //Define a url que quando for requisitada chamará o método a seguir
 public class LogradouroController {
 
     @Autowired // Anotação para a Injeção automática de Dependências

@@ -30,7 +30,7 @@ public class MunicipioRepository {
                                     rs.getString("NME_MUNICIPIO"),
                                     rs.getInt("COD_ESTADO")
                             ),
-                    new Object[]{idMunicipio}
+                    idMunicipio
             );
         }catch(EmptyResultDataAccessException e){
             return null;

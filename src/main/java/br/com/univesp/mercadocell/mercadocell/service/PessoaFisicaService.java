@@ -53,8 +53,8 @@ public class PessoaFisicaService {
         }
     }
 
-    public void atualizarPessoaFisica(PessoaFisica PessoaFisica) {
-        pessoaFisicaRepository.atualizarPessoaFisica(PessoaFisica);
+    public void atualizarPessoaFisica(PessoaFisica pessoaFisica) {
+        pessoaFisicaRepository.atualizarPessoaFisica(pessoaFisica);
     }
 
     public void deletarPessoaFisica(int idPessoaFisica) {

@@ -40,13 +40,13 @@ public class PessoaFisicaController {
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarPessoaFisica(@Valid @RequestBody PessoaFisica pessoaFisica) {
+    public ResponseEntity<PessoaFisica> atualizarPessoaFisica(@Valid @RequestBody PessoaFisica pessoaFisica) {
         pessoaFisicaService.atualizarPessoaFisica(pessoaFisica);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idPessoaFisica}")
-    public ResponseEntity<?> deletarPessoaFisica(@PathVariable int idPessoaFisica) {
+    public ResponseEntity<PessoaFisica> deletarPessoaFisica(@PathVariable int idPessoaFisica) {
         pessoaFisicaService.deletarPessoaFisica(idPessoaFisica);
         return ResponseEntity.noContent().build();
     }

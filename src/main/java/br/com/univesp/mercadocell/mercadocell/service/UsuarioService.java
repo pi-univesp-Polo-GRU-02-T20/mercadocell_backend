@@ -1,6 +1,5 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
-import br.com.univesp.mercadocell.mercadocell.model.Pessoa;
 import br.com.univesp.mercadocell.mercadocell.model.Usuario;
 import br.com.univesp.mercadocell.mercadocell.repository.UsuarioRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
@@ -33,7 +32,7 @@ public class UsuarioService {
                         "A pessoa informada não foi cadastrada na base:" + usuario.getCodPessoa());
             }
         }
-        usuario.setSenha(UsuarioRepository.mascaraSenha);
+        usuario.setSenha(UsuarioRepository.MASCARA_SENHA);
         return usuario;
     }
 

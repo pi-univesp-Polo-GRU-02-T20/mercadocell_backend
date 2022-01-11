@@ -51,22 +51,11 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-    // todo terminar validação de senha
+
     @PostMapping("validarSenha")
     public ResponseEntity<Boolean> validarSenha(@Valid @RequestBody Usuario usuario) {
         boolean valido = usuarioService.validarSenha(usuario);
         HttpStatus statusSenha = valido ? HttpStatus.OK: HttpStatus.UNAUTHORIZED;
         return ResponseEntity.status(statusSenha).body(valido);
-
-        /* versão antiga de validação de senha
-        Optional<Usuario> usuarioOpt = Optional.ofNullable(usuarioService.buscarUsuarioPorLogin(usuario.getLogin()));
-        if(usuarioOpt.isEmpty()){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
-        }
-        Usuario usuarioBd = usuarioOpt.get();
-        boolean valido = psEncoder.matches( usuario.getSenha(), usuarioBd.getSenha());
-        HttpStatus statusSenha = (valido)? HttpStatus.OK: HttpStatus.UNAUTHORIZED;
-        return ResponseEntity.status(statusSenha).body(valido);
-         */
     }
 }

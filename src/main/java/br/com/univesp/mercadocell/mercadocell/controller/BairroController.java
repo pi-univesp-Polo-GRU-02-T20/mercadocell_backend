@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-//@RestController
-//@CrossOrigin
-//@RequestMapping("bairro")
+@RestController
+@CrossOrigin
+@RequestMapping("bairro")
 public class BairroController {
 
     @Autowired
@@ -35,13 +35,13 @@ public class BairroController {
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarBairro(@Valid @RequestBody Bairro bairro) {
+    public ResponseEntity<Bairro> atualizarBairro(@Valid @RequestBody Bairro bairro) {
         bairroService.atualizarBairro(bairro);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idBairro}")
-    public ResponseEntity<?> deletarBairro(@PathVariable int idBairro) {
+    public ResponseEntity<Bairro> deletarBairro(@PathVariable int idBairro) {
         bairroService.deletarBairro(idBairro);
         return ResponseEntity.noContent().build();
     }

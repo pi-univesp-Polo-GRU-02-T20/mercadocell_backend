@@ -16,7 +16,7 @@ public class ItemOperacaoRepository {
     JdbcTemplate jdbcTemplate;
 
     private static final String SELECT_ITEM_PRODUTO =
-            " SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO "+
+            " SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO, "+
             ", SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA "+
             ", CT.COD_CATEGORIA, CT.NME_CATEGORIA "+
             ", UM.COD_UNIDADE_MEDIDA, UM.NME_UNIDADE_MEDIDA, UM.SGL_UNIDADE_MEDIDA "+
@@ -53,6 +53,7 @@ public class ItemOperacaoRepository {
                                 new Produto(
                                         resultSet.getInt("COD_PRODUTO"),
                                         resultSet.getString("NME_PRODUTO"),
+                                        resultSet.getString("DSC_PRODUTO"),
                                         new SubCategoria(
                                                 resultSet.getInt("COD_SUBCATEGORIA"),
                                                 resultSet.getString("NME_SUBCATEGORIA"),
@@ -93,6 +94,7 @@ public class ItemOperacaoRepository {
                                 new Produto(
                                         resultSet.getInt("COD_PRODUTO"),
                                         resultSet.getString("NME_PRODUTO"),
+                                        resultSet.getString("DSC_PRODUTO"),
                                         new SubCategoria(
                                                 resultSet.getInt("COD_SUBCATEGORIA"),
                                                 resultSet.getString("NME_SUBCATEGORIA"),
@@ -133,6 +135,7 @@ public class ItemOperacaoRepository {
                                 new Produto(
                                         resultSet.getInt("COD_PRODUTO"),
                                         resultSet.getString("NME_PRODUTO"),
+                                        resultSet.getString("DSC_PRODUTO"),
                                         new SubCategoria(
                                                 resultSet.getInt("COD_SUBCATEGORIA"),
                                                 resultSet.getString("NME_SUBCATEGORIA"),
@@ -173,6 +176,7 @@ public class ItemOperacaoRepository {
                                 new Produto(
                                         resultSet.getInt("COD_PRODUTO"),
                                         resultSet.getString("NME_PRODUTO"),
+                                        resultSet.getString("DSC_PRODUTO"),
                                         new SubCategoria(
                                                 resultSet.getInt("COD_SUBCATEGORIA"),
                                                 resultSet.getString("NME_SUBCATEGORIA"),

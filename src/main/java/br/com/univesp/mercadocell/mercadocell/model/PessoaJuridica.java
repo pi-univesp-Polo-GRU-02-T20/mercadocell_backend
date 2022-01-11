@@ -11,17 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PessoaJuridica extends Pessoa {
 
-    //@NotEmpty(message = "A Razão Social deve ser preenchida")
+  //@NotEmpty(message = "A Razão Social deve ser preenchida")
     private String nomeRazaoSocial;
     private String codCNPJ;
-/*  todo -> Verificar como associar dados de Endereço e Operação à pessoa
-    @Autowired
-    private List<Endereco> listaEndereco;
-    @Autowired
-    private List<Operacao> listaOperacao;
-*/
 
-    public PessoaJuridica(Integer codPessoa, String nomePessoa, Integer codPessoaJuridica,
+    public PessoaJuridica(Integer codPessoa, String nomePessoa,
                           String nomeRazaoSocial, String codCNPJ) {
         super(codPessoa, nomePessoa);
         this.nomeRazaoSocial = nomeRazaoSocial;

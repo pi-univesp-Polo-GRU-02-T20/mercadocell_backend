@@ -1,17 +1,13 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.List;
-import java.util.Optional;
-
+import br.com.univesp.mercadocell.mercadocell.model.Categoria;
+import br.com.univesp.mercadocell.mercadocell.model.SubCategoria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import br.com.univesp.mercadocell.mercadocell.model.Categoria;
-import br.com.univesp.mercadocell.mercadocell.model.SubCategoria;
+import java.util.List;
 
 @Repository
 public class SubCategoriaRepository {
@@ -40,7 +36,7 @@ public class SubCategoriaRepository {
                                     rs.getString("NME_CATEGORIA")
                             )
                     ),
-                    new Object[]{idSubCategoria}
+                    idSubCategoria
             );
     }
 
@@ -83,7 +79,7 @@ public class SubCategoriaRepository {
                                     resultSet.getInt("COD_SUBCATEGORIA"),
                                     resultSet.getString("NME_SUBCATEGORIA")
                             ),
-                    new Object[]{nomeCategoria}
+                    nomeCategoria
             );
     }
 }

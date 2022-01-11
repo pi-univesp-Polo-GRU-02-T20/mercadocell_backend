@@ -45,7 +45,7 @@ public class Usuario extends Pessoa{
         this.senha = senha;
         this.ativo = ativo;
     }
-
+    @Override
     public String toString() {
         return "Usuario(codUsuario=" + this.getCodUsuario() + ", login=" +   this.getLogin() +
                 ", ativo=" + this.getAtivo() + ", codPessoa="+ super.getCodPessoa() + ")";

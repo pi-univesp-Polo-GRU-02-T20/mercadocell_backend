@@ -1,9 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.model;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 @Data
 public class Pessoa {

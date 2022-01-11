@@ -1,14 +1,11 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
-import br.com.univesp.mercadocell.mercadocell.model.Pessoa;
 import br.com.univesp.mercadocell.mercadocell.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Repository
@@ -16,9 +13,15 @@ public class UsuarioRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-    public static String mascaraSenha = "*******";
-    private String SELECT_USUARIO = "SELECT U.COD_USUARIO, U.DSC_LOGIN, U.FLG_ATIVO, P.COD_PESSOA, P.NME_PESSOA " +
-            "FROM `USUARIO` U LEFT JOIN PESSOA P ON U.COD_PESSOA  = P.COD_PESSOA";
+    public static final String MASCARA_SENHA = "*******";
+    private static final String SELECT_USUARIO = "SELECT U.COD_USUARIO, U.DSC_LOGIN, U.FLG_ATIVO, P.COD_PESSOA, P.NME_PESSOA " +
+            "FROM USUARIO U LEFT JOIN PESSOA P ON U.COD_PESSOA  = P.COD_PESSOA";
+    private static final String COLUNA_COD_USUARIO = "COD_USUARIO";
+    private static final String COLUNA_DSC_LOGIN = "DSC_LOGIN";
+    private static final String COLUNA_FLG_ATIVO = "FLG_ATIVO";
+    private static final String COLUNA_COD_PESSOA = "COD_PESSOA";
+    private static final String COLUNA_NME_PESSOA = "NME_PESSOA";
+    private static final String COLUNA_DSC_SENHA = "DSC_SENHA";
 
     public void cadastrarUsuario(Usuario usuario)
             throws DataIntegrityViolationException {
@@ -37,14 +40,14 @@ public class UsuarioRepository {
                     SELECT_USUARIO + " WHERE `COD_USUARIO` = ?;"
                     , (rs, rowNum) ->
                             new Usuario(
-                                            rs.getInt("COD_PESSOA"),
-                                            rs.getString("NME_PESSOA"),
-                                            rs.getString("DSC_LOGIN"),
-                                            mascaraSenha,
-                                            rs.getBoolean("FLG_ATIVO"),
-                                            rs.getInt("COD_PESSOA")
+                                            rs.getInt(COLUNA_COD_PESSOA),
+                                            rs.getString(COLUNA_NME_PESSOA),
+                                            rs.getString(COLUNA_DSC_LOGIN),
+                                            MASCARA_SENHA,
+                                            rs.getBoolean(COLUNA_FLG_ATIVO),
+                                            rs.getInt(COLUNA_COD_PESSOA)
                                 ),
-                    new Object[]{idUsuario}
+                    idUsuario
             );
     }
     public Usuario buscarUsuarioPorLogin(String loginUsuario) {
@@ -52,13 +55,13 @@ public class UsuarioRepository {
                             " FROM `USUARIO` WHERE `DSC_LOGIN` = ?"
                     , (resultSet, rowNum) ->
                             new Usuario(
-                                    resultSet.getInt("COD_USUARIO"),
-                                    resultSet.getString("DSC_LOGIN"),
-                                    resultSet.getString("DSC_SENHA"),
-                                    resultSet.getBoolean("FLG_ATIVO"),
-                                    resultSet.getInt("COD_PESSOA")
+                                    resultSet.getInt(COLUNA_COD_USUARIO),
+                                    resultSet.getString(COLUNA_DSC_LOGIN),
+                                    resultSet.getString(COLUNA_DSC_SENHA),
+                                    resultSet.getBoolean(COLUNA_FLG_ATIVO),
+                                    resultSet.getInt(COLUNA_COD_PESSOA)
                             ),
-                    new Object[]{loginUsuario}
+                    loginUsuario
             );
     }
 
@@ -66,12 +69,12 @@ public class UsuarioRepository {
         return jdbcTemplate.query(SELECT_USUARIO
                 , (resultSet, rowNum) ->
                         new Usuario(
-                                resultSet.getInt("COD_USUARIO"),
-                                resultSet.getString("NME_PESSOA"),
-                                resultSet.getString("DSC_LOGIN"),
-                                mascaraSenha,
-                                resultSet.getBoolean("FLG_ATIVO"),
-                                resultSet.getInt("COD_PESSOA")
+                                resultSet.getInt(COLUNA_COD_USUARIO),
+                                resultSet.getString(COLUNA_NME_PESSOA),
+                                resultSet.getString(COLUNA_DSC_LOGIN),
+                                MASCARA_SENHA,
+                                resultSet.getBoolean(COLUNA_FLG_ATIVO),
+                                resultSet.getInt(COLUNA_COD_PESSOA)
                         )
         );
     }

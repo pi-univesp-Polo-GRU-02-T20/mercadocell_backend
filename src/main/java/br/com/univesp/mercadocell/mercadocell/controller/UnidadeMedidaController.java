@@ -35,13 +35,13 @@ public class UnidadeMedidaController {
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarUnidadeMedida(@Valid @RequestBody UnidadeMedida unidadeMedida) {
+    public ResponseEntity<UnidadeMedida> atualizarUnidadeMedida(@Valid @RequestBody UnidadeMedida unidadeMedida) {
         unidadeMedidaService.atualizarUnidadeMedida(unidadeMedida);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idUnidadeMedida}")
-    public ResponseEntity<?> deletarUnidadeMedida(@PathVariable int idUnidadeMedida) {
+    public ResponseEntity<UnidadeMedida> deletarUnidadeMedida(@PathVariable int idUnidadeMedida) {
         unidadeMedidaService.deletarUnidadeMedida(idUnidadeMedida);
         return ResponseEntity.noContent().build();
     }

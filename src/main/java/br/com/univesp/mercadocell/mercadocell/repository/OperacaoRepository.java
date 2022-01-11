@@ -123,7 +123,7 @@ public class OperacaoRepository {
                                             resultSet.getString("NME_TIPO_PAGAMENTO")
                                     )
                             ),
-                new Object[]{pago, tipoOperacao}
+                pago, tipoOperacao
             );
     }
 
@@ -149,7 +149,7 @@ public class OperacaoRepository {
                                             resultSet.getString("NME_TIPO_PAGAMENTO")
                                     )
                             ),
-                    new Object[]{dataInicio, dataTermino, tipoOperacao}
+                    dataInicio, dataTermino, tipoOperacao
             );
     }
 

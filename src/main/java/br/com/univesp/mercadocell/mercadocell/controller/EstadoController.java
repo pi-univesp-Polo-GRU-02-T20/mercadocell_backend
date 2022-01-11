@@ -3,18 +3,15 @@ package br.com.univesp.mercadocell.mercadocell.controller;
 import br.com.univesp.mercadocell.mercadocell.model.Estado;
 import br.com.univesp.mercadocell.mercadocell.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.validation.Valid;
+import java.util.List;
 
-//@RestController // Anotação de Serviços Rest
-//@CrossOrigin
-//@RequestMapping("/estado") //Define a url que quando for requisitada chamará o método a seguir
+@RestController // Anotação de Serviços Rest
+@CrossOrigin
+@RequestMapping("/estado") //Define a url que quando for requisitada chamará o método a seguir
 public class EstadoController {
 
     @Autowired // Anotação para a Injeção automática de Dependências
@@ -28,12 +25,8 @@ public class EstadoController {
 
     @GetMapping(path="/{idEstado}")
     public ResponseEntity<Estado> buscarEstadoPorId(@PathVariable int idEstado) {
-        Optional<Estado> estadoOpt = Optional.ofNullable(estadoService.buscarEstadoPorId(idEstado));
-        if (estadoOpt.isPresent()){
-            return new ResponseEntity<Estado>(estadoOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<Estado>(new Estado(0,"Não Encontrado"), HttpStatus.OK);
-        }
+        Estado estado = estadoService.buscarEstadoPorId(idEstado);
+        return  ResponseEntity.ok().body(estado);
     }
 
     @GetMapping

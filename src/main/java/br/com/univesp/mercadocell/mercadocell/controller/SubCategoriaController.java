@@ -19,7 +19,7 @@ public class SubCategoriaController {
     private SubCategoriaService subCategoriaService;
 
     @PostMapping
-    public ResponseEntity<?> cadastrarSubCategoria(@Valid @RequestBody SubCategoria subcategoria) {
+    public ResponseEntity<SubCategoria> cadastrarSubCategoria(@Valid @RequestBody SubCategoria subcategoria) {
         subCategoriaService.cadastrarSubCategoria(subcategoria);
         return ResponseEntity.accepted().body(subcategoria);
     }
@@ -36,13 +36,13 @@ public class SubCategoriaController {
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarSubCategoria(@Valid @RequestBody SubCategoria subCategoria) {
+    public ResponseEntity<SubCategoria> atualizarSubCategoria(@Valid @RequestBody SubCategoria subCategoria) {
         subCategoriaService.atualizarSubCategoria(subCategoria);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idSubCategoria}")
-    public ResponseEntity<?> deletarSubCategoria(@PathVariable int idSubCategoria) {
+    public ResponseEntity<SubCategoria> deletarSubCategoria(@PathVariable int idSubCategoria) {
         subCategoriaService.deletarSubCategoria(idSubCategoria);
         return ResponseEntity.noContent().build();
     }

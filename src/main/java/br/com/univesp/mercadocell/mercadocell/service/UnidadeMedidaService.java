@@ -14,7 +14,6 @@ public class UnidadeMedidaService {
     @Autowired
     private UnidadeMedidaRepository unidadeMedidaRepository;
 
-    //TODO ADD VERIFICAÇÃO DE UNID MED EXISTENTE NA BASE ANTES DE CADASTRAR
     public void cadastrarUnidadeMedida(UnidadeMedida unidadeMedida) {
         try {
             unidadeMedidaRepository.buscarUnidadeMedidaPorNome(unidadeMedida.getNomeUnidadeMedida());
@@ -36,7 +35,7 @@ public class UnidadeMedidaService {
     public void atualizarUnidadeMedida(UnidadeMedida tipoPagamento) {
         unidadeMedidaRepository.atualizarUnidadeMedida(tipoPagamento);
     }
-    // TODO ADD VERIFICAÇÃO DE ERRO DE FK (PRODUTO VINCULADO A UNID MED A SER APAGADA)
+
     public void deletarUnidadeMedida(int idUnidadeMedida) {
         unidadeMedidaRepository.deletarUnidadeMedida(idUnidadeMedida);
     }

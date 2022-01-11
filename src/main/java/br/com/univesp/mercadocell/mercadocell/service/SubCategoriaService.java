@@ -1,8 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
-import br.com.univesp.mercadocell.mercadocell.model.Categoria;
 import br.com.univesp.mercadocell.mercadocell.model.SubCategoria;
-import br.com.univesp.mercadocell.mercadocell.repository.CategoriaRepository;
 import br.com.univesp.mercadocell.mercadocell.repository.SubCategoriaRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
@@ -11,9 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SubCategoriaService {

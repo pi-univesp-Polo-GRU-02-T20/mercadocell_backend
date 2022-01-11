@@ -12,6 +12,17 @@ public class UnidadeMedidaRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+    private static final String CONSULTA_UNIDADE_MEDIDA =
+            "SELECT COD_UNIDADE_MEDIDA, NME_UNIDADE_MEDIDA, SGL_UNIDADE_MEDIDA FROM UNIDADE_MEDIDA ";
+    private static final String DELETE_UNIDADE_MEDIDA = " DELETE FROM UNIDADE_MEDIDA ";
+    private static final String UPDATE_UNIDADE_MEDIDA =
+                " UPDATE UNIDADE_MEDIDA  SET NME_UNIDADE_MEDIDA = ?, SGL_UNIDADE_MEDIDA = ?";
+    private static final String COLUNA_COD_UNIDADE_MEDIDA = "COD_UNIDADE_MEDIDA";
+    private static final String COLUNA_NME_UNIDADE_MEDIDA = "NME_UNIDADE_MEDIDA";
+    private static final String COLUNA_SGL_UNIDADE_MEDIDA = "SGL_UNIDADE_MEDIDA";
+
+    private static final String FILTRO_COD_UNIDADE_MEDIDA = " WHERE COD_UNIDADE_MEDIDA = ?";
+    private static final String FILTRO_NME_UNIDADE_MEDIDA = " WHERE NME_UNIDADE_MEDIDA = ?";
 
     public void cadastrarUnidadeMedida(UnidadeMedida unidadeMedida){
         jdbcTemplate.update("INSERT INTO UNIDADE_MEDIDA (NME_UNIDADE_MEDIDA, SGL_UNIDADE_MEDIDA ) VALUES (?, ?)",
@@ -21,48 +32,43 @@ public class UnidadeMedidaRepository {
     }
 
     public UnidadeMedida buscarUnidadeMedidaPorId(int idUnidadeMedida){
-            return jdbcTemplate.queryForObject("SELECT COD_UNIDADE_MEDIDA, NME_UNIDADE_MEDIDA, SGL_UNIDADE_MEDIDA " +
-                            "FROM `UNIDADE_MEDIDA` WHERE `COD_UNIDADE_MEDIDA` = ?"
+            return jdbcTemplate.queryForObject( CONSULTA_UNIDADE_MEDIDA + FILTRO_COD_UNIDADE_MEDIDA
                     , (rs, rowNum) ->
                             new UnidadeMedida(
-                                    rs.getInt("COD_UNIDADE_MEDIDA"),
-                                    rs.getString("NME_UNIDADE_MEDIDA"),
-                                    rs.getString("SGL_UNIDADE_MEDIDA")
+                                    rs.getInt(COLUNA_COD_UNIDADE_MEDIDA),
+                                    rs.getString(COLUNA_NME_UNIDADE_MEDIDA),
+                                    rs.getString(COLUNA_SGL_UNIDADE_MEDIDA)
                             ),
-                    new Object[]{idUnidadeMedida}
+                    idUnidadeMedida
             );
     }
 
     public UnidadeMedida buscarUnidadeMedidaPorNome(String nomeUnidadeMedida){
-        return jdbcTemplate.queryForObject("SELECT COD_UNIDADE_MEDIDA, NME_UNIDADE_MEDIDA, SGL_UNIDADE_MEDIDA " +
-                        "FROM UNIDADE_MEDIDA WHERE NME_UNIDADE_MEDIDA = ?"
+        return jdbcTemplate.queryForObject(CONSULTA_UNIDADE_MEDIDA + FILTRO_NME_UNIDADE_MEDIDA
                 , (rs, rowNum) ->
                         new UnidadeMedida(
-                                rs.getInt("COD_UNIDADE_MEDIDA"),
-                                rs.getString("NME_UNIDADE_MEDIDA"),
-                                rs.getString("SGL_UNIDADE_MEDIDA")
+                                rs.getInt(COLUNA_COD_UNIDADE_MEDIDA),
+                                rs.getString(COLUNA_NME_UNIDADE_MEDIDA),
+                                rs.getString(COLUNA_SGL_UNIDADE_MEDIDA)
                         ),
-                new Object[]{nomeUnidadeMedida}
+                nomeUnidadeMedida
         );
     }
 
     public List<UnidadeMedida> listarUnidadeMedida(){
-        return jdbcTemplate.query("SELECT COD_UNIDADE_MEDIDA, NME_UNIDADE_MEDIDA, SGL_UNIDADE_MEDIDA " +
-                        "FROM `UNIDADE_MEDIDA`"
+        return jdbcTemplate.query(CONSULTA_UNIDADE_MEDIDA
                 , (rs, rowNum) ->
                         new UnidadeMedida(
-                                rs.getInt("COD_UNIDADE_MEDIDA"),
-                                rs.getString("NME_UNIDADE_MEDIDA"),
-                                rs.getString("SGL_UNIDADE_MEDIDA")
+                                rs.getInt(COLUNA_COD_UNIDADE_MEDIDA),
+                                rs.getString(COLUNA_NME_UNIDADE_MEDIDA),
+                                rs.getString(COLUNA_SGL_UNIDADE_MEDIDA)
                         )
         );
     }
 
     public void atualizarUnidadeMedida(UnidadeMedida unidadeMedida){
         jdbcTemplate.update(
-                "UPDATE `UNIDADE_MEDIDA` UN" +
-                        " SET `NME_UNIDADE_MEDIDA` = ?, SGL_UNIDADE_MEDIDA = ?" +
-                        " WHERE `COD_UNIDADE_MEDIDA` = ?",
+                UPDATE_UNIDADE_MEDIDA + FILTRO_COD_UNIDADE_MEDIDA,
                 unidadeMedida.getNomeUnidadeMedida(),
                 unidadeMedida.getSiglaUnidadeMedida(),
                 unidadeMedida.getCodUnidadeMedida()
@@ -71,7 +77,7 @@ public class UnidadeMedidaRepository {
 
     public void deletarUnidadeMedida(int idUnidadeMedida){
         jdbcTemplate.update(
-                "DELETE FROM `UNIDADE_MEDIDA` UM WHERE `UM`.`COD_UNIDADE_MEDIDA` = ?",
+                DELETE_UNIDADE_MEDIDA + FILTRO_COD_UNIDADE_MEDIDA,
                 idUnidadeMedida
         );
     }

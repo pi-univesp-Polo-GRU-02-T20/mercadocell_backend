@@ -3,7 +3,6 @@ package br.com.univesp.mercadocell.mercadocell.repository;
 import br.com.univesp.mercadocell.mercadocell.model.PessoaJuridica;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -57,11 +56,10 @@ public class PessoaJuridicaRepository {
                         new PessoaJuridica(
                                 resultSet.getInt("COD_PESSOA"), // codPessoa
                                 resultSet.getString("NME_PESSOA"),
-                                resultSet.getInt("COD_PESSOA"), // codPessoaJuridica
                                 resultSet.getString("NME_RAZAO_SOCIAL"),
                                 resultSet.getString("COD_CNPJ")
                         ),
-                new Object[]{idPessoaJuridica}
+                idPessoaJuridica
         );
     }
 
@@ -76,11 +74,10 @@ public class PessoaJuridicaRepository {
                             new PessoaJuridica(
                                     resultSet.getInt("COD_PESSOA"), // codPessoa
                                     resultSet.getString("NME_PESSOA"),
-                                    resultSet.getInt("COD_PESSOA"), // codPessoaJuridica
                                     resultSet.getString("NME_RAZAO_SOCIAL"),
                                     resultSet.getString("COD_CNPJ")
                             ),
-                    new Object[]{"%" + nomePessoaJuridica + "%"}
+                    "%" + nomePessoaJuridica + "%"
             );
     }
     public List<PessoaJuridica> listarPessoasJuridicas() {
@@ -89,7 +86,6 @@ public class PessoaJuridicaRepository {
                         new PessoaJuridica(
                                 resultSet.getInt("COD_PESSOA"), // codPessoa
                                 resultSet.getString("NME_PESSOA"),
-                                resultSet.getInt("COD_PESSOA"), // codPessoaJuridica
                                 resultSet.getString("NME_RAZAO_SOCIAL"),
                                 resultSet.getString("COD_CNPJ")
                         )

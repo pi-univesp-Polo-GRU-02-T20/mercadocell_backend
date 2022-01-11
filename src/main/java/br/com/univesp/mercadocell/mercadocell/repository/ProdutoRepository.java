@@ -1,11 +1,12 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
-import br.com.univesp.mercadocell.mercadocell.model.*;
+import br.com.univesp.mercadocell.mercadocell.model.Categoria;
 import br.com.univesp.mercadocell.mercadocell.model.Produto;
+import br.com.univesp.mercadocell.mercadocell.model.SubCategoria;
+import br.com.univesp.mercadocell.mercadocell.model.UnidadeMedida;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -16,16 +17,17 @@ public class ProdutoRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-    private static String SELECT_PRODUTO ="SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO "+
+
+    private static final String SELECT_PRODUTO ="SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO "+
             ", SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA "+
             ", CT.COD_CATEGORIA, CT.NME_CATEGORIA "+
             ", UM.COD_UNIDADE_MEDIDA, UM.NME_UNIDADE_MEDIDA, UM.SGL_UNIDADE_MEDIDA "+
             " FROM PRODUTO PR "+
-            " INNER JOIN SUBCATEGORIA 	    SC ON PR.COD_SUBCATEGORIA 	=	SC.COD_SUBCATEGORIA "+
-            " INNER JOIN CATEGORIA 		    CT ON CT.COD_CATEGORIA 		= 	SC.COD_CATEGORIA "+
-            " INNER JOIN UNIDADE_MEDIDA 	UM ON UM.COD_UNIDADE_MEDIDA = 	PR.COD_UNIDADE_MEDIDA ";
-    private static String FILTRO_COD_PRODUTO = " WHERE COD_PRODUTO = ?";
-    private static String FILTRO_NOME_PRODUTO = " WHERE NME_PRODUTO = ?";
+            " INNER JOIN SUBCATEGORIA SC ON PR.COD_SUBCATEGORIA = SC.COD_SUBCATEGORIA "+
+            " INNER JOIN CATEGORIA CT ON CT.COD_CATEGORIA = SC.COD_CATEGORIA "+
+            " INNER JOIN UNIDADE_MEDIDA UM ON UM.COD_UNIDADE_MEDIDA = PR.COD_UNIDADE_MEDIDA ";
+    private static final String FILTRO_COD_PRODUTO = " WHERE COD_PRODUTO = ?";
+    private static final String FILTRO_NOME_PRODUTO = " WHERE NME_PRODUTO = ?";
 
     public void cadastrarProduto(Produto produto) throws EntityIntegrityViolationException {
         jdbcTemplate.update("INSERT INTO PRODUTO " + 
@@ -60,7 +62,7 @@ public class ProdutoRepository {
                                             rs.getString("SGL_UNIDADE_MEDIDA")
                                     )
                             ),
-                    new Object[]{idProduto}
+                    idProduto
             );
     }
 
@@ -71,7 +73,7 @@ public class ProdutoRepository {
                                 rs.getInt("COD_CATEGORIA"),
                                 rs.getString("NME_CATEGORIA")
                         ),
-                new Object[]{nomeProduto}
+                nomeProduto
         );
     }
     public List<Produto> listarProdutos(){

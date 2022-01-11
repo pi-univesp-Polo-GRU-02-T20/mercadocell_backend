@@ -1,6 +1,5 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
-import br.com.univesp.mercadocell.mercadocell.model.PessoaFisica;
 import br.com.univesp.mercadocell.mercadocell.model.PessoaJuridica;
 import br.com.univesp.mercadocell.mercadocell.repository.PessoaJuridicaRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;

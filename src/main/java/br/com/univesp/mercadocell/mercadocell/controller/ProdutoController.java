@@ -35,13 +35,13 @@ public class ProdutoController {
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarProduto(@Valid @RequestBody Produto produto) {
+    public ResponseEntity<Produto> atualizarProduto(@Valid @RequestBody Produto produto) {
         produtoService.atualizarProduto(produto);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idProduto}")
-    public ResponseEntity<?> deletarProduto(@PathVariable int idProduto) {
+    public ResponseEntity<Produto> deletarProduto(@PathVariable int idProduto) {
         produtoService.deletarProduto(idProduto);
         return ResponseEntity.noContent().build();
     }

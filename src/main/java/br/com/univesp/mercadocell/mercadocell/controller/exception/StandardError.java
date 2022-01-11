@@ -1,6 +1,5 @@
 package br.com.univesp.mercadocell.mercadocell.controller.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
