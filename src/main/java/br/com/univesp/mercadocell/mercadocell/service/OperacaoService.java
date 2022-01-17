@@ -4,6 +4,7 @@ import br.com.univesp.mercadocell.mercadocell.model.Operacao;
 import br.com.univesp.mercadocell.mercadocell.repository.OperacaoRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
+import br.com.univesp.mercadocell.mercadocell.service.util.Mensagens;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -36,9 +37,10 @@ public class OperacaoService {
         try{
             return operacaoRepository.listarOperacoes();
         }catch (EmptyResultDataAccessException e ){
-            throw  new EntityNotFoundException("Nenhum registro encontrado");
+            throw  new EntityNotFoundException(Mensagens.NO_REG_FOUND);
         }
     }
+
 
     public void atualizarOperacao(Operacao operacao) {
         try{
@@ -63,7 +65,7 @@ public class OperacaoService {
         try{
             return operacaoRepository.listarOperacoesPorPessoa(idPessoa, tipoOperacao);
         }catch (EmptyResultDataAccessException e ){
-            throw  new EntityNotFoundException("Nenhum registro encontrado");
+            throw  new EntityNotFoundException(Mensagens.NO_REG_FOUND);
         }
     }
 
@@ -71,14 +73,14 @@ public class OperacaoService {
         try{
             return operacaoRepository.listarOperacoesPagas(pago, tipoIOperacao);
         }catch (EmptyResultDataAccessException e ){
-            throw  new EntityNotFoundException("Nenhum registro encontrado");
+            throw  new EntityNotFoundException(Mensagens.NO_REG_FOUND);
         }
     }
     public List<Operacao> listarOperacoesPorPeriodo(LocalDate dataInicio, LocalDate dataTermino, String tipoOperacao) {
         try{
             return operacaoRepository.listarOperacoesPorPeriodo(dataInicio, dataTermino, tipoOperacao);
         }catch (EmptyResultDataAccessException e ){
-            throw  new EntityNotFoundException("Nenhum registro encontrado");
+            throw  new EntityNotFoundException(Mensagens.NO_REG_FOUND);
         }
     }
 

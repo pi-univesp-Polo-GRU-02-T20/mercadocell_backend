@@ -31,7 +31,7 @@ public class LogradouroRepository {
                                     rs.getInt("COD_CEP"),
                                     rs.getString("DSC_LOGRADOURO")                                    
                             ),
-                    new Object[]{idLogradouro}
+                    idLogradouro
             );
         }catch(EmptyResultDataAccessException e){
             return null;

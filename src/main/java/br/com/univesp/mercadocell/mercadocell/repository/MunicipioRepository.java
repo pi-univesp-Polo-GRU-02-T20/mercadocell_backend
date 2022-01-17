@@ -49,13 +49,13 @@ public class MunicipioRepository {
         );
     }
 
-    public void atualizarMunicipios(Municipio Municipio) {
+    public void atualizarMunicipios(Municipio municipio) {
         jdbcTemplate.update(
                 "UPDATE `MUNICIPIO` SET `NME_MUNICIPIO` = ?, COD_ESTADO = ?" +
                         " WHERE COD_MUNICIPIO = ?",
-                Municipio.getNomeMunicipio(),
-                Municipio.getCodEstado(),
-                Municipio.getCodMunicipio()
+                municipio.getNomeMunicipio(),
+                municipio.getCodEstado(),
+                municipio.getCodMunicipio()
         );
     }
 

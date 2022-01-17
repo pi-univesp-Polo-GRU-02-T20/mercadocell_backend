@@ -24,6 +24,10 @@ public class PessoaJuridicaRepository {
     private static final String SELECT_PESSOA_JURIDICA =
          " SELECT P.COD_PESSOA, P.NME_PESSOA, PJ.NME_RAZAO_SOCIAL, PJ.COD_CNPJ " +
             " FROM PESSOA P INNER JOIN PESSOA_JURIDICA PJ ON P.COD_PESSOA = PJ.COD_PESSOA";
+    private static final String COL_NME_PESSOA = "NME_PESSOA";
+    private static final String COL_NME_RAZAO_SOCIAL = "NME_RAZAO_SOCIAL";
+    private static final String COL_COD_CNPJ = "COD_CNPJ";
+    private static final String COL_COD_PESSOA = "COD_PESSOA";
 
     @Transactional
     public void cadastrarPessoaJuridica(PessoaJuridica  pessoaJuridica) {
@@ -33,7 +37,7 @@ public class PessoaJuridicaRepository {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(
-                        INSERT_PESSOA_JURIDICA, new String[] { "COD_PESSOA" }
+                        INSERT_PESSOA_JURIDICA, new String[] { COL_COD_PESSOA }
                 );
                 ps.setString(1, pessoaJuridica.getNomePessoa());
                 return ps;
@@ -54,10 +58,10 @@ public class PessoaJuridicaRepository {
                 SELECT_PESSOA_JURIDICA + " WHERE P.COD_PESSOA = ? "
                 , (resultSet, rowNum) ->
                         new PessoaJuridica(
-                                resultSet.getInt("COD_PESSOA"), // codPessoa
-                                resultSet.getString("NME_PESSOA"),
-                                resultSet.getString("NME_RAZAO_SOCIAL"),
-                                resultSet.getString("COD_CNPJ")
+                                resultSet.getInt(COL_COD_PESSOA), // codPessoa
+                                resultSet.getString(COL_NME_PESSOA),
+                                resultSet.getString(COL_NME_RAZAO_SOCIAL),
+                                resultSet.getString(COL_COD_CNPJ)
                         ),
                 idPessoaJuridica
         );
@@ -72,10 +76,10 @@ public class PessoaJuridicaRepository {
                           String nomeRazaoSocial, String codCNPJ
                     * */
                             new PessoaJuridica(
-                                    resultSet.getInt("COD_PESSOA"), // codPessoa
-                                    resultSet.getString("NME_PESSOA"),
-                                    resultSet.getString("NME_RAZAO_SOCIAL"),
-                                    resultSet.getString("COD_CNPJ")
+                                    resultSet.getInt(COL_COD_PESSOA), // codPessoa
+                                    resultSet.getString(COL_NME_PESSOA),
+                                    resultSet.getString(COL_NME_RAZAO_SOCIAL),
+                                    resultSet.getString(COL_COD_CNPJ)
                             ),
                     "%" + nomePessoaJuridica + "%"
             );
@@ -84,10 +88,10 @@ public class PessoaJuridicaRepository {
         return jdbcTemplate.query(SELECT_PESSOA_JURIDICA
                 , (resultSet, rowNum) ->
                         new PessoaJuridica(
-                                resultSet.getInt("COD_PESSOA"), // codPessoa
-                                resultSet.getString("NME_PESSOA"),
-                                resultSet.getString("NME_RAZAO_SOCIAL"),
-                                resultSet.getString("COD_CNPJ")
+                                resultSet.getInt(COL_COD_PESSOA), // codPessoa
+                                resultSet.getString(COL_NME_PESSOA),
+                                resultSet.getString(COL_NME_RAZAO_SOCIAL),
+                                resultSet.getString(COL_COD_CNPJ)
                         )
         );
     }

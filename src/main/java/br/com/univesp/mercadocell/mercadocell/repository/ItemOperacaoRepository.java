@@ -30,45 +30,65 @@ public class ItemOperacaoRepository {
             " INNER JOIN OPERACAO       OP  ON OP.COD_OPERACAO       = IOP.COD_OPERACAO " +
             " INNER JOIN TIPO_PAGAMENTO TP  ON TP.COD_TIPO_PAGAMENTO = OP.COD_TIPO_PAGAMENTO "
             ;
+    private static final String COL_DTA_OPERACAO = "DTA_OPERACAO";
+    private static final String COL_VLR_TOTAL = "VLR_TOTAL";
+    private static final String COL_COD_TIPO_PAGAMENTO = "COD_TIPO_PAGAMENTO";
+    private static final String COL_COD_SUBCATEGORIA = "COD_SUBCATEGORIA";
+    private static final String COL_COD_OPERACAO = "COD_OPERACAO";
+    private static final String COL_COD_UNIDADE_MEDIDA = "COD_UNIDADE_MEDIDA";
+    private static final String COL_COD_PRODUTO = "COD_PRODUTO";
+    private static final String COL_COD_CATEGORIA = "COD_CATEGORIA";
+    private static final String COL_QTD_ITEM = "QTD_ITEM";
+    private static final String COL_NME_UNIDADE_MEDIDA = "NME_UNIDADE_MEDIDA";
+    private static final String COL_VLR_ITEM = "VLR_ITEM";
+    private static final String COL_COD_NOTA_FISCAL = "COD_NOTA_FISCAL";
+    private static final String COL_NME_PRODUTO = "NME_PRODUTO";
+    private static final String COL_TPO_STATUS = "TPO_STATUS";
+    private static final String COL_NME_SUBCATEGORIA = "NME_SUBCATEGORIA";
+    private static final String COL_DSC_PRODUTO = "DSC_PRODUTO";
+    private static final String COL_NME_CATEGORIA = "NME_CATEGORIA";
+    private static final String COL_COD_ITEM_OPERACAO = "COD_ITEM_OPERACAO";
+    private static final String COL_NME_TIPO_PAGAMENTO = "NME_TIPO_PAGAMENTO";
+
 
      public List<ItemOperacao> listarOperacoesPorCategoria(String nomeCategoria, String tipoOperacao) {
         return jdbcTemplate.query(
                 SELECT_ITEM_PRODUTO + "WHERE CT.NME_CATEGORIA LIKE ? AND OP.TPO_OPERACAO = ?"
                 , (resultSet, rowNum) ->
                         new ItemOperacao(
-                                resultSet.getInt("COD_ITEM_OPERACAO"),
-                                resultSet.getFloat("QTD_ITEM"),
-                                resultSet.getDouble("VLR_ITEM"),
+                                resultSet.getInt(COL_COD_ITEM_OPERACAO),
+                                resultSet.getFloat(COL_QTD_ITEM),
+                                resultSet.getDouble(COL_VLR_ITEM),
                                 new Operacao(
-                                    resultSet.getInt("COD_OPERACAO"),
-                                    resultSet.getObject("DTA_OPERACAO", LocalDateTime.class),
-                                    resultSet.getString("COD_NOTA_FISCAL"),
-                                    resultSet.getDouble("VLR_TOTAL"),
-                                    resultSet.getString("TPO_STATUS"),
+                                    resultSet.getInt(COL_COD_OPERACAO),
+                                    resultSet.getObject(COL_DTA_OPERACAO, LocalDateTime.class),
+                                    resultSet.getString(COL_COD_NOTA_FISCAL),
+                                    resultSet.getDouble(COL_VLR_TOTAL),
+                                    resultSet.getString(COL_TPO_STATUS),
                                     new TipoPagamento(
-                                            resultSet.getInt("COD_TIPO_PAGAMENTO"),
-                                            resultSet.getString("NME_TIPO_PAGAMENTO")
+                                            resultSet.getInt(COL_COD_TIPO_PAGAMENTO),
+                                            resultSet.getString(COL_NME_TIPO_PAGAMENTO)
                                     )
                                 ),
                                 new Produto(
-                                        resultSet.getInt("COD_PRODUTO"),
-                                        resultSet.getString("NME_PRODUTO"),
-                                        resultSet.getString("DSC_PRODUTO"),
+                                        resultSet.getInt(COL_COD_PRODUTO),
+                                        resultSet.getString(COL_NME_PRODUTO),
+                                        resultSet.getString(COL_DSC_PRODUTO),
                                         new SubCategoria(
-                                                resultSet.getInt("COD_SUBCATEGORIA"),
-                                                resultSet.getString("NME_SUBCATEGORIA"),
+                                                resultSet.getInt(COL_COD_SUBCATEGORIA),
+                                                resultSet.getString(COL_NME_SUBCATEGORIA),
                                                 new Categoria(
-                                                        resultSet.getInt("COD_CATEGORIA"),
-                                                        resultSet.getString("NME_CATEGORIA")
+                                                        resultSet.getInt(COL_COD_CATEGORIA),
+                                                        resultSet.getString(COL_NME_CATEGORIA)
                                                 )
                                         ),
                                         new UnidadeMedida(
-                                                resultSet.getInt("COD_UNIDADE_MEDIDA"),
-                                                resultSet.getString("NME_UNIDADE_MEDIDA")
+                                                resultSet.getInt(COL_COD_UNIDADE_MEDIDA),
+                                                resultSet.getString(COL_NME_UNIDADE_MEDIDA)
                                         )
                                 )
                         ),
-                new Object[]{"%"+nomeCategoria+"%", tipoOperacao}
+                "%"+nomeCategoria+"%", tipoOperacao
         );
     }
 
@@ -77,39 +97,39 @@ public class ItemOperacaoRepository {
                     SELECT_ITEM_PRODUTO + "WHERE PR.NME_PRODUTO LIKE ? AND OP.TPO_OPERACAO = ?"
                 , (resultSet, rowNum) ->
                         new ItemOperacao(
-                                resultSet.getInt("COD_ITEM_OPERACAO"),
-                                resultSet.getFloat("QTD_ITEM"),
-                                resultSet.getDouble("VLR_ITEM"),
+                                resultSet.getInt(COL_COD_ITEM_OPERACAO),
+                                resultSet.getFloat(COL_QTD_ITEM),
+                                resultSet.getDouble(COL_VLR_ITEM),
                                 new Operacao(
-                                        resultSet.getInt("COD_OPERACAO"),
-                                        resultSet.getObject("DTA_OPERACAO", LocalDateTime.class),
-                                        resultSet.getString("COD_NOTA_FISCAL"),
-                                        resultSet.getDouble("VLR_TOTAL"),
-                                        resultSet.getString("TPO_STATUS"),
+                                        resultSet.getInt(COL_COD_OPERACAO),
+                                        resultSet.getObject(COL_DTA_OPERACAO, LocalDateTime.class),
+                                        resultSet.getString(COL_COD_NOTA_FISCAL),
+                                        resultSet.getDouble(COL_VLR_TOTAL),
+                                        resultSet.getString(COL_TPO_STATUS),
                                         new TipoPagamento(
-                                                resultSet.getInt("COD_TIPO_PAGAMENTO"),
-                                                resultSet.getString("NME_TIPO_PAGAMENTO")
+                                                resultSet.getInt(COL_COD_TIPO_PAGAMENTO),
+                                                resultSet.getString(COL_NME_TIPO_PAGAMENTO)
                                         )
                                 ),
                                 new Produto(
-                                        resultSet.getInt("COD_PRODUTO"),
-                                        resultSet.getString("NME_PRODUTO"),
-                                        resultSet.getString("DSC_PRODUTO"),
+                                        resultSet.getInt(COL_COD_PRODUTO),
+                                        resultSet.getString(COL_NME_PRODUTO),
+                                        resultSet.getString(COL_DSC_PRODUTO),
                                         new SubCategoria(
-                                                resultSet.getInt("COD_SUBCATEGORIA"),
-                                                resultSet.getString("NME_SUBCATEGORIA"),
+                                                resultSet.getInt(COL_COD_SUBCATEGORIA),
+                                                resultSet.getString(COL_NME_SUBCATEGORIA),
                                                 new Categoria(
-                                                        resultSet.getInt("COD_CATEGORIA"),
-                                                        resultSet.getString("NME_CATEGORIA")
+                                                        resultSet.getInt(COL_COD_CATEGORIA),
+                                                        resultSet.getString(COL_NME_CATEGORIA)
                                                 )
                                         ),
                                         new UnidadeMedida(
-                                                resultSet.getInt("COD_UNIDADE_MEDIDA"),
-                                                resultSet.getString("NME_UNIDADE_MEDIDA")
+                                                resultSet.getInt(COL_COD_UNIDADE_MEDIDA),
+                                                resultSet.getString(COL_NME_UNIDADE_MEDIDA)
                                         )
                                 )
                         ),
-                new Object[]{"%"+nomeProduto+"%", tipoOperacao}
+                "%"+nomeProduto+"%", tipoOperacao
         );
     }
 
@@ -118,39 +138,39 @@ public class ItemOperacaoRepository {
                 SELECT_ITEM_PRODUTO + "  WHERE OP.COD_OPERACAO = ? "
                 , (resultSet, rowNum) ->
                         new ItemOperacao(
-                                resultSet.getInt("COD_ITEM_OPERACAO"),
-                                resultSet.getFloat("QTD_ITEM"),
-                                resultSet.getDouble("VLR_ITEM"),
+                                resultSet.getInt(COL_COD_ITEM_OPERACAO),
+                                resultSet.getFloat(COL_QTD_ITEM),
+                                resultSet.getDouble(COL_VLR_ITEM),
                                 new Operacao(
-                                        resultSet.getInt("COD_OPERACAO"),
-                                        resultSet.getObject("DTA_OPERACAO", LocalDateTime.class),
-                                        resultSet.getString("COD_NOTA_FISCAL"),
-                                        resultSet.getDouble("VLR_TOTAL"),
-                                        resultSet.getString("TPO_STATUS"),
+                                        resultSet.getInt(COL_COD_OPERACAO),
+                                        resultSet.getObject(COL_DTA_OPERACAO, LocalDateTime.class),
+                                        resultSet.getString(COL_COD_NOTA_FISCAL),
+                                        resultSet.getDouble(COL_VLR_TOTAL),
+                                        resultSet.getString(COL_TPO_STATUS),
                                         new TipoPagamento(
-                                                resultSet.getInt("COD_TIPO_PAGAMENTO"),
-                                                resultSet.getString("NME_TIPO_PAGAMENTO")
+                                                resultSet.getInt(COL_COD_TIPO_PAGAMENTO),
+                                                resultSet.getString(COL_NME_TIPO_PAGAMENTO)
                                         )
                                 ),
                                 new Produto(
-                                        resultSet.getInt("COD_PRODUTO"),
-                                        resultSet.getString("NME_PRODUTO"),
-                                        resultSet.getString("DSC_PRODUTO"),
+                                        resultSet.getInt(COL_COD_PRODUTO),
+                                        resultSet.getString(COL_NME_PRODUTO),
+                                        resultSet.getString(COL_DSC_PRODUTO),
                                         new SubCategoria(
-                                                resultSet.getInt("COD_SUBCATEGORIA"),
-                                                resultSet.getString("NME_SUBCATEGORIA"),
+                                                resultSet.getInt(COL_COD_SUBCATEGORIA),
+                                                resultSet.getString(COL_NME_SUBCATEGORIA),
                                                 new Categoria(
-                                                        resultSet.getInt("COD_CATEGORIA"),
-                                                        resultSet.getString("NME_CATEGORIA")
+                                                        resultSet.getInt(COL_COD_CATEGORIA),
+                                                        resultSet.getString(COL_NME_CATEGORIA)
                                                 )
                                         ),
                                         new UnidadeMedida(
-                                                resultSet.getInt("COD_UNIDADE_MEDIDA"),
-                                                resultSet.getString("NME_UNIDADE_MEDIDA")
+                                                resultSet.getInt(COL_COD_UNIDADE_MEDIDA),
+                                                resultSet.getString(COL_NME_UNIDADE_MEDIDA)
                                         )
                                 )
                         ),
-                new Object[]{idOperacao}
+                idOperacao
         );
     }
 
@@ -159,39 +179,39 @@ public class ItemOperacaoRepository {
                 SELECT_ITEM_PRODUTO + "  WHERE OP.TPO_OPERACAO = ? "
                 , (resultSet, rowNum) ->
                         new ItemOperacao(
-                                resultSet.getInt("COD_ITEM_OPERACAO"),
-                                resultSet.getFloat("QTD_ITEM"),
-                                resultSet.getDouble("VLR_ITEM"),
+                                resultSet.getInt(COL_COD_ITEM_OPERACAO),
+                                resultSet.getFloat(COL_QTD_ITEM),
+                                resultSet.getDouble(COL_VLR_ITEM),
                                 new Operacao(
-                                        resultSet.getInt("COD_OPERACAO"),
-                                        resultSet.getObject("DTA_OPERACAO", LocalDateTime.class),
-                                        resultSet.getString("COD_NOTA_FISCAL"),
-                                        resultSet.getDouble("VLR_TOTAL"),
-                                        resultSet.getString("TPO_STATUS"),
+                                        resultSet.getInt(COL_COD_OPERACAO),
+                                        resultSet.getObject(COL_DTA_OPERACAO, LocalDateTime.class),
+                                        resultSet.getString(COL_COD_NOTA_FISCAL),
+                                        resultSet.getDouble(COL_VLR_TOTAL),
+                                        resultSet.getString(COL_TPO_STATUS),
                                         new TipoPagamento(
-                                                resultSet.getInt("COD_TIPO_PAGAMENTO"),
-                                                resultSet.getString("NME_TIPO_PAGAMENTO")
+                                                resultSet.getInt(COL_COD_TIPO_PAGAMENTO),
+                                                resultSet.getString(COL_NME_TIPO_PAGAMENTO)
                                         )
                                 ),
                                 new Produto(
-                                        resultSet.getInt("COD_PRODUTO"),
-                                        resultSet.getString("NME_PRODUTO"),
-                                        resultSet.getString("DSC_PRODUTO"),
+                                        resultSet.getInt(COL_COD_PRODUTO),
+                                        resultSet.getString(COL_NME_PRODUTO),
+                                        resultSet.getString(COL_DSC_PRODUTO),
                                         new SubCategoria(
-                                                resultSet.getInt("COD_SUBCATEGORIA"),
-                                                resultSet.getString("NME_SUBCATEGORIA"),
+                                                resultSet.getInt(COL_COD_SUBCATEGORIA),
+                                                resultSet.getString(COL_NME_SUBCATEGORIA),
                                                 new Categoria(
-                                                        resultSet.getInt("COD_CATEGORIA"),
-                                                        resultSet.getString("NME_CATEGORIA")
+                                                        resultSet.getInt(COL_COD_CATEGORIA),
+                                                        resultSet.getString(COL_NME_CATEGORIA)
                                                 )
                                         ),
                                         new UnidadeMedida(
-                                                resultSet.getInt("COD_UNIDADE_MEDIDA"),
-                                                resultSet.getString("NME_UNIDADE_MEDIDA")
+                                                resultSet.getInt(COL_COD_UNIDADE_MEDIDA),
+                                                resultSet.getString(COL_NME_UNIDADE_MEDIDA)
                                         )
                                 )
                         ),
-                new Object[]{tipoOperacao}
+                tipoOperacao
         );
     }
 
@@ -205,7 +225,8 @@ public class ItemOperacaoRepository {
         );
     }
 
-    public void removerItemOperacao(br.com.univesp.mercadocell.mercadocell.model.ItemOperacao itemOperacao) throws DataIntegrityViolationException {
+    public void removerItemOperacao(br.com.univesp.mercadocell.mercadocell.model.ItemOperacao itemOperacao)
+            throws DataIntegrityViolationException {
         jdbcTemplate.update("DELETE FROM ITEM_OPERACAO WHERE COD_ITEM_OPERACAO = ?",
                 itemOperacao.getCodItemOperacao()
         );

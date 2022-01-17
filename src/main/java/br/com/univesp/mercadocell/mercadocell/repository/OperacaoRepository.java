@@ -31,6 +31,19 @@ public class OperacaoRepository {
             " DATE_FORMAT(DTA_OPERACAO,'%Y-%m-%d') <= ?" +
             " AND TPO_OPERACAO = ?";
 
+    private static final String COL_COD_OPERACAO = "COD_OPERACAO";
+    private static final String COL_DTA_OPERACAO = "DTA_OPERACAO";
+    private static final String COL_COD_NOTA_FISCAL = "COD_NOTA_FISCAL";
+    private static final String COL_VLR_TOTAL = "VLR_TOTAL";
+    private static final String COL_QTD_PARCELA = "QTD_PARCELA";
+    private static final String COL_FLG_PAGO = "FLG_PAGO";
+    private static final String COL_TPO_OPERACAO = "TPO_OPERACAO";
+    private static final String COL_TPO_STATUS = "TPO_STATUS";
+    private static final String COL_COD_PESSOA = "COD_PESSOA";
+    private static final String COL_NME_PESSOA = "NME_PESSOA";
+    private static final String COL_COD_TIPO_PAGAMENTO = "COD_TIPO_PAGAMENTO";
+    private static final String COL_NME_TIPO_PAGAMENTO = "NME_TIPO_PAGAMENTO";
+
     public void cadastrarOperacao(Operacao operacao) {
         jdbcTemplate.update(
                 "INSERT INTO `OPERACAO` " +
@@ -54,24 +67,24 @@ public class OperacaoRepository {
                     SELECT_OPERACAO + "  WHERE COD_OPERACAO = ?",
                      (resultSet, rowNum) ->
                             new Operacao(
-                                    resultSet.getInt("COD_OPERACAO"),
-                                    resultSet.getObject("DTA_OPERACAO", LocalDateTime.class),
-                                    resultSet.getString("COD_NOTA_FISCAL"),
-                                    resultSet.getDouble("VLR_TOTAL"),
-                                    resultSet.getInt("QTD_PARCELA"),
-                                    resultSet.getBoolean("FLG_PAGO"),
-                                    resultSet.getString("TPO_OPERACAO"), // C - Compra; V -- Venda
-                                    resultSet.getString("TPO_STATUS"), // P - Pedido; O- orçamento
+                                    resultSet.getInt(COL_COD_OPERACAO),
+                                    resultSet.getObject(COL_DTA_OPERACAO, LocalDateTime.class),
+                                    resultSet.getString(COL_COD_NOTA_FISCAL),
+                                    resultSet.getDouble(COL_VLR_TOTAL),
+                                    resultSet.getInt(COL_QTD_PARCELA),
+                                    resultSet.getBoolean(COL_FLG_PAGO),
+                                    resultSet.getString(COL_TPO_OPERACAO), // C - Compra; V -- Venda
+                                    resultSet.getString(COL_TPO_STATUS), // P - Pedido; O- orçamento
                                     new Pessoa(
-                                            resultSet.getInt("COD_PESSOA"),
-                                            resultSet.getString("NME_PESSOA")
+                                            resultSet.getInt(COL_COD_PESSOA),
+                                            resultSet.getString(COL_NME_PESSOA)
                                     ),
                                     new TipoPagamento(
-                                            resultSet.getInt("COD_TIPO_PAGAMENTO"),
-                                            resultSet.getString("NME_TIPO_PAGAMENTO")
+                                            resultSet.getInt(COL_COD_TIPO_PAGAMENTO),
+                                            resultSet.getString(COL_NME_TIPO_PAGAMENTO)
                                     )
                             ),
-                    new Object[]{idOperacao}
+                    idOperacao
             );
     }
 
@@ -80,24 +93,24 @@ public class OperacaoRepository {
                     SELECT_OPERACAO + "  WHERE P.COD_PESSOA = ? and TPO_OPERACAO = ?",
                     (resultSet, rowNum) ->
                             new Operacao(
-                                    resultSet.getInt("COD_OPERACAO"),
-                                    resultSet.getObject("DTA_OPERACAO", LocalDateTime.class),
-                                    resultSet.getString("COD_NOTA_FISCAL"),
-                                    resultSet.getDouble("VLR_TOTAL"),
-                                    resultSet.getInt("QTD_PARCELA"),
-                                    resultSet.getBoolean("FLG_PAGO"),
-                                    resultSet.getString("TPO_OPERACAO"), // C - Compra; V -- Venda
-                                    resultSet.getString("TPO_STATUS"), // P - Pedido; O- orçamento
+                                    resultSet.getInt(COL_COD_OPERACAO),
+                                    resultSet.getObject(COL_DTA_OPERACAO, LocalDateTime.class),
+                                    resultSet.getString(COL_COD_NOTA_FISCAL),
+                                    resultSet.getDouble(COL_VLR_TOTAL),
+                                    resultSet.getInt(COL_QTD_PARCELA),
+                                    resultSet.getBoolean(COL_FLG_PAGO),
+                                    resultSet.getString(COL_TPO_OPERACAO), // C - Compra; V -- Venda
+                                    resultSet.getString(COL_TPO_STATUS), // P - Pedido; O- orçamento
                                     new Pessoa(
-                                            resultSet.getInt("COD_PESSOA"),
-                                            resultSet.getString("NME_PESSOA")
+                                            resultSet.getInt(COL_COD_PESSOA),
+                                            resultSet.getString(COL_NME_PESSOA)
                                     ),
                                     new TipoPagamento(
-                                            resultSet.getInt("COD_TIPO_PAGAMENTO"),
-                                            resultSet.getString("NME_TIPO_PAGAMENTO")
+                                            resultSet.getInt(COL_COD_TIPO_PAGAMENTO),
+                                            resultSet.getString(COL_NME_TIPO_PAGAMENTO)
                                     )
                             ),
-                    new Object[]{codPessoa, tipoOperacao}
+                    codPessoa, tipoOperacao
             );
     }
 
@@ -106,21 +119,21 @@ public class OperacaoRepository {
                     SELECT_OPERACAO + "  WHERE FLG_PAGO = ? AND  TPO_OPERACAO = ?",
                     (resultSet, rowNum) ->
                             new Operacao(
-                                    resultSet.getInt("COD_OPERACAO"),
-                                    resultSet.getObject("DTA_OPERACAO", LocalDateTime.class),
-                                    resultSet.getString("COD_NOTA_FISCAL"),
-                                    resultSet.getDouble("VLR_TOTAL"),
-                                    resultSet.getInt("QTD_PARCELA"),
-                                    resultSet.getBoolean("FLG_PAGO"),
-                                    resultSet.getString("TPO_OPERACAO"), // C - Compra; V -- Venda
-                                    resultSet.getString("TPO_STATUS"), // P - Pedido; O- orçamento
+                                    resultSet.getInt(COL_COD_OPERACAO),
+                                    resultSet.getObject(COL_DTA_OPERACAO, LocalDateTime.class),
+                                    resultSet.getString(COL_COD_NOTA_FISCAL),
+                                    resultSet.getDouble(COL_VLR_TOTAL),
+                                    resultSet.getInt(COL_QTD_PARCELA),
+                                    resultSet.getBoolean(COL_FLG_PAGO),
+                                    resultSet.getString(COL_TPO_OPERACAO), // C - Compra; V -- Venda
+                                    resultSet.getString(COL_TPO_STATUS), // P - Pedido; O- orçamento
                                     new Pessoa(
-                                            resultSet.getInt("COD_PESSOA"),
-                                            resultSet.getString("NME_PESSOA")
+                                            resultSet.getInt(COL_COD_PESSOA),
+                                            resultSet.getString(COL_NME_PESSOA)
                                     ),
                                     new TipoPagamento(
-                                            resultSet.getInt("COD_TIPO_PAGAMENTO"),
-                                            resultSet.getString("NME_TIPO_PAGAMENTO")
+                                            resultSet.getInt(COL_COD_TIPO_PAGAMENTO),
+                                            resultSet.getString(COL_NME_TIPO_PAGAMENTO)
                                     )
                             ),
                 pago, tipoOperacao
@@ -132,21 +145,21 @@ public class OperacaoRepository {
                     SELECT_OPERACAO + FILTRO_RANGE_DATA_OPERACAO,
                     (resultSet, rowNum) ->
                             new Operacao(
-                                    resultSet.getInt("COD_OPERACAO"),
-                                    resultSet.getObject("DTA_OPERACAO", LocalDateTime.class),
-                                    resultSet.getString("COD_NOTA_FISCAL"),
-                                    resultSet.getDouble("VLR_TOTAL"),
-                                    resultSet.getInt("QTD_PARCELA"),
-                                    resultSet.getBoolean("FLG_PAGO"),
-                                    resultSet.getString("TPO_OPERACAO"), // C - Compra; V -- Venda
-                                    resultSet.getString("TPO_STATUS"), // P - Pedido; O- orçamento
+                                    resultSet.getInt(COL_COD_OPERACAO),
+                                    resultSet.getObject(COL_DTA_OPERACAO, LocalDateTime.class),
+                                    resultSet.getString(COL_COD_NOTA_FISCAL),
+                                    resultSet.getDouble(COL_VLR_TOTAL),
+                                    resultSet.getInt(COL_QTD_PARCELA),
+                                    resultSet.getBoolean(COL_FLG_PAGO),
+                                    resultSet.getString(COL_TPO_OPERACAO), // C - Compra; V -- Venda
+                                    resultSet.getString(COL_TPO_STATUS), // P - Pedido; O- orçamento
                                     new Pessoa(
-                                            resultSet.getInt("COD_PESSOA"),
-                                            resultSet.getString("NME_PESSOA")
+                                            resultSet.getInt(COL_COD_PESSOA),
+                                            resultSet.getString(COL_NME_PESSOA)
                                     ),
                                     new TipoPagamento(
-                                            resultSet.getInt("COD_TIPO_PAGAMENTO"),
-                                            resultSet.getString("NME_TIPO_PAGAMENTO")
+                                            resultSet.getInt(COL_COD_TIPO_PAGAMENTO),
+                                            resultSet.getString(COL_NME_TIPO_PAGAMENTO)
                                     )
                             ),
                     dataInicio, dataTermino, tipoOperacao
@@ -159,21 +172,21 @@ public class OperacaoRepository {
                 SELECT_OPERACAO,
                 (resultSet, rowNum) ->
                         new Operacao(
-                                resultSet.getInt("COD_OPERACAO"),
-                                resultSet.getObject("DTA_OPERACAO", LocalDateTime.class),
-                                resultSet.getString("COD_NOTA_FISCAL"),
-                                resultSet.getDouble("VLR_TOTAL"),
-                                resultSet.getInt("QTD_PARCELA"),
-                                resultSet.getBoolean("FLG_PAGO"),
-                                resultSet.getString("TPO_OPERACAO"), // C - Compra; V -- Venda
-                                resultSet.getString("TPO_STATUS"), // P - Pedido; O- orçamento
+                                resultSet.getInt(COL_COD_OPERACAO),
+                                resultSet.getObject(COL_DTA_OPERACAO, LocalDateTime.class),
+                                resultSet.getString(COL_COD_NOTA_FISCAL),
+                                resultSet.getDouble(COL_VLR_TOTAL),
+                                resultSet.getInt(COL_QTD_PARCELA),
+                                resultSet.getBoolean(COL_FLG_PAGO),
+                                resultSet.getString(COL_TPO_OPERACAO), // C - Compra; V -- Venda
+                                resultSet.getString(COL_TPO_STATUS), // P - Pedido; O- orçamento
                                 new Pessoa(
-                                        resultSet.getInt("COD_PESSOA"),
-                                        resultSet.getString("NME_PESSOA")
+                                        resultSet.getInt(COL_COD_PESSOA),
+                                        resultSet.getString(COL_NME_PESSOA)
                                 ),
                                 new TipoPagamento(
-                                        resultSet.getInt("COD_TIPO_PAGAMENTO"),
-                                        resultSet.getString("NME_TIPO_PAGAMENTO")
+                                        resultSet.getInt(COL_COD_TIPO_PAGAMENTO),
+                                        resultSet.getString(COL_NME_TIPO_PAGAMENTO)
                                 )
                         )
         );

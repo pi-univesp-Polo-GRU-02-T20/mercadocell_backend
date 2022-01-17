@@ -49,8 +49,8 @@ public class PessoaJuridicaService {
         return pessoaJuridicaRepository.listarPessoasJuridicas();
     }
 
-    public void atualizarPessoaJuridica(PessoaJuridica PessoaJuridica) {
-        pessoaJuridicaRepository.atualizarPessoaJuridica(PessoaJuridica);
+    public void atualizarPessoaJuridica(PessoaJuridica pessoaJuridica) {
+        pessoaJuridicaRepository.atualizarPessoaJuridica(pessoaJuridica);
     }
 
     public void deletarPessoaJuridica(int idPessoaJuridica) {

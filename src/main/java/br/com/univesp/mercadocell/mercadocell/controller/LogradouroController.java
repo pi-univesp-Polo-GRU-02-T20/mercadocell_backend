@@ -3,14 +3,11 @@ package br.com.univesp.mercadocell.mercadocell.controller;
 import br.com.univesp.mercadocell.mercadocell.model.Logradouro;
 import br.com.univesp.mercadocell.mercadocell.service.LogradouroService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController // Anotação de Serviços Rest
 @CrossOrigin
@@ -28,12 +25,8 @@ public class LogradouroController {
 
     @GetMapping(path="/{idLogradouro}")
     public ResponseEntity<Logradouro> buscarLogradouroPorId(@PathVariable int idLogradouro) {
-        Optional<Logradouro> logradouroOpt = Optional.ofNullable(logradouroService.buscarLogradouroPorId(idLogradouro));
-        if (logradouroOpt.isPresent()){
-            return new ResponseEntity<Logradouro>(logradouroOpt.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<Logradouro>(new Logradouro(0,"Não Encontrado"), HttpStatus.OK);
-        }
+        Logradouro logradouro = logradouroService.buscarLogradouroPorId(idLogradouro);
+          return ResponseEntity.ok().body(logradouro);
     }
 
     @GetMapping

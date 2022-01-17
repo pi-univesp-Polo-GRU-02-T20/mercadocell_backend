@@ -8,7 +8,7 @@ public class SubCategoria {
     private Integer  codSubCategoria;
     //@NotEmpty(message = "O nome da Subcategoria deve ser preenchida")
     private String  nomeSubCategoria;
-    private Categoria Categoria;
+    private Categoria categoria;
 
     public SubCategoria(Integer codSubCategoria, String nomeSubCategoria) {
         this.codSubCategoria = codSubCategoria;

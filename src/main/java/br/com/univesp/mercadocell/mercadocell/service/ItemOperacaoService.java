@@ -4,6 +4,7 @@ import br.com.univesp.mercadocell.mercadocell.model.ItemOperacao;
 import br.com.univesp.mercadocell.mercadocell.repository.ItemOperacaoRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
+import br.com.univesp.mercadocell.mercadocell.service.util.Mensagens;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,7 +25,7 @@ public class ItemOperacaoService {
             return itemOperacaoRepository.listarOperacoesPorCategoria(nomeCategoria, tipoOperacao);
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException(
-                    "Itens não encontrados com os críterios informados :" +
+                    Mensagens.NO_ITEM_FOUND_FILTER +
                             " nomeCategoria = " + nomeCategoria  + " "+
                             " tipoOperacao = " + tipoOperacao  + " "
             );
@@ -36,7 +37,7 @@ public class ItemOperacaoService {
             return itemOperacaoRepository.listarItensOperacaoPorProduto(nomeProduto, tipoOperacao);
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException(
-                    "Itens não encontrados com os críterios informados :" +
+                    Mensagens.NO_ITEM_FOUND_FILTER +
                             " nomeProduto = " + nomeProduto  + " "+
                             " tipoOperacao = " + tipoOperacao  + " "
             );
@@ -48,7 +49,7 @@ public class ItemOperacaoService {
             return itemOperacaoRepository.listarItensOperacaoPorTipoOperacao(tipoOperacao);
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException(
-                    "Itens não encontrados com os críterios informados :" +
+                    Mensagens.NO_ITEM_FOUND_FILTER +
                             " tipoOperacao = " + tipoOperacao
             );
         }
