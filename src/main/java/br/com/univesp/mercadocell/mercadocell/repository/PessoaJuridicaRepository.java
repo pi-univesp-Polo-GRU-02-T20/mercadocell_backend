@@ -43,11 +43,11 @@ public class PessoaJuridicaRepository {
                 return ps;
             }
         }, keyHolder);
-        int codPessoa  = keyHolder.getKey().intValue();
+
         jdbcTemplate.update(
                 "INSERT INTO `PESSOA_JURIDICA` (COD_PESSOA, NME_RAZAO_SOCIAL, COD_CNPJ ) " +
                         " VALUES (?, ?, ?)",
-                codPessoa,
+                keyHolder.getKey().intValue(),//nosonar
                 pessoaJuridica.getNomeRazaoSocial(),
                 pessoaJuridica.getCodCNPJ()
         );

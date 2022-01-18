@@ -44,11 +44,11 @@ public class PessoaFisicaRepository {
                 return statement;
             }
         }, keyHolder);
-        int codPessoa  = keyHolder.getKey().intValue();
+
        jdbcTemplate.update(
                 "INSERT INTO `PESSOA_FISICA` (COD_PESSOA, SGL_UF_NATURALIDADE, DTA_NASCIMENTO, TPO_SEXO ) " +
                         " VALUES (?, ?, ?, ?)",
-                        codPessoa,
+                       keyHolder.getKey().intValue(),//nosonar
                         pessoaFisica.getEstadoNaturalidade(),
                         pessoaFisica.getDataNascimento().toString(),
                         pessoaFisica.getTipoSexo()

@@ -18,6 +18,10 @@ public class SubCategoriaRepository {
             SELECT_SUBCATEGORIA= "SELECT CT.COD_CATEGORIA,CT.NME_CATEGORIA,SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA " +
                                     " FROM CATEGORIA CT JOIN SUBCATEGORIA SC " +
                                     " ON SC.COD_CATEGORIA = CT.COD_CATEGORIA ";
+    private static final String COL_COD_CATEGORIA = "COD_CATEGORIA";
+    private static final String COL_NME_CATEGORIA = "NME_CATEGORIA";
+    private static final String COL_COD_SUBCATEGORIA = "COD_SUBCATEGORIA";
+    private static final String COL_NME_SUBCATEGORIA = "NME_SUBCATEGORIA";
 
     public void cadastrarSubCategoria(SubCategoria subcategoria) {
            jdbcTemplate.update("INSERT INTO SUBCATEGORIA (NME_SUBCATEGORIA, COD_CATEGORIA ) VALUES (?, ?)",
@@ -29,11 +33,11 @@ public class SubCategoriaRepository {
             return jdbcTemplate.queryForObject( SELECT_SUBCATEGORIA+ " WHERE `COD_SUBCATEGORIA` = ?"
                     , (rs, rowNum) ->
                             new SubCategoria(
-                            rs.getInt("COD_SUBCATEGORIA"),
-                            rs.getString("NME_SUBCATEGORIA"),
+                            rs.getInt(COL_COD_SUBCATEGORIA),
+                            rs.getString(COL_NME_SUBCATEGORIA),
                             new Categoria(
-                                    rs.getInt("COD_CATEGORIA"),
-                                    rs.getString("NME_CATEGORIA")
+                                    rs.getInt(COL_COD_CATEGORIA),
+                                    rs.getString(COL_NME_CATEGORIA)
                             )
                     ),
                     idSubCategoria
@@ -44,11 +48,11 @@ public class SubCategoriaRepository {
         return jdbcTemplate.query(  SELECT_SUBCATEGORIA
                 , (rs, rowNum) ->
                         new SubCategoria(
-                                rs.getInt("COD_SUBCATEGORIA"),
-                                rs.getString("NME_SUBCATEGORIA"),
+                                rs.getInt(COL_COD_SUBCATEGORIA),
+                                rs.getString(COL_NME_SUBCATEGORIA),
                                 new Categoria(
-                                            rs.getInt("COD_CATEGORIA"),
-                                            rs.getString("NME_CATEGORIA")
+                                            rs.getInt(COL_COD_CATEGORIA),
+                                            rs.getString(COL_NME_CATEGORIA)
                                 )
                         )
         );
@@ -76,8 +80,8 @@ public class SubCategoriaRepository {
                             " FROM SUBCATEGORIA WHERE NME_SUBCATEGORIA = ?"
                     , (resultSet, rowNum) ->
                             new SubCategoria(
-                                    resultSet.getInt("COD_SUBCATEGORIA"),
-                                    resultSet.getString("NME_SUBCATEGORIA")
+                                    resultSet.getInt(COL_COD_SUBCATEGORIA),
+                                    resultSet.getString(COL_NME_SUBCATEGORIA)
                             ),
                     nomeCategoria
             );

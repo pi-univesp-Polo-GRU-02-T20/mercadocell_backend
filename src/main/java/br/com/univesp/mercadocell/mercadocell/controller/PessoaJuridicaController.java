@@ -41,13 +41,13 @@ public class PessoaJuridicaController {
     }
 
     @PutMapping
-    public ResponseEntity<?> atualizarPessoaJuridica(@Valid @RequestBody PessoaJuridica pessoaJuridica) {
+    public ResponseEntity<PessoaJuridica> atualizarPessoaJuridica(@Valid @RequestBody PessoaJuridica pessoaJuridica) {
         pessoaJuridicaService.atualizarPessoaJuridica(pessoaJuridica);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{idPessoaJuridica}")
-    public ResponseEntity<?> deletarPessoaJuridica(@PathVariable int idPessoaJuridica) {
+    public ResponseEntity<PessoaJuridica> deletarPessoaJuridica(@PathVariable int idPessoaJuridica) {
         pessoaJuridicaService.deletarPessoaJuridica(idPessoaJuridica);
         return ResponseEntity.noContent().build();
     }

@@ -27,7 +27,7 @@ public class ItemOperacaoService {
             throw  new EntityNotFoundException(
                     Mensagens.NO_ITEM_FOUND_FILTER +
                             " nomeCategoria = " + nomeCategoria  + " "+
-                            " tipoOperacao = " + tipoOperacao  + " "
+                            "tipoOperacao = " + tipoOperacao
             );
         }
     }
@@ -39,7 +39,7 @@ public class ItemOperacaoService {
             throw  new EntityNotFoundException(
                     Mensagens.NO_ITEM_FOUND_FILTER +
                             " nomeProduto = " + nomeProduto  + " "+
-                            " tipoOperacao = " + tipoOperacao  + " "
+                            "tipoOperacao = " + tipoOperacao
             );
         }
     }

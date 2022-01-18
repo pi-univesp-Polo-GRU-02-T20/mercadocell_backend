@@ -28,6 +28,18 @@ public class ProdutoRepository {
             " INNER JOIN UNIDADE_MEDIDA UM ON UM.COD_UNIDADE_MEDIDA = PR.COD_UNIDADE_MEDIDA ";
     private static final String FILTRO_COD_PRODUTO = " WHERE COD_PRODUTO = ?";
     private static final String FILTRO_NOME_PRODUTO = " WHERE NME_PRODUTO = ?";
+    private static final String COL_COD_SUBCATEGORIA = "COD_SUBCATEGORIA";
+    private static final String COL_NME_SUBCATEGORIA = "NME_SUBCATEGORIA";
+    private static final String COL_COD_CATEGORIA = "COD_CATEGORIA";
+    private static final String COL_NME_CATEGORIA = "NME_CATEGORIA";
+    private static final String COL_COD_PRODUTO = "COD_PRODUTO";
+    private static final String COL_DSC_PRODUTO = "DSC_PRODUTO";
+    private static final String COL_NME_PRODUTO = "NME_PRODUTO";
+    private static final String COL_NME_UNIDADE_MEDIDA = "NME_UNIDADE_MEDIDA";
+    private static final String COL_SGL_UNIDADE_MEDIDA = "SGL_UNIDADE_MEDIDA";
+
+
+
 
     public void cadastrarProduto(Produto produto) throws EntityIntegrityViolationException {
         jdbcTemplate.update("INSERT INTO PRODUTO " + 
@@ -45,21 +57,21 @@ public class ProdutoRepository {
                     SELECT_PRODUTO + FILTRO_COD_PRODUTO
                     , (rs, rowNum) ->
                             new Produto(
-                                    rs.getInt("COD_PRODUTO"),
-                                    rs.getString("NME_PRODUTO"),
-                                    rs.getString("DSC_PRODUTO"),
+                                    rs.getInt(COL_COD_PRODUTO),
+                                    rs.getString(COL_NME_PRODUTO),
+                                    rs.getString(COL_DSC_PRODUTO),
                                     new SubCategoria(
-                                                rs.getInt("COD_SUBCATEGORIA"),
-                                                rs.getString("NME_SUBCATEGORIA"),
+                                                rs.getInt(COL_COD_SUBCATEGORIA),
+                                                rs.getString(COL_NME_SUBCATEGORIA),
                                             new Categoria(
-                                                    rs.getInt("COD_CATEGORIA"),
-                                                    rs.getString("NME_CATEGORIA")
+                                                    rs.getInt(COL_COD_CATEGORIA),
+                                                    rs.getString(COL_NME_CATEGORIA)
                                             )
                                     ),
                                     new UnidadeMedida(
-                                            rs.getInt("COD_SUBCATEGORIA"),
-                                            rs.getString("NME_UNIDADE_MEDIDA"),
-                                            rs.getString("SGL_UNIDADE_MEDIDA")
+                                            rs.getInt(COL_COD_SUBCATEGORIA),
+                                            rs.getString(COL_NME_UNIDADE_MEDIDA),
+                                            rs.getString(COL_SGL_UNIDADE_MEDIDA)
                                     )
                             ),
                     idProduto
@@ -70,8 +82,8 @@ public class ProdutoRepository {
         return jdbcTemplate.queryForObject(SELECT_PRODUTO + FILTRO_NOME_PRODUTO
                 , (rs, rowNum) ->
                         new Categoria(
-                                rs.getInt("COD_CATEGORIA"),
-                                rs.getString("NME_CATEGORIA")
+                                rs.getInt(COL_COD_CATEGORIA),
+                                rs.getString(COL_NME_CATEGORIA)
                         ),
                 nomeProduto
         );
@@ -80,21 +92,21 @@ public class ProdutoRepository {
         return jdbcTemplate.query(SELECT_PRODUTO
                 , (rs, rowNum) ->
                         new Produto(
-                                rs.getInt("COD_PRODUTO"),
-                                rs.getString("NME_PRODUTO"),
-                                rs.getString("DSC_PRODUTO"),
+                                rs.getInt(COL_COD_PRODUTO),
+                                rs.getString(COL_NME_PRODUTO),
+                                rs.getString(COL_DSC_PRODUTO),
                                 new SubCategoria(
-                                        rs.getInt("COD_SUBCATEGORIA"),
-                                        rs.getString("NME_SUBCATEGORIA"),
+                                        rs.getInt(COL_COD_SUBCATEGORIA),
+                                        rs.getString(COL_NME_SUBCATEGORIA),
                                         new Categoria(
-                                                rs.getInt("COD_CATEGORIA"),
-                                                rs.getString("NME_CATEGORIA")
+                                                rs.getInt(COL_COD_CATEGORIA),
+                                                rs.getString(COL_NME_CATEGORIA)
                                         )
                                 ),
                                 new UnidadeMedida(
-                                        rs.getInt("COD_SUBCATEGORIA"),
-                                        rs.getString("NME_UNIDADE_MEDIDA"),
-                                        rs.getString("SGL_UNIDADE_MEDIDA")
+                                        rs.getInt(COL_COD_SUBCATEGORIA),
+                                        rs.getString(COL_NME_UNIDADE_MEDIDA),
+                                        rs.getString(COL_SGL_UNIDADE_MEDIDA)
                                 )
                         )
         );
