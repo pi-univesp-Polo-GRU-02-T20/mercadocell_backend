@@ -16,17 +16,18 @@ public class ItemOperacaoRepository {
     JdbcTemplate jdbcTemplate;
 
     private static final String SELECT_ITEM_PRODUTO =
-            " SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO, "+
+            " SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO "+
             ", SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA "+
             ", CT.COD_CATEGORIA, CT.NME_CATEGORIA "+
             ", UM.COD_UNIDADE_MEDIDA, UM.NME_UNIDADE_MEDIDA, UM.SGL_UNIDADE_MEDIDA "+
             ", OP.COD_OPERACAO, OP.DTA_OPERACAO, OP.VLR_TOTAL,OP.COD_NOTA_FISCAL, OP.TPO_STATUS"+
-            ", IOP.COD_ITEM_OPERACAO,IOP.QTD_ITEM, IOP.VLR_ITEM,IOP.COD_OPERACAO " +
+            ", IOP.COD_ITEM_OPERACAO,IOP.QTD_ITEM, IOP.VLR_ITEM,IOP.COD_OPERACAO, " +
+            " tp.COD_TIPO_PAGAMENTO, TP.NME_TIPO_PAGAMENTO "+
             " FROM PRODUTO PR "+
-            " INNER JOIN SUBCATEGORIA   SC ON PR.COD_SUBCATEGORIA    = SC.COD_SUBCATEGORIA "+
-            " INNER JOIN CATEGORIA      CT  ON CT.COD_CATEGORIA      = SC.COD_CATEGORIA "+
+            " INNER JOIN SUBCATEGORIA   SC ON PR.COD_SUBCATEGORIA    = SC.COD_SUBCATEGORIA " +
+            " INNER JOIN CATEGORIA      CT  ON CT.COD_CATEGORIA      = SC.COD_CATEGORIA " +
             " INNER JOIN UNIDADE_MEDIDA UM  ON UM.COD_UNIDADE_MEDIDA = PR.COD_UNIDADE_MEDIDA "+
-            " INNER JOIN ITEM_OPERACAO  IOP ON  PR.COD_PRODUTO       = IOP.COD_PRODUTO "+
+            " INNER JOIN ITEM_OPERACAO  IOP ON  PR.COD_PRODUTO       = IOP.COD_PRODUTO " +
             " INNER JOIN OPERACAO       OP  ON OP.COD_OPERACAO       = IOP.COD_OPERACAO " +
             " INNER JOIN TIPO_PAGAMENTO TP  ON TP.COD_TIPO_PAGAMENTO = OP.COD_TIPO_PAGAMENTO "
             ;
@@ -135,7 +136,7 @@ public class ItemOperacaoRepository {
 
     public List<ItemOperacao> listarItensPorOperacao(int idOperacao) {
         return jdbcTemplate.query(//SELECT_ITEM_PRODUTO + "  WHERE IOP.COD_OPERACAO = "+ idOperacao
-                SELECT_ITEM_PRODUTO + "  WHERE OP.COD_OPERACAO = ? "
+                SELECT_ITEM_PRODUTO + "  WHERE OP.COD_OPERACAO = ? ; "
                 , (resultSet, rowNum) ->
                         new ItemOperacao(
                                 resultSet.getInt(COL_COD_ITEM_OPERACAO),
