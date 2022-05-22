@@ -16,6 +16,8 @@ public class Produto {
     private SubCategoria subCategoria;
     private UnidadeMedida unidadeMedida;
     private Integer quantidadeEstoqueMinima;
+    private Integer quantidadeEstoqueMaximo;
+    private Integer quantidadeEstoqueAtual;
 
 
 }

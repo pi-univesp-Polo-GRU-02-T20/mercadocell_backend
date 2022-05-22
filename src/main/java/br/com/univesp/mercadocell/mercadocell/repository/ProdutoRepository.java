@@ -19,7 +19,8 @@ public class ProdutoRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    private static final String SELECT_PRODUTO ="SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO, PR.QTD_ESTOQUE_MIN "+
+    private static final String SELECT_PRODUTO ="SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO," +
+            " PR.QTD_ESTOQUE_MIN, PR.QTD_ESTOQUE_MAX, PR.QTD_ESTOQUE_ATUAL "+
             ", SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA "+
             ", CT.COD_CATEGORIA, CT.NME_CATEGORIA "+
             ", UM.COD_UNIDADE_MEDIDA, UM.NME_UNIDADE_MEDIDA, UM.SGL_UNIDADE_MEDIDA "+
@@ -39,18 +40,23 @@ public class ProdutoRepository {
     private static final String COL_NME_UNIDADE_MEDIDA = "NME_UNIDADE_MEDIDA";
     private static final String COL_SGL_UNIDADE_MEDIDA = "SGL_UNIDADE_MEDIDA";
     private static final String COL_QTD_ESTOQUE_MIN ="QTD_ESTOQUE_MIN";
+    private static final String COL_QTD_ESTOQUE_MAX ="QTD_ESTOQUE_MAX";
+    private static final String COL_QTD_ESTOQUE_ATUAL ="QTD_ESTOQUE_ATUAL";
 
 
 
     public void cadastrarProduto(Produto produto) throws EntityIntegrityViolationException {
         jdbcTemplate.update("INSERT INTO PRODUTO " + 
-                        "(NME_PRODUTO, DSC_PRODUTO, COD_SUBCATEGORIA, COD_UNIDADE_MEDIDA, QTD_MIN_ESTOQUE )" +
+                        "(NME_PRODUTO, DSC_PRODUTO, COD_SUBCATEGORIA, COD_UNIDADE_MEDIDA, PR.QTD_ESTOQUE_MIN, " +
+                        "PR.QTD_ESTOQUE_MAX, PR.QTD_ESTOQUE_ATUAL )" +
                         " VALUES (?, ?, ?, ?, ?)",
                 produto.getNomeProduto(),
                 produto.getDescricaoProduto(),
                 produto.getSubCategoria().getCodSubCategoria(),
                 produto.getUnidadeMedida().getCodUnidadeMedida(),
-                produto.getQuantidadeEstoqueMinima()
+                produto.getQuantidadeEstoqueMinima(),
+                produto.getQuantidadeEstoqueMaximo(),
+                produto.getQuantidadeEstoqueAtual()
         );
     }
 
@@ -75,7 +81,9 @@ public class ProdutoRepository {
                                             rs.getString(COL_NME_UNIDADE_MEDIDA),
                                             rs.getString(COL_SGL_UNIDADE_MEDIDA)
                                     ),
-                                    rs.getInt(COL_QTD_ESTOQUE_MIN)
+                                    rs.getInt(COL_QTD_ESTOQUE_MIN),
+                                    rs.getInt(COL_QTD_ESTOQUE_MAX),
+                                    rs.getInt(COL_QTD_ESTOQUE_ATUAL)
                             ),
                     idProduto
             );
@@ -111,7 +119,9 @@ public class ProdutoRepository {
                                         rs.getString(COL_NME_UNIDADE_MEDIDA),
                                         rs.getString(COL_SGL_UNIDADE_MEDIDA)
                                 ),
-                                rs.getInt(COL_QTD_ESTOQUE_MIN)
+                                rs.getInt(COL_QTD_ESTOQUE_MIN),
+                                rs.getInt(COL_QTD_ESTOQUE_MAX),
+                                rs.getInt(COL_QTD_ESTOQUE_ATUAL)
                         )
         );
     }
