@@ -15,10 +15,11 @@ import java.util.List;
 @Repository
 public class ProdutoRepository {
 
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    private static final String SELECT_PRODUTO ="SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO "+
+    private static final String SELECT_PRODUTO ="SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO, PR.QTD_ESTOQUE_MIN "+
             ", SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA "+
             ", CT.COD_CATEGORIA, CT.NME_CATEGORIA "+
             ", UM.COD_UNIDADE_MEDIDA, UM.NME_UNIDADE_MEDIDA, UM.SGL_UNIDADE_MEDIDA "+
@@ -37,18 +38,19 @@ public class ProdutoRepository {
     private static final String COL_NME_PRODUTO = "NME_PRODUTO";
     private static final String COL_NME_UNIDADE_MEDIDA = "NME_UNIDADE_MEDIDA";
     private static final String COL_SGL_UNIDADE_MEDIDA = "SGL_UNIDADE_MEDIDA";
-
+    private static final String COL_QTD_ESTOQUE_MIN ="QTD_ESTOQUE_MIN";
 
 
 
     public void cadastrarProduto(Produto produto) throws EntityIntegrityViolationException {
         jdbcTemplate.update("INSERT INTO PRODUTO " + 
-                        "(NME_PRODUTO, DSC_PRODUTO, COD_SUBCATEGORIA, COD_UNIDADE_MEDIDA )" +
-                        " VALUES (?, ?, ?, ?)",
+                        "(NME_PRODUTO, DSC_PRODUTO, COD_SUBCATEGORIA, COD_UNIDADE_MEDIDA, QTD_MIN_ESTOQUE )" +
+                        " VALUES (?, ?, ?, ?, ?)",
                 produto.getNomeProduto(),
                 produto.getDescricaoProduto(),
                 produto.getSubCategoria().getCodSubCategoria(),
-                produto.getUnidadeMedida().getCodUnidadeMedida()
+                produto.getUnidadeMedida().getCodUnidadeMedida(),
+                produto.getQuantidadeEstoqueMinima()
         );
     }
 
@@ -72,7 +74,8 @@ public class ProdutoRepository {
                                             rs.getInt(COL_COD_SUBCATEGORIA),
                                             rs.getString(COL_NME_UNIDADE_MEDIDA),
                                             rs.getString(COL_SGL_UNIDADE_MEDIDA)
-                                    )
+                                    ),
+                                    rs.getInt(COL_QTD_ESTOQUE_MIN)
                             ),
                     idProduto
             );
@@ -107,7 +110,8 @@ public class ProdutoRepository {
                                         rs.getInt(COL_COD_SUBCATEGORIA),
                                         rs.getString(COL_NME_UNIDADE_MEDIDA),
                                         rs.getString(COL_SGL_UNIDADE_MEDIDA)
-                                )
+                                ),
+                                rs.getInt(COL_QTD_ESTOQUE_MIN)
                         )
         );
     }

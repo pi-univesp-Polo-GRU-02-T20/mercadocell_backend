@@ -15,6 +15,7 @@ public class Produto {
     private String descricaoProduto;
     private SubCategoria subCategoria;
     private UnidadeMedida unidadeMedida;
+    private Integer quantidadeEstoqueMinima;
 
 
 }

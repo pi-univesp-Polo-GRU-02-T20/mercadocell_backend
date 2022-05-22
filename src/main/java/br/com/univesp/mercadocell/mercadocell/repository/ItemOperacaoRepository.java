@@ -16,7 +16,7 @@ public class ItemOperacaoRepository {
     JdbcTemplate jdbcTemplate;
 
     private static final String SELECT_ITEM_PRODUTO =
-            " SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO "+
+            " SELECT PR.COD_PRODUTO, PR.NME_PRODUTO, PR.DSC_PRODUTO, PR.QTD_ESTOQUE_MIN "+
             ", SC.COD_SUBCATEGORIA, SC.NME_SUBCATEGORIA "+
             ", CT.COD_CATEGORIA, CT.NME_CATEGORIA "+
             ", UM.COD_UNIDADE_MEDIDA, UM.NME_UNIDADE_MEDIDA, UM.SGL_UNIDADE_MEDIDA "+
@@ -47,6 +47,7 @@ public class ItemOperacaoRepository {
     private static final String COL_TPO_STATUS = "TPO_STATUS";
     private static final String COL_NME_SUBCATEGORIA = "NME_SUBCATEGORIA";
     private static final String COL_DSC_PRODUTO = "DSC_PRODUTO";
+    private static final String COL_QTD_ESTOQUE_MIN ="QTD_ESTOQUE_MIN";
     private static final String COL_NME_CATEGORIA = "NME_CATEGORIA";
     private static final String COL_COD_ITEM_OPERACAO = "COD_ITEM_OPERACAO";
     private static final String COL_NME_TIPO_PAGAMENTO = "NME_TIPO_PAGAMENTO";
@@ -86,7 +87,8 @@ public class ItemOperacaoRepository {
                                         new UnidadeMedida(
                                                 resultSet.getInt(COL_COD_UNIDADE_MEDIDA),
                                                 resultSet.getString(COL_NME_UNIDADE_MEDIDA)
-                                        )
+                                        ),
+                                        resultSet.getInt(COL_QTD_ESTOQUE_MIN)
                                 )
                         ),
                 "%"+nomeCategoria+"%", tipoOperacao
@@ -127,7 +129,8 @@ public class ItemOperacaoRepository {
                                         new UnidadeMedida(
                                                 resultSet.getInt(COL_COD_UNIDADE_MEDIDA),
                                                 resultSet.getString(COL_NME_UNIDADE_MEDIDA)
-                                        )
+                                        ),
+                                        resultSet.getInt(COL_QTD_ESTOQUE_MIN)
                                 )
                         ),
                 "%"+nomeProduto+"%", tipoOperacao
@@ -168,7 +171,8 @@ public class ItemOperacaoRepository {
                                         new UnidadeMedida(
                                                 resultSet.getInt(COL_COD_UNIDADE_MEDIDA),
                                                 resultSet.getString(COL_NME_UNIDADE_MEDIDA)
-                                        )
+                                        ),
+                                        resultSet.getInt(COL_QTD_ESTOQUE_MIN)
                                 )
                         ),
                 idOperacao
@@ -209,7 +213,8 @@ public class ItemOperacaoRepository {
                                         new UnidadeMedida(
                                                 resultSet.getInt(COL_COD_UNIDADE_MEDIDA),
                                                 resultSet.getString(COL_NME_UNIDADE_MEDIDA)
-                                        )
+                                        ),
+                                        resultSet.getInt(COL_QTD_ESTOQUE_MIN)
                                 )
                         ),
                 tipoOperacao
