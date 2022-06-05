@@ -22,7 +22,7 @@ public class BairroRepository {
     public void cadastrarBairro(Bairro bairro) {
         jdbcTemplate.update(
                 "INSERT INTO `Bairro` (NME_BAIRRO, COD_MUNICIPIO) VALUES (?, ?)",
-                bairro.getCodBairro(),
+                bairro.getNomeBairro(),
                 bairro.getCodMunicipio()
         );
     }
