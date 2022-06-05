@@ -14,7 +14,8 @@ public class UsuarioRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
     public static final String MASCARA_SENHA = "*******";
-    private static final String SELECT_USUARIO = "SELECT U.COD_USUARIO, U.DSC_LOGIN, U.FLG_ATIVO, P.COD_PESSOA, P.NME_PESSOA " +
+    private static final String SELECT_USUARIO =
+            "SELECT U.COD_USUARIO, U.DSC_LOGIN, U.FLG_ATIVO, P.COD_PESSOA, P.NME_PESSOA,U.DSC_COMPLEMENTO_SENHA " +
             "FROM USUARIO U LEFT JOIN PESSOA P ON U.COD_PESSOA  = P.COD_PESSOA";
     private static final String COLUNA_COD_USUARIO = "COD_USUARIO";
     private static final String COLUNA_DSC_LOGIN = "DSC_LOGIN";
@@ -22,16 +23,19 @@ public class UsuarioRepository {
     private static final String COLUNA_COD_PESSOA = "COD_PESSOA";
     private static final String COLUNA_NME_PESSOA = "NME_PESSOA";
     private static final String COLUNA_DSC_SENHA = "DSC_SENHA";
+    private static final String COLUNA_DSC_COMPLEMENTO_SENHA = "DSC_COMPLEMENTO_SENHA";
 
     public void cadastrarUsuario(Usuario usuario)
             throws DataIntegrityViolationException {
             jdbcTemplate.update(
-                    "INSERT INTO USUARIO ( COD_USUARIO, DSC_LOGIN, DSC_SENHA, FLG_ATIVO, COD_PESSOA) VALUES (?, ?, ?, ?, ?)",
+                    "INSERT INTO USUARIO ( COD_USUARIO, DSC_LOGIN, DSC_SENHA, FLG_ATIVO, COD_PESSOA," +
+                            " DSC_COMPLEMENTO_SENHA) VALUES (?, ?, ?, ?, ?, ?)",
                     usuario.getCodUsuario(),
                     usuario.getLogin(),
                     usuario.getSenha(),
                     usuario.getAtivo(),
-                    usuario.getCodPessoa()
+                    usuario.getCodPessoa(),
+                    usuario.getComplementoSenha()
             );
     }
 
@@ -51,7 +55,8 @@ public class UsuarioRepository {
             );
     }
     public Usuario buscarUsuarioPorLogin(String loginUsuario) {
-            return jdbcTemplate.queryForObject("SELECT COD_USUARIO, DSC_LOGIN, DSC_SENHA, FLG_ATIVO, COD_PESSOA" +
+            return jdbcTemplate.queryForObject(
+                    "SELECT COD_USUARIO, DSC_LOGIN, DSC_SENHA, FLG_ATIVO, COD_PESSOA, DSC_COMPLEMENTO_SENHA " +
                             " FROM `USUARIO` WHERE `DSC_LOGIN` = ?"
                     , (resultSet, rowNum) ->
                             new Usuario(
@@ -59,7 +64,8 @@ public class UsuarioRepository {
                                     resultSet.getString(COLUNA_DSC_LOGIN),
                                     resultSet.getString(COLUNA_DSC_SENHA),
                                     resultSet.getBoolean(COLUNA_FLG_ATIVO),
-                                    resultSet.getInt(COLUNA_COD_PESSOA)
+                                    resultSet.getInt(COLUNA_COD_PESSOA),
+                                    resultSet.getString(COLUNA_DSC_COMPLEMENTO_SENHA)
                             ),
                     loginUsuario
             );

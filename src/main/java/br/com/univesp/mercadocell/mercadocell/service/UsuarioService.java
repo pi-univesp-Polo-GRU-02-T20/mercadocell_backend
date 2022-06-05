@@ -18,13 +18,20 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private PasswordEncoder psEncoder;
+    private static final String DIGEST = "SHA3-256";
 
     public Usuario cadastrarUsuario(Usuario usuario) {
         try {
             usuarioRepository.buscarUsuarioPorLogin(usuario.getLogin());
             throw new EntityIntegrityViolationException("Usuário já cadastrado: " + usuario.toString());
         }catch (EmptyResultDataAccessException emptyResultDataAccessException) {
-            usuario.setSenha(psEncoder.encode(usuario.getSenha())); // encriptação da senha
+            usuario.setComplementoSenha(String.valueOf(System.currentTimeMillis()));
+
+            //System.out.println("Senha: " + usuario.getSenha());
+            //System.out.println("Complemento: " + usuario.getComplementoSenha());
+            //System.out.println("string encriptada: " + usuario.getSenha().concat(usuario.getComplementoSenha()));
+            usuario.setSenha(psEncoder.encode(usuario.getSenha().concat(usuario.getComplementoSenha()))); // encriptação da senha
+            //usuario.setSenha(psEncoder.encode(usuario.getSenha())); // encriptação da senha
             try {
                 usuarioRepository.cadastrarUsuario(usuario);
             } catch (DataIntegrityViolationException dataIntegrityViolationException) {
@@ -33,6 +40,7 @@ public class UsuarioService {
             }
         }
         usuario.setSenha(UsuarioRepository.MASCARA_SENHA);
+        usuario.setComplementoSenha(null);
         return usuario;
     }
 
@@ -58,6 +66,12 @@ public class UsuarioService {
 
     public void atualizarUsuario(Usuario usuario) {
         try{
+            Usuario usuarioBD = buscarUsuarioPorLogin(usuario.getLogin());
+            System.out.println("Senha: " + usuario.getSenha());
+            System.out.println("Complemento: " + usuarioBD.getComplementoSenha());
+            System.out.println("string encriptada: " + usuario.getSenha().concat(usuarioBD.getComplementoSenha()));
+
+            usuario.setSenha(psEncoder.encode(usuario.getSenha().concat(usuarioBD.getComplementoSenha()))); // encriptação da senha
             usuarioRepository.atualizarUsuario(usuario);
         }catch(DataIntegrityViolationException e ){
             throw new EntityIntegrityViolationException(
@@ -72,6 +86,7 @@ public class UsuarioService {
 
     public Boolean validarSenha(Usuario usuario){
        Usuario usuarioBD = buscarUsuarioPorLogin(usuario.getLogin());
-        return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
+        return psEncoder.matches( usuario.getSenha().concat(usuarioBD.getComplementoSenha()), usuarioBD.getSenha());
+       // return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
     }
 }

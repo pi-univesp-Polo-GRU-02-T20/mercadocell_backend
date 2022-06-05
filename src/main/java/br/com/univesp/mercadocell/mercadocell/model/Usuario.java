@@ -12,6 +12,7 @@ public class Usuario extends Pessoa{
     private String login;
     private String senha;
     private Boolean ativo;
+    private String complementoSenha;
 
     public Usuario(String login, String senha) {
         this.login = login;
@@ -32,12 +33,14 @@ public class Usuario extends Pessoa{
         this.ativo = ativo;
     }
 
-    public Usuario(Integer codUsuario, String login, String senha, Boolean ativo, Integer codPessoa) {
+    public Usuario(Integer codUsuario, String login, String senha, Boolean ativo,
+                    Integer codPessoa, String complementoSenha) {
         super(codPessoa);
         this.codUsuario = codUsuario;
         this.login = login;
         this.senha = senha;
         this.ativo = ativo;
+        this.complementoSenha = complementoSenha;
     }
     public Usuario(Integer codUsuario,  String login, String senha, Boolean ativo) {
         this.codUsuario = codUsuario;

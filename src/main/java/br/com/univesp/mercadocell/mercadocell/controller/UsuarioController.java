@@ -40,7 +40,6 @@ public class UsuarioController {
 
     @PutMapping
     public ResponseEntity<Usuario> atualizarUsuario(@Valid @RequestBody Usuario usuario) {
-        usuario.setSenha(psEncoder.encode(usuario.getSenha())); // encriptação da senha
         usuarioService.atualizarUsuario(usuario);
         return ResponseEntity.accepted().build();
     }
