@@ -25,7 +25,7 @@ public class LogradouroRepository {
     public Logradouro buscarLogradouroPorId(int idLogradouro) {
         try {
             return jdbcTemplate.queryForObject(
-                    "SELECT COD_CEP, DSC_LOGRADOURO FROM `LOGRADOURO` WHERE `COD_CEP` = ?"
+                    "SELECT COD_CEP, DSC_LOGRADOURO FROM LOGRADOURO WHERE COD_CEP = ?"
                     , (rs, rowNum) ->
                         new Logradouro(
                                     rs.getInt("COD_CEP"),
@@ -40,7 +40,7 @@ public class LogradouroRepository {
 
     public List<Logradouro> listarLogradouros() {
         return jdbcTemplate.query(
-                "SELECT COD_CEP, DSC_LOGRADOURO FROM `LOGRADOURO`"
+                "SELECT COD_CEP, DSC_LOGRADOURO FROM LOGRADOURO"
                 , (rs, rowNum) ->
                         new Logradouro(
                                 rs.getInt("COD_CEP"),
@@ -51,7 +51,7 @@ public class LogradouroRepository {
 
     public void atualizarLogradouro(Logradouro logradouro) {
         jdbcTemplate.update(
-                "UPDATE `LOGRADOURO` SET `COD_CEP` = ?, DSC_LOGRADOURO = ? WHERE COD_CEP = ?",
+                "UPDATE LOGRADOURO SET COD_CEP = ?, DSC_LOGRADOURO = ? WHERE COD_CEP = ?",
                 logradouro.getCodCEP(),
                 logradouro.getDescricaoLogradouro()
         );

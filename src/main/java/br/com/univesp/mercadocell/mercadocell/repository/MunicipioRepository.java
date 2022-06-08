@@ -23,7 +23,7 @@ public class MunicipioRepository {
     public Municipio buscarMunicipioPorId(int idMunicipio) {
         try {
             return jdbcTemplate.queryForObject(
-                    "SELECT COD_MUNICIPIO,NME_MUNICIPIO, COD_ESTADO FROM `Municipio` WHERE `COD_Municipio` = ?"
+                    "SELECT COD_MUNICIPIO,NME_MUNICIPIO, COD_ESTADO FROM Municipio WHERE COD_Municipio = ?"
                     , (rs, rowNum) ->
                             new Municipio(
                                     rs.getInt("COD_MUNICIPIO"),
@@ -39,7 +39,7 @@ public class MunicipioRepository {
 
     public List<Municipio> listarMunicipios() {
         return jdbcTemplate.query(
-                "SELECT COD_Municipio,NME_Municipio, SGL_UF FROM `Municipio`"
+                "SELECT COD_Municipio,NME_Municipio, SGL_UF FROM Municipio"
                 , (rs, rowNum) ->
                         new Municipio(
                                 rs.getInt("COD_Municipio"),
@@ -51,7 +51,7 @@ public class MunicipioRepository {
 
     public void atualizarMunicipios(Municipio municipio) {
         jdbcTemplate.update(
-                "UPDATE `MUNICIPIO` SET `NME_MUNICIPIO` = ?, COD_ESTADO = ?" +
+                "UPDATE MUNICIPIO SET NME_MUNICIPIO = ?, COD_ESTADO = ?" +
                         " WHERE COD_MUNICIPIO = ?",
                 municipio.getNomeMunicipio(),
                 municipio.getCodEstado(),

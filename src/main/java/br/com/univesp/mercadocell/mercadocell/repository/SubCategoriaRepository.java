@@ -30,7 +30,7 @@ public class SubCategoriaRepository {
     }
 
     public SubCategoria buscarSubCategoriaPorId(int idSubCategoria) {
-            return jdbcTemplate.queryForObject( SELECT_SUBCATEGORIA+ " WHERE `COD_SUBCATEGORIA` = ?"
+            return jdbcTemplate.queryForObject( SELECT_SUBCATEGORIA+ " WHERE COD_SUBCATEGORIA = ?"
                     , (rs, rowNum) ->
                             new SubCategoria(
                             rs.getInt(COL_COD_SUBCATEGORIA),

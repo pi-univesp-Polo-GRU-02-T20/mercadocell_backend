@@ -46,7 +46,7 @@ public class OperacaoRepository {
 
     public void cadastrarOperacao(Operacao operacao) {
         jdbcTemplate.update(
-                "INSERT INTO `OPERACAO` " +
+                "INSERT INTO OPERACAO " +
                     "(DTA_OPERACAO, COD_NOTA_FISCAL, VLR_TOTAL, QTD_PARCELA, TPO_STATUS," +
                         " COD_PESSOA, FLG_PAGO, TPO_OPERACAO, COD_TIPO_PAGAMENTO)" +
                     " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )",
@@ -194,9 +194,9 @@ public class OperacaoRepository {
 
     public void atualizarOperacao(Operacao operacao) throws DataIntegrityViolationException{
         jdbcTemplate.update(
-                "UPDATE `Operacao` SET `DTA_OPERACAO` = ?, COD_NOTA_FISCAL = ?, VLR_TOTAL = ?, QTD_PARCELA = ?, " +
+                "UPDATE Operacao SET DTA_OPERACAO = ?, COD_NOTA_FISCAL = ?, VLR_TOTAL = ?, QTD_PARCELA = ?, " +
                         " TPO_STATUS = ?, COD_PESSOA = ?, FLG_PAGO = ?, TPO_OPERACAO = ? "+
-                        " WHERE `COD_OPERACAO` = ?",
+                        " WHERE COD_OPERACAO = ?",
                 operacao.getDataOperacao().toString(),
                 operacao.getCodNotaFiscal(),
                 operacao.getValorTotal(),
@@ -211,7 +211,7 @@ public class OperacaoRepository {
 
     public void deletarOperacao(int codOperacao) throws DataIntegrityViolationException {
         jdbcTemplate.update(
-                "DELETE FROM `OPERACAO` WHERE `COD_OPERACAO` = ?",
+                "DELETE FROM OPERACAO WHERE COD_OPERACAO = ?",
                 codOperacao
         );
     }

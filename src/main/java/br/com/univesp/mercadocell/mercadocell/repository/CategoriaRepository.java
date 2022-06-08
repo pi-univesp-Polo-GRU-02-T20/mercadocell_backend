@@ -19,14 +19,14 @@ public class CategoriaRepository {
 
     public void cadastrarCategoria(Categoria categoria) {
         jdbcTemplate.update(
-                "INSERT INTO `CATEGORIA` (`NME_CATEGORIA`) VALUES (?)",
+                "INSERT INTO CATEGORIA (NME_CATEGORIA) VALUES (?)",
                 categoria.getNomeCategoria()
         );
     }
 
     public Categoria buscarCategoriaPorId(int idCategoria) {
             return jdbcTemplate.queryForObject(
-                    "SELECT COD_CATEGORIA FROM `CATEGORIA` WHERE `COD_CATEGORIA` = ?"
+                    "SELECT COD_CATEGORIA FROM CATEGORIA WHERE COD_CATEGORIA = ?"
                     , (rs, rowNum) ->
                             new Categoria(
                                     rs.getInt(COLUNA_COD_CATEGORIA),
@@ -50,7 +50,7 @@ public class CategoriaRepository {
     }
 
     public List<Categoria> listarCategorias() {
-            return jdbcTemplate.query("SELECT COD_CATEGORIA, NME_CATEGORIA FROM `CATEGORIA`"
+            return jdbcTemplate.query("SELECT COD_CATEGORIA, NME_CATEGORIA FROM CATEGORIA"
                     , (rs, rowNum) ->
                             new Categoria(
                                     rs.getInt(COLUNA_COD_CATEGORIA),
@@ -61,7 +61,7 @@ public class CategoriaRepository {
 
     public void atualizarCategoria(Categoria categoria) {
         jdbcTemplate.update(
-                "UPDATE `CATEGORIA` SET `NME_CATEGORIA` = ? WHERE `CATEGORIA`.`COD_CATEGORIA` = ?",
+                "UPDATE CATEGORIA SET NME_CATEGORIA = ? WHERE CATEGORIA.COD_CATEGORIA = ?",
                 categoria.getNomeCategoria(),
                 categoria.getCodCategoria()
         );
@@ -69,7 +69,7 @@ public class CategoriaRepository {
 
     public void deletarCategoria(int idCategoria) throws DataIntegrityViolationException /*, SQLIntegrityConstraintViolationException*/ {
         jdbcTemplate.update(
-                "DELETE FROM `CATEGORIA` WHERE `CATEGORIA`.`COD_CATEGORIA` = ?",
+                "DELETE FROM CATEGORIA WHERE CATEGORIA.COD_CATEGORIA = ?",
                 idCategoria
         );
     }

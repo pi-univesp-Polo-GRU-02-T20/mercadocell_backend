@@ -45,7 +45,7 @@ public class PessoaJuridicaRepository {
         }, keyHolder);
 
         jdbcTemplate.update(
-                "INSERT INTO `PESSOA_JURIDICA` (COD_PESSOA, NME_RAZAO_SOCIAL, COD_CNPJ ) " +
+                "INSERT INTO PESSOA_JURIDICA (COD_PESSOA, NME_RAZAO_SOCIAL, COD_CNPJ ) " +
                         " VALUES (?, ?, ?)",
                 keyHolder.getKey().intValue(),//nosonar
                 pessoaJuridica.getNomeRazaoSocial(),
@@ -118,11 +118,11 @@ public class PessoaJuridicaRepository {
     @Transactional
     public void deletarPessoaJuridica(int idPessoaJuridica) throws DataIntegrityViolationException {
         jdbcTemplate.update(
-                "DELETE FROM `PESSOA_JURIDICA` WHERE `COD_PESSOA` = ? ",
+                "DELETE FROM PESSOA_JURIDICA WHERE COD_PESSOA = ? ",
                 idPessoaJuridica
         );
         jdbcTemplate.update(
-                "DELETE FROM `PESSOA` WHERE `COD_PESSOA` = ? ",
+                "DELETE FROM PESSOA WHERE COD_PESSOA = ? ",
                 idPessoaJuridica
         );
     }

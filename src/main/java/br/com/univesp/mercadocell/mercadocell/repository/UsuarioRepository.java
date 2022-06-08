@@ -41,7 +41,7 @@ public class UsuarioRepository {
 
     public Usuario buscarUsuarioPorId(int idUsuario) {
             return jdbcTemplate.queryForObject(
-                    SELECT_USUARIO + " WHERE `COD_USUARIO` = ?;"
+                    SELECT_USUARIO + " WHERE COD_USUARIO = ?;"
                     , (rs, rowNum) ->
                             new Usuario(
                                             rs.getInt(COLUNA_COD_PESSOA),
@@ -57,7 +57,7 @@ public class UsuarioRepository {
     public Usuario buscarUsuarioPorLogin(String loginUsuario) {
             return jdbcTemplate.queryForObject(
                     "SELECT COD_USUARIO, DSC_LOGIN, DSC_SENHA, FLG_ATIVO, COD_PESSOA, DSC_COMPLEMENTO_SENHA " +
-                            " FROM `USUARIO` WHERE `DSC_LOGIN` = ?"
+                            " FROM USUARIO WHERE DSC_LOGIN = ?"
                     , (resultSet, rowNum) ->
                             new Usuario(
                                     resultSet.getInt(COLUNA_COD_USUARIO),
@@ -99,7 +99,7 @@ public class UsuarioRepository {
 
     public void deletarUsuario(int idUsuario) {
         jdbcTemplate.update(
-                "DELETE FROM `USUARIO` WHERE `COD_USUARIO` = ?",
+                "DELETE FROM USUARIO WHERE COD_USUARIO = ?",
                 idUsuario
         );
     }

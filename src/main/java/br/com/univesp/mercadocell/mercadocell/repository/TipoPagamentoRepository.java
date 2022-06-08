@@ -19,7 +19,7 @@ public class TipoPagamentoRepository {
     }
 
     public TipoPagamento buscarTipoPagamentoPorId(int idTipoPagamento){
-            return jdbcTemplate.queryForObject("SELECT COD_TIPO_PAGAMENTO, NME_TIPO_PAGAMENTO FROM `TIPO_PAGAMENTO` WHERE `COD_TIPO_PAGAMENTO` = ?"
+            return jdbcTemplate.queryForObject("SELECT COD_TIPO_PAGAMENTO, NME_TIPO_PAGAMENTO FROM TIPO_PAGAMENTO WHERE COD_TIPO_PAGAMENTO = ?"
                     , (rs, rowNum) ->
                             new TipoPagamento(
                                     rs.getInt("COD_TIPO_PAGAMENTO"),
@@ -30,7 +30,7 @@ public class TipoPagamentoRepository {
     }
 
     public List<TipoPagamento> listarTiposPagamento(){
-        return jdbcTemplate.query("SELECT COD_TIPO_PAGAMENTO, NME_TIPO_PAGAMENTO FROM `TIPO_PAGAMENTO`"
+        return jdbcTemplate.query("SELECT COD_TIPO_PAGAMENTO, NME_TIPO_PAGAMENTO FROM TIPO_PAGAMENTO"
                 , (rs, rowNum) ->
                         new TipoPagamento(
                                 rs.getInt("COD_TIPO_PAGAMENTO"),
@@ -41,7 +41,7 @@ public class TipoPagamentoRepository {
 
     public void atualizarTipoPagamento(TipoPagamento tipoPagamento){
         jdbcTemplate.update(
-                "UPDATE `TIPO_PAGAMENTO` SET `NME_TIPO_PAGAMENTO` = ? WHERE `COD_TIPO_PAGAMENTO` = ?",
+                "UPDATE TIPO_PAGAMENTO SET NME_TIPO_PAGAMENTO = ? WHERE COD_TIPO_PAGAMENTO = ?",
                 tipoPagamento.getNomeTipoPagamento(),
                 tipoPagamento.getCodTipoPagamento()
         );
@@ -49,7 +49,7 @@ public class TipoPagamentoRepository {
 
     public void deletarTipoPagamento(int idTipoPagamento){
         jdbcTemplate.update(
-                "DELETE FROM `TIPO_PAGAMENTO` TP WHERE `TP`.`COD_TIPO_PAGAMENTO` = ?",
+                "DELETE FROM TIPO_PAGAMENTO TP WHERE TP.COD_TIPO_PAGAMENTO = ?",
                 idTipoPagamento
         );
     }

@@ -46,7 +46,7 @@ public class PessoaFisicaRepository {
         }, keyHolder);
 
        jdbcTemplate.update(
-                "INSERT INTO `PESSOA_FISICA` (COD_PESSOA, SGL_UF_NATURALIDADE, DTA_NASCIMENTO, TPO_SEXO ) " +
+                "INSERT INTO PESSOA_FISICA (COD_PESSOA, SGL_UF_NATURALIDADE, DTA_NASCIMENTO, TPO_SEXO ) " +
                         " VALUES (?, ?, ?, ?)",
                        keyHolder.getKey().intValue(),//nosonar
                         pessoaFisica.getEstadoNaturalidade(),
@@ -120,11 +120,11 @@ public class PessoaFisicaRepository {
     @Transactional
     public void deletarPessoaFisica(int idPessoaFisica) throws DataIntegrityViolationException {
         jdbcTemplate.update(
-                "DELETE FROM `PESSOA_FISICA` WHERE `COD_PESSOA` = ? ",
+                "DELETE FROM PESSOA_FISICA WHERE COD_PESSOA = ? ",
                 idPessoaFisica
         ); 
         jdbcTemplate.update(
-                "DELETE FROM `PESSOA` WHERE `COD_PESSOA` = ? ",
+                "DELETE FROM PESSOA WHERE COD_PESSOA = ? ",
                 idPessoaFisica
         );
     }

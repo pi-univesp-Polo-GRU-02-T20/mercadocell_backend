@@ -30,6 +30,13 @@ public class ProdutoRepository {
             " INNER JOIN UNIDADE_MEDIDA UM ON UM.COD_UNIDADE_MEDIDA = PR.COD_UNIDADE_MEDIDA ";
     private static final String FILTRO_COD_PRODUTO = " WHERE COD_PRODUTO = ?";
     private static final String FILTRO_NOME_PRODUTO = " WHERE NME_PRODUTO = ?";
+    private static final String  INSERT_PRODUTO =   "INSERT INTO PRODUTO " +
+                                                    "(NME_PRODUTO, DSC_PRODUTO, COD_SUBCATEGORIA, COD_UNIDADE_MEDIDA," +
+                                                    "PR.QTD_ESTOQUE_MIN, PR.QTD_ESTOQUE_MAX, PR.QTD_ESTOQUE_ATUAL )" +
+                                                    " VALUES (?, ?, ?, ?, ?)";
+    private static final String  UPDATE_PRODUTO = "UPDATE PRODUTO SET NME_PRODUTO = ? , DSC_PRODUTO = ? " +
+                                                  " COD_SUBCATEGORIA = ? , COD_UNIDADE_MEDIDA = ? ";
+    private static final String  DELETE_PRODUTO = "DELETE FROM PRODUTO ";
     private static final String COL_COD_SUBCATEGORIA = "COD_SUBCATEGORIA";
     private static final String COL_NME_SUBCATEGORIA = "NME_SUBCATEGORIA";
     private static final String COL_COD_CATEGORIA = "COD_CATEGORIA";
@@ -46,10 +53,7 @@ public class ProdutoRepository {
 
 
     public void cadastrarProduto(Produto produto) throws EntityIntegrityViolationException {
-        jdbcTemplate.update("INSERT INTO PRODUTO " + 
-                        "(NME_PRODUTO, DSC_PRODUTO, COD_SUBCATEGORIA, COD_UNIDADE_MEDIDA, PR.QTD_ESTOQUE_MIN, " +
-                        "PR.QTD_ESTOQUE_MAX, PR.QTD_ESTOQUE_ATUAL )" +
-                        " VALUES (?, ?, ?, ?, ?)",
+        jdbcTemplate.update(INSERT_PRODUTO,
                 produto.getNomeProduto(),
                 produto.getDescricaoProduto(),
                 produto.getSubCategoria().getCodSubCategoria(),
@@ -84,17 +88,37 @@ public class ProdutoRepository {
                                     rs.getInt(COL_QTD_ESTOQUE_MIN),
                                     rs.getInt(COL_QTD_ESTOQUE_MAX),
                                     rs.getInt(COL_QTD_ESTOQUE_ATUAL)
+                                    ,null
                             ),
                     idProduto
             );
     }
 
-    public Categoria buscarProdutoPorNome(String nomeProduto) {
-        return jdbcTemplate.queryForObject(SELECT_PRODUTO + FILTRO_NOME_PRODUTO
+    public Produto buscarProdutoPorNome(String nomeProduto){
+        return jdbcTemplate.queryForObject(
+                SELECT_PRODUTO + FILTRO_NOME_PRODUTO
                 , (rs, rowNum) ->
-                        new Categoria(
-                                rs.getInt(COL_COD_CATEGORIA),
-                                rs.getString(COL_NME_CATEGORIA)
+                        new Produto(
+                                rs.getInt(COL_COD_PRODUTO),
+                                rs.getString(COL_NME_PRODUTO),
+                                rs.getString(COL_DSC_PRODUTO),
+                                new SubCategoria(
+                                        rs.getInt(COL_COD_SUBCATEGORIA),
+                                        rs.getString(COL_NME_SUBCATEGORIA),
+                                        new Categoria(
+                                                rs.getInt(COL_COD_CATEGORIA),
+                                                rs.getString(COL_NME_CATEGORIA)
+                                        )
+                                ),
+                                new UnidadeMedida(
+                                        rs.getInt(COL_COD_SUBCATEGORIA),
+                                        rs.getString(COL_NME_UNIDADE_MEDIDA),
+                                        rs.getString(COL_SGL_UNIDADE_MEDIDA)
+                                ),
+                                rs.getInt(COL_QTD_ESTOQUE_MIN),
+                                rs.getInt(COL_QTD_ESTOQUE_MAX),
+                                rs.getInt(COL_QTD_ESTOQUE_ATUAL)
+                                ,null
                         ),
                 nomeProduto
         );
@@ -122,16 +146,14 @@ public class ProdutoRepository {
                                 rs.getInt(COL_QTD_ESTOQUE_MIN),
                                 rs.getInt(COL_QTD_ESTOQUE_MAX),
                                 rs.getInt(COL_QTD_ESTOQUE_ATUAL)
+                                ,null
                         )
         );
     }
 
     public void atualizarProduto(Produto produto) throws DataIntegrityViolationException{
-        String update = "UPDATE `PRODUTO` SET `NME_PRODUTO` = ? , DSC_PRODUTO = ?, "
-                + " COD_SUBCATEGORIA = ? , COD_UNIDADE_MEDIDA = ? "
-                + FILTRO_COD_PRODUTO;
         jdbcTemplate.update(
-                    update,
+                UPDATE_PRODUTO + FILTRO_COD_PRODUTO,
                 produto.getNomeProduto(),
                 produto.getDescricaoProduto(),
                 produto.getSubCategoria().getCodSubCategoria(),
@@ -141,8 +163,7 @@ public class ProdutoRepository {
     }
 
     public void deletarProduto(int idProduto) throws DataIntegrityViolationException {
-        jdbcTemplate.update(
-                "DELETE FROM `PRODUTO` " + FILTRO_COD_PRODUTO,
+        jdbcTemplate.update(DELETE_PRODUTO + FILTRO_COD_PRODUTO,
                 idProduto
         );
     }
