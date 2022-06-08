@@ -2,6 +2,7 @@ package br.com.univesp.mercadocell.mercadocell.controller.exception;
 
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
+import br.com.univesp.mercadocell.mercadocell.service.exception.FileHandleException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -35,7 +36,7 @@ public class ControllerExceptionHandler {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
         err.setStatus(HttpStatus.BAD_REQUEST.value());
-        err.setError("Problema na integridade dos dados");
+        err.setError("Problema de integridade dos dados");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
@@ -53,4 +54,14 @@ public class ControllerExceptionHandler {
         return errors;
     }
 
+    @ExceptionHandler(EntityIntegrityViolationException.class)
+    public ResponseEntity<StandardError> fileHandleException(FileHandleException e, HttpServletRequest request){
+        StandardError err = new StandardError();
+        err.setTimestamp(Instant.now());
+        err.setStatus(HttpStatus.BAD_REQUEST.value());
+        err.setError("Problema no manipulação da imagem");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
 }

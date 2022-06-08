@@ -92,7 +92,8 @@ public class ItemOperacaoRepository {
                                         ),
                                         resultSet.getInt(COL_QTD_ESTOQUE_MIN),
                                         resultSet.getInt(COL_QTD_ESTOQUE_MAX),
-                                        resultSet.getInt(COL_QTD_ESTOQUE_ATUAL)
+                                        resultSet.getInt(COL_QTD_ESTOQUE_ATUAL),
+                                        null//TODO ADD LEITURA IMG
                                 )
                         ),
                 "%"+nomeCategoria+"%", tipoOperacao
@@ -136,7 +137,8 @@ public class ItemOperacaoRepository {
                                         ),
                                         resultSet.getInt(COL_QTD_ESTOQUE_MIN),
                                         resultSet.getInt(COL_QTD_ESTOQUE_MAX),
-                                        resultSet.getInt(COL_QTD_ESTOQUE_ATUAL)
+                                        resultSet.getInt(COL_QTD_ESTOQUE_ATUAL),
+                                        null//TODO ADD LEITURA IMG
                                 )
                         ),
                 "%"+nomeProduto+"%", tipoOperacao
@@ -180,7 +182,8 @@ public class ItemOperacaoRepository {
                                         ),
                                         resultSet.getInt(COL_QTD_ESTOQUE_MIN),
                                         resultSet.getInt(COL_QTD_ESTOQUE_MAX),
-                                        resultSet.getInt(COL_QTD_ESTOQUE_ATUAL)
+                                        resultSet.getInt(COL_QTD_ESTOQUE_ATUAL),
+                                        null //TODO ADD LEITURA IMG
                                 )
                         ),
                 idOperacao
@@ -224,7 +227,8 @@ public class ItemOperacaoRepository {
                                         ),
                                         resultSet.getInt(COL_QTD_ESTOQUE_MIN),
                                         resultSet.getInt(COL_QTD_ESTOQUE_MAX),
-                                        resultSet.getInt(COL_QTD_ESTOQUE_ATUAL)
+                                        resultSet.getInt(COL_QTD_ESTOQUE_ATUAL),
+                                        null//TODO ADD LEITURA IMG
                                 )
                         ),
                 tipoOperacao
