@@ -5,6 +5,7 @@ import br.com.univesp.mercadocell.mercadocell.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,8 +19,9 @@ public class ProdutoController {
     private ProdutoService produtoService ;
 
     @PostMapping
-    public ResponseEntity<Produto> cadastrarProduto(@Valid @RequestBody Produto produto) {
-        produtoService.cadastrarProduto(produto);
+    public ResponseEntity<Produto> cadastrarProduto(@Valid @RequestBody Produto produto,
+                                                        @RequestParam("file") MultipartFile file) {
+        produtoService.cadastrarProduto(produto, file);
         return ResponseEntity.accepted().body(produto);
     }
 
