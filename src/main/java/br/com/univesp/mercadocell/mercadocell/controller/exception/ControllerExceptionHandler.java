@@ -54,7 +54,7 @@ public class ControllerExceptionHandler {
         return errors;
     }
 
-    @ExceptionHandler(EntityIntegrityViolationException.class)
+    @ExceptionHandler(FileHandleException.class)
     public ResponseEntity<StandardError> fileHandleException(FileHandleException e, HttpServletRequest request){
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
