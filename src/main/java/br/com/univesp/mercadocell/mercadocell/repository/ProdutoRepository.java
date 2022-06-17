@@ -59,7 +59,7 @@ public class ProdutoRepository {
                 produto.getSubCategoria().getCodSubCategoria(),
                 produto.getUnidadeMedida().getCodUnidadeMedida(),
                 produto.getQuantidadeEstoqueMinima(),
-                produto.getQuantidadeEstoqueMaximo(),
+                produto.getQuantidadeEstoqueMaxima(),
                 produto.getQuantidadeEstoqueAtual()
         );
     }
@@ -88,7 +88,7 @@ public class ProdutoRepository {
                                     rs.getInt(COL_QTD_ESTOQUE_MIN),
                                     rs.getInt(COL_QTD_ESTOQUE_MAX),
                                     rs.getInt(COL_QTD_ESTOQUE_ATUAL)
-                                    ,null
+
                             ),
                     idProduto
             );
@@ -118,7 +118,6 @@ public class ProdutoRepository {
                                 rs.getInt(COL_QTD_ESTOQUE_MIN),
                                 rs.getInt(COL_QTD_ESTOQUE_MAX),
                                 rs.getInt(COL_QTD_ESTOQUE_ATUAL)
-                                ,null
                         ),
                 nomeProduto
         );
@@ -146,7 +145,6 @@ public class ProdutoRepository {
                                 rs.getInt(COL_QTD_ESTOQUE_MIN),
                                 rs.getInt(COL_QTD_ESTOQUE_MAX),
                                 rs.getInt(COL_QTD_ESTOQUE_ATUAL)
-                                ,null
                         )
         );
     }
