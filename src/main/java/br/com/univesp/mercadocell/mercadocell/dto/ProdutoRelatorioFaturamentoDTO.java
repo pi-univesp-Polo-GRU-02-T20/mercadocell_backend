@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
+
 public class ProdutoRelatorioFaturamentoDTO {
 
     private Integer codigoProduto;
@@ -15,3 +16,6 @@ public class ProdutoRelatorioFaturamentoDTO {
     private String descricaoPeriodo;
 
 }
+
+
+
