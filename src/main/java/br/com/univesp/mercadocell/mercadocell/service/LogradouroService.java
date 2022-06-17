@@ -1,12 +1,11 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
-import java.util.List;
-
+import br.com.univesp.mercadocell.mercadocell.model.Logradouro;
+import br.com.univesp.mercadocell.mercadocell.repository.LogradouroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.univesp.mercadocell.mercadocell.model.Logradouro;
-import br.com.univesp.mercadocell.mercadocell.repository.LogradouroRepository;
+import java.util.List;
 
 @Service
 public class LogradouroService {

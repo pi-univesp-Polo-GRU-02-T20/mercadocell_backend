@@ -1,5 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
+import br.com.univesp.mercadocell.mercadocell.dto.ItemOperacaoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.ItemOperacao;
 import br.com.univesp.mercadocell.mercadocell.repository.ItemOperacaoRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
@@ -22,6 +23,7 @@ public class ItemOperacaoService {
 
     public List<ItemOperacao> listarItensOperacaoPorCategoria(String nomeCategoria, String tipoOperacao) {
         try{
+
             return itemOperacaoRepository.listarOperacoesPorCategoria(nomeCategoria, tipoOperacao);
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException(
@@ -30,6 +32,16 @@ public class ItemOperacaoService {
                             "tipoOperacao = " + tipoOperacao
             );
         }
+    }
+
+    private ItemOperacaoDTO converteItemOperacaoParaItemOperacaoDTO(ItemOperacao itemOperacao){
+        return new ItemOperacaoDTO(
+                itemOperacao.getCodItemOperacao(),
+                itemOperacao.getQuantidadeItem(),
+                itemOperacao.getValorItem(),
+                OperacaoService.converteOperacaoParaOpereacaoDTO(itemOperacao.getOperacao()),
+                ProdutoService.converteProdutoParaProdutoDTO(itemOperacao.getProduto())
+        );
     }
 
     public List<ItemOperacao> listarItensOperacaoPorProduto(String nomeProduto, String tipoOperacao) {

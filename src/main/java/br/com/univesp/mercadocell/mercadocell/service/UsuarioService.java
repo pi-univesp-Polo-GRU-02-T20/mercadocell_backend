@@ -26,12 +26,7 @@ public class UsuarioService {
             throw new EntityIntegrityViolationException("Usuário já cadastrado: " + usuario.toString());
         }catch (EmptyResultDataAccessException emptyResultDataAccessException) {
             usuario.setComplementoSenha(String.valueOf(System.currentTimeMillis()));
-
-            //System.out.println("Senha: " + usuario.getSenha());
-            //System.out.println("Complemento: " + usuario.getComplementoSenha());
-            //System.out.println("string encriptada: " + usuario.getSenha().concat(usuario.getComplementoSenha()));
             usuario.setSenha(psEncoder.encode(usuario.getSenha().concat(usuario.getComplementoSenha()))); // encriptação da senha
-            //usuario.setSenha(psEncoder.encode(usuario.getSenha())); // encriptação da senha
             try {
                 usuarioRepository.cadastrarUsuario(usuario);
             } catch (DataIntegrityViolationException dataIntegrityViolationException) {

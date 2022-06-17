@@ -2,7 +2,6 @@ package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
-import br.com.univesp.mercadocell.mercadocell.model.ItemOperacao;
 import br.com.univesp.mercadocell.mercadocell.model.Produto;
 import br.com.univesp.mercadocell.mercadocell.repository.ProdutoRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
@@ -12,7 +11,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -40,19 +38,23 @@ public class ProdutoService {
     public ProdutoDTO buscarProdutoPorId(int  idProduto) {
        try{
             Produto produto =  produtoRepository.buscarProdutoPorId(idProduto);
-            return new ProdutoDTO(
-                    produto.getCodProduto(),
-                    produto.getNomeProduto(),
-                    produto.getDescricaoProduto(),
-                    produto.getSubCategoria().getCodSubCategoria(),
-                    produto.getUnidadeMedida().getCodUnidadeMedida(),
-                    produto.getQuantidadeEstoqueMinima(),
-                    produto.getQuantidadeEstoqueMaxima(),
-                    produto.getQuantidadeEstoqueAtual()
-            );
-        } catch(EmptyResultDataAccessException e){
+           return converteProdutoParaProdutoDTO(produto);
+       } catch(EmptyResultDataAccessException e){
             throw  new EntityNotFoundException("Código de produto não encontrado: " + idProduto);
         }
+    }
+
+    public static ProdutoDTO converteProdutoParaProdutoDTO(Produto produto) {
+        return new ProdutoDTO(
+                produto.getCodProduto(),
+                produto.getNomeProduto(),
+                produto.getDescricaoProduto(),
+                produto.getSubCategoria().getCodSubCategoria(),
+                produto.getUnidadeMedida().getCodUnidadeMedida(),
+                produto.getQuantidadeEstoqueMinima(),
+                produto.getQuantidadeEstoqueMaxima(),
+                produto.getQuantidadeEstoqueAtual()
+        );
     }
 
     public List<Produto> listarProdutos() {

@@ -1,7 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.controller;
 
 import br.com.univesp.mercadocell.mercadocell.dto.ImagemDTO;
-import br.com.univesp.mercadocell.mercadocell.model.Categoria;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.service.ImagemService;
 import org.springframework.beans.factory.annotation.Autowired;

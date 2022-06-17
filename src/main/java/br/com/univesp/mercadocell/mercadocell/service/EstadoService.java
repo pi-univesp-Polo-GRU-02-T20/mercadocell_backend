@@ -1,7 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
-import java.util.List;
-
+import br.com.univesp.mercadocell.mercadocell.model.Estado;
+import br.com.univesp.mercadocell.mercadocell.repository.EstadoRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import br.com.univesp.mercadocell.mercadocell.model.Estado;
-import br.com.univesp.mercadocell.mercadocell.repository.EstadoRepository;
+import java.util.List;
 
 @Service
 public class EstadoService {

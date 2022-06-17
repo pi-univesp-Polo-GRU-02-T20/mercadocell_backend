@@ -1,8 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
-import br.com.univesp.mercadocell.mercadocell.dto.ImagemDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
-import br.com.univesp.mercadocell.mercadocell.model.Produto;
 import br.com.univesp.mercadocell.mercadocell.repository.ImagemRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
@@ -10,7 +8,6 @@ import br.com.univesp.mercadocell.mercadocell.service.exception.FileHandleExcept
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;

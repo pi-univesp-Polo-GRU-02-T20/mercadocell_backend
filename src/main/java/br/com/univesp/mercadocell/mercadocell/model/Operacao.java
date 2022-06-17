@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Operacao {
     private Integer codOperacao;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataOperacao;
     private String codNotaFiscal;
