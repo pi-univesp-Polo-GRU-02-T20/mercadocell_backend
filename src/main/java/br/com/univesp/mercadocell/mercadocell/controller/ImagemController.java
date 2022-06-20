@@ -76,17 +76,4 @@ public class ImagemController {
         return ResponseEntity.status(HttpStatus.OK).body(arquivosImagem);
 
     }
-
-
-/*
-
-
-    @DeleteMapping("/{idCategoria}")
-    public ResponseEntity<Categoria> deletarCategoria(@PathVariable int idCategoria) {
-        imagemService.deletarCategoria(idCategoria);
-        return ResponseEntity.noContent().build();
-    }
-
-
- */
 }
