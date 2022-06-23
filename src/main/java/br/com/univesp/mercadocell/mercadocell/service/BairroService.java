@@ -22,7 +22,12 @@ public class BairroService {
             bairroRepository.buscarBairroPorNome(bairro.getNomeBairro());
             throw new EntityIntegrityViolationException("Bairro já cadastrado: " + bairro.toString());
         }catch (EmptyResultDataAccessException e){
-            bairroRepository.cadastrarBairro(bairro);
+            try {
+                bairroRepository.cadastrarBairro(bairro);
+            }catch (DataIntegrityViolationException dataIntegrityViolationException) {
+                throw new EntityIntegrityViolationException(
+                        "Dados de Bairro Inconsistentes:" + bairro.toString());
+            }
         }
     }
 

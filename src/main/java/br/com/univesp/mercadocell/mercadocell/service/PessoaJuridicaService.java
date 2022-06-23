@@ -22,7 +22,12 @@ public class PessoaJuridicaService {
             pessoaJuridicaRepository.buscarPessoaJuridicaPorNome(pessoaJuridica.getNomePessoa());
             throw new EntityIntegrityViolationException("Pessoa jurídica já cadastrada" + pessoaJuridica.toString());
         }catch (EmptyResultDataAccessException e) {
-            pessoaJuridicaRepository.cadastrarPessoaJuridica(pessoaJuridica);
+            try{
+                pessoaJuridicaRepository.cadastrarPessoaJuridica(pessoaJuridica);
+            }catch (DataIntegrityViolationException dataIntegrityViolationException) {
+                throw new EntityIntegrityViolationException(
+                        "Dados de Pessoa Jurídica inconsistentes:" + pessoaJuridica.toString());
+            }
         }
     }
 

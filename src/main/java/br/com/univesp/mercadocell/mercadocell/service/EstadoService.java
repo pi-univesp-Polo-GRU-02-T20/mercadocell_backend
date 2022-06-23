@@ -22,7 +22,12 @@ public class EstadoService {
             estadoRepository.buscarEstadoPorUF(estado.getSiglaUF());
             throw new EntityIntegrityViolationException("Estado já cadastrado: " + estado.toString());
         } catch(EmptyResultDataAccessException e){
-            estadoRepository.cadastrarEstado(estado);
+           try {
+               estadoRepository.cadastrarEstado(estado);
+           }catch (DataIntegrityViolationException dataIntegrityViolationException) {
+               throw new EntityIntegrityViolationException(
+                       "Dados de Estado Inconsistentes:" + estado.toString());
+           }
         }
     }
 

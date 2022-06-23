@@ -23,7 +23,12 @@ public class TipoPagamentoService {
             throw new EntityIntegrityViolationException("Tipo de pagamento já cadastrado: " +
                     tipoPagamento.getCodTipoPagamento());
         }catch (EmptyResultDataAccessException e ){
-            tipoPagamentoRepository.cadastrarTipoPagamento(tipoPagamento);
+            try {
+                tipoPagamentoRepository.cadastrarTipoPagamento(tipoPagamento);
+            } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+            throw new EntityIntegrityViolationException(
+                    "Dados de Tipo de Pagamento inconsistentes: " + tipoPagamento.toString());
+            }
         }
     }
 

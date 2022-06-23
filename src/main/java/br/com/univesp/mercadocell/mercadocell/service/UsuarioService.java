@@ -31,7 +31,7 @@ public class UsuarioService {
                 usuarioRepository.cadastrarUsuario(usuario);
             } catch (DataIntegrityViolationException dataIntegrityViolationException) {
                 throw new EntityIntegrityViolationException(
-                        "A pessoa informada não foi cadastrada na base:" + usuario.getCodPessoa());
+                        "Dados de usuário inconsistentes:" + usuario.toString());
             }
         }
         usuario.setSenha(UsuarioRepository.MASCARA_SENHA);

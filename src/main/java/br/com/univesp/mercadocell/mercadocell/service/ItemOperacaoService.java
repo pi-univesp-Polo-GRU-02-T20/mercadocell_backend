@@ -74,7 +74,7 @@ public class ItemOperacaoService {
                 itemOperacaoRepository.incluirItemOperacao(item);
             } catch (DataIntegrityViolationException e) {
                 throw new EntityIntegrityViolationException(
-                        "Produto, Compra ou venda não cadastrado na base: " + item.toString());
+                        "Dados de Item de Operação de compra ou venda inconsistentes: " + item.toString());
             }
         }
     }

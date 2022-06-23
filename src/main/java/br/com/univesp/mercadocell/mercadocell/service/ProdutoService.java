@@ -31,10 +31,12 @@ public class ProdutoService {
             produtoRepository.buscarProdutoPorNome(produtoDTO.getNomeProduto());
             throw new EntityIntegrityViolationException("Produto já cadastrado: " + produtoDTO.toString());
         }catch (EmptyResultDataAccessException e){
-          produtoRepository.cadastrarProduto(converteProdutoDTOParaProduto(produtoDTO));
-       } catch (DataIntegrityViolationException dataIntegrityViolationException) {
-           throw new EntityIntegrityViolationException(
-                   "Subcategoria ou Unidade de Medida informada não foi cadastrada na base:" + produtoDTO.toString());
+            try {
+                produtoRepository.cadastrarProduto(converteProdutoDTOParaProduto(produtoDTO));
+            } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+                    throw new EntityIntegrityViolationException(
+                   "Dados de Produto Inconsistentes:" + produtoDTO.toString());
+            }
        }
         produtoDTO.setCodProduto(produtoRepository.getCodProdutoCadastrado());
        return produtoDTO;

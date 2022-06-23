@@ -26,7 +26,7 @@ public class SubCategoriaService {
                 subCategoriaRepository.cadastrarSubCategoria(subCategoria);
             } catch (DataIntegrityViolationException dataIntegrityViolationException) {
                 throw new EntityIntegrityViolationException(
-                        "A Categoria informada não foi cadastrada na base: " + subCategoria.getCategoria().toString());
+                        "Dados de Categoria inconsistentes: " + subCategoria.getCategoria().toString());
             }
         }
     }

@@ -22,7 +22,12 @@ public class PessoaFisicaService {
             pessoaFisicaRepository.buscarPessoaFisicaPorNome(pessoaFisica.getNomePessoa());
             throw new EntityIntegrityViolationException("Pessoa física já cadastrada");
         }catch (EmptyResultDataAccessException e) {
-                pessoaFisicaRepository.cadastrarPessoaFisica(pessoaFisica);
+                try{
+                    pessoaFisicaRepository.cadastrarPessoaFisica(pessoaFisica);
+                }catch (DataIntegrityViolationException dataIntegrityViolationException) {
+                    throw new EntityIntegrityViolationException(
+                            "Dados de Pessoa Física inconsistentes:" + pessoaFisica.toString());
+                }
         }
     }
 

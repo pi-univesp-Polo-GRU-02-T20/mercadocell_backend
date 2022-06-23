@@ -23,7 +23,12 @@ public class OperacaoService {
     private OperacaoRepository operacaoRepository;
 
     public void cadastrarOperacao(Operacao operacao){
-        operacaoRepository.cadastrarOperacao(operacao);
+        try {
+            operacaoRepository.cadastrarOperacao(operacao);
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+            throw new EntityIntegrityViolationException(
+                    "Dados de Operação inconsistentes:" + operacao.toString());
+        }
     }
 
     public Operacao buscarOperacaoPorId(int idOperacao) {

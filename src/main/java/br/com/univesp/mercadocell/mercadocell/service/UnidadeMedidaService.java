@@ -4,6 +4,7 @@ import br.com.univesp.mercadocell.mercadocell.model.UnidadeMedida;
 import br.com.univesp.mercadocell.mercadocell.repository.UnidadeMedidaRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,12 @@ public class UnidadeMedidaService {
             unidadeMedidaRepository.buscarUnidadeMedidaPorNome(unidadeMedida.getNomeUnidadeMedida());
             throw new EntityIntegrityViolationException("Categoria já cadastrada: " + unidadeMedida.toString());
         }catch (EmptyResultDataAccessException e){
-            unidadeMedidaRepository.cadastrarUnidadeMedida(unidadeMedida);
+            try {
+                unidadeMedidaRepository.cadastrarUnidadeMedida(unidadeMedida);
+            } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+                throw new EntityIntegrityViolationException(
+                        "Dados de Unidade de Medida inconsistentes: " + unidadeMedida.toString());
+            }
         }
 
     }

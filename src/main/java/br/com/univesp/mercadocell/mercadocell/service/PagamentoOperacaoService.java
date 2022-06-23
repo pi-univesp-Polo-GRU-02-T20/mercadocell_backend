@@ -2,7 +2,9 @@ package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.model.PagamentoOperacao;
 import br.com.univesp.mercadocell.mercadocell.repository.PagamentoOperacaoRespository;
+import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +16,12 @@ public class PagamentoOperacaoService {
     PagamentoOperacaoRespository pagamentoOperacaoRespository;
 
     public void incluirPagamentoOperacao(PagamentoOperacao pagamentoOperacao) {
-        pagamentoOperacaoRespository.incluirPagamentoOperacao(pagamentoOperacao);
+        try {
+            pagamentoOperacaoRespository.incluirPagamentoOperacao(pagamentoOperacao);
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+            throw new EntityIntegrityViolationException(
+                    "Dados de Pagamento inconsistentes:" + pagamentoOperacao.toString());
+        }
     }
 
     public void removerPagamentoOperacao(Integer idPagamento) {

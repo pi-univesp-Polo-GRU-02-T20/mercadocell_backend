@@ -34,8 +34,8 @@ public class ProdutoRepository {
     private static final String FILTRO_NOME_PRODUTO = " WHERE NME_PRODUTO = ?";
     private static final String  INSERT_PRODUTO =   "INSERT INTO PRODUTO " +
                                                     "(NME_PRODUTO, DSC_PRODUTO, COD_SUBCATEGORIA, COD_UNIDADE_MEDIDA," +
-                                                    "PR.QTD_ESTOQUE_MIN, PR.QTD_ESTOQUE_MAX, PR.QTD_ESTOQUE_ATUAL )" +
-                                                    " VALUES (?, ?, ?, ?, ?)";
+                                                    "QTD_ESTOQUE_MIN, QTD_ESTOQUE_MAX, QTD_ESTOQUE_ATUAL )" +
+                                                    " VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String  UPDATE_PRODUTO = "UPDATE PRODUTO SET NME_PRODUTO = ? , DSC_PRODUTO = ? " +
                                                   " COD_SUBCATEGORIA = ? , COD_UNIDADE_MEDIDA = ? ";
 
