@@ -1,12 +1,22 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
-import br.com.univesp.mercadocell.mercadocell.model.*;
+
+import br.com.univesp.mercadocell.mercadocell.dto.ImagemProdutoDTO;
+import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ImagemRepository {
@@ -21,13 +31,18 @@ public class ImagemRepository {
     private static final String FILTRO_COD_IMAGEM = " WHERE COD_IMAGEM = ?";
     private static final String  INSERT_IMAGEM =    " INSERT INTO IMAGEM (NME_IMAGEM, TPO_IMAGEM, BNR_IMAGEM )" +
                                                     " VALUES (?, ?, ?) ";
+    private static final String  TABELA_IMAGEM =    " IMAGEM";
+    private static final String GET_INSERTED_ID = " SELECT MAX(COD_IMAGEM) COD_IMAGEM FROM IMAGEM ";
+    private static final String COL_AUTO_INCREMENT = "AUTO_INCREMENT";
     private static final String  UPDATE_IMAGEM = "UPDATE IMAGEM SET NME_IMAGEM = ? , TPO_IMAGEM = ?, BNR_IMAGEM = ? ";
     private static final String  DELETE_IMAGEM = "DELETE FROM IMAGEM ";
 
     // VINCULO IMAGEM
     private static final String INSERT_IMAGEM_VINCULO_PRODUTO = " INSERT INTO IMAGEM_PRODUTO " +
-            " (COD_PRODUTO, COD_IMAGEM)" +
+            " (COD_IMAGEM, COD_PRODUTO)" +
             " VALUES (?, ?,) ";
+
+
     private static final String DELETE_VINCULO_IMAGEM_PRODUTO = "DELETE FROM IMAGEM_PRODUTO " +
             " WHERE COD_PRODUTO = ? AND COD_IMAGEM = ? ";
     private static final String SELECT_IMAGEM_VINCULO_PRODUTO =
@@ -44,8 +59,25 @@ public class ImagemRepository {
     private static final String COL_NOME_IMAGEM = "NME_IMAGEM";
     private static final String COL_TIPO_IMAGEM = "TPO_IMAGEM";
     private static final String COL_BINARIO_IMAGEM = "BNR_IMAGEM";
+
+
     // VINCULOS
-    private static final String COL_PRODUTO = "COD_PRODUTO";
+    private static final String COL_COD_PRODUTO = "COD_PRODUTO";
+
+   /* public int cadastrarImagem(Imagem imagem) throws EntityIntegrityViolationException {
+      KeyHolder keyHolder = new GeneratedKeyHolder();
+       return  jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement statement = con.prepareStatement(INSERT_IMAGEM + GET_INSERTED_ID,
+                        new String[]{COL_COD_IMAGEM});
+                statement.setString(1, imagem.getNomeImagem());
+                statement.setString(2, imagem.getTipoImagem());
+                statement.setBytes(3, imagem.getBinarioImagem());
+                return statement;
+            }
+        }, keyHolder);
+    }*/
 
     public void cadastrarImagem(Imagem imagem) throws EntityIntegrityViolationException {
         jdbcTemplate.update(
@@ -54,6 +86,11 @@ public class ImagemRepository {
                 imagem.getTipoImagem(),
                 imagem.getBinarioImagem()
         );
+    }
+
+    public int getCodImagemCadastrado() throws EntityIntegrityViolationException {
+        Integer codImagem =  jdbcTemplate.queryForObject(GET_INSERTED_ID, Integer.class);
+        return  codImagem == null? 0: codImagem;
     }
 
     public Imagem buscarImagemPorId(int idImagem){
@@ -120,11 +157,11 @@ public class ImagemRepository {
         );
     }
 
-    public void inserirVinculoImagemProduto(int codigoProduto, int codigoImagem)
+    public void vincularImagemProduto(ImagemProdutoDTO imagemProdutoDTO)
                 throws EntityIntegrityViolationException {
             jdbcTemplate.update(INSERT_IMAGEM_VINCULO_PRODUTO,
-                    codigoProduto,
-                    codigoImagem
+                    imagemProdutoDTO.getCodigoProduto(),
+                    imagemProdutoDTO.getCodigoImagem()
             );
     }
 

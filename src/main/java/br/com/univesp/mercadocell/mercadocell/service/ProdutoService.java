@@ -3,6 +3,8 @@ package br.com.univesp.mercadocell.mercadocell.service;
 import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.model.Produto;
+import br.com.univesp.mercadocell.mercadocell.model.SubCategoria;
+import br.com.univesp.mercadocell.mercadocell.model.UnidadeMedida;
 import br.com.univesp.mercadocell.mercadocell.repository.ProdutoRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
@@ -23,22 +25,26 @@ public class ProdutoService {
     private ImagemService imagemService;
 
     @Transactional
-    public void cadastrarProduto(Produto produto) {
+    public ProdutoDTO cadastrarProduto(ProdutoDTO produtoDTO) {
+
        try {
-            produtoRepository.buscarProdutoPorNome(produto.getNomeProduto());
-            throw new EntityIntegrityViolationException("Produto já cadastrado: " + produto.toString());
+            produtoRepository.buscarProdutoPorNome(produtoDTO.getNomeProduto());
+            throw new EntityIntegrityViolationException("Produto já cadastrado: " + produtoDTO.toString());
         }catch (EmptyResultDataAccessException e){
-           produtoRepository.cadastrarProduto(produto);
+          produtoRepository.cadastrarProduto(converteProdutoDTOParaProduto(produtoDTO));
        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
-               throw new EntityIntegrityViolationException(
-               "Subcategoria ou Unidade de Medida informada não foi cadastrada na base:" + produto.toString());
-        }
+           throw new EntityIntegrityViolationException(
+                   "Subcategoria ou Unidade de Medida informada não foi cadastrada na base:" + produtoDTO.toString());
+       }
+        produtoDTO.setCodProduto(produtoRepository.getCodProdutoCadastrado());
+       return produtoDTO;
     }
 
-    public ProdutoDTO buscarProdutoPorId(int  idProduto) {
+    public Produto buscarProdutoPorId(int  idProduto) {
        try{
-            Produto produto =  produtoRepository.buscarProdutoPorId(idProduto);
-           return converteProdutoParaProdutoDTO(produto);
+            //Produto produto =  produtoRepository.buscarProdutoPorId(idProduto);
+           return  produtoRepository.buscarProdutoPorId(idProduto);
+           //return converteProdutoParaProdutoDTO(produto);
        } catch(EmptyResultDataAccessException e){
             throw  new EntityNotFoundException("Código de produto não encontrado: " + idProduto);
         }
@@ -56,6 +62,23 @@ public class ProdutoService {
                 produto.getQuantidadeEstoqueAtual()
         );
     }
+    public static Produto converteProdutoDTOParaProduto(ProdutoDTO produtoDTO) {
+        return new Produto(
+                produtoDTO.getCodProduto(),
+                produtoDTO.getNomeProduto(),
+                produtoDTO.getDescricaoProduto(),
+                new SubCategoria(
+                        produtoDTO.getCodigoSubcategoria()
+                ),
+                new UnidadeMedida(
+                        produtoDTO.getCodigoUnidadeMedida()
+                ),
+                produtoDTO.getCodigoUnidadeMedida(),
+                produtoDTO.getQuantidadeEstoqueMinima(),
+                produtoDTO.getQuantidadeEstoqueAtual()
+        );
+    }
+
 
     public List<Produto> listarProdutos() {
         try{
@@ -65,12 +88,12 @@ public class ProdutoService {
         }
     }
 
-    public void atualizarProduto(Produto produto) {
+    public void atualizarProduto(ProdutoDTO produtoDTO) {
         try{
-            produtoRepository.atualizarProduto(produto);
+            produtoRepository.atualizarProduto(converteProdutoDTOParaProduto(produtoDTO));
         }catch(DataIntegrityViolationException e ){
             throw new EntityIntegrityViolationException(
-                    "Subcategoria ou Unidade de medida não cadastrada na base: " + produto.toString());
+                    "Subcategoria ou Unidade de medida não cadastrada na base: " + produtoDTO.toString());
         }
     }
 

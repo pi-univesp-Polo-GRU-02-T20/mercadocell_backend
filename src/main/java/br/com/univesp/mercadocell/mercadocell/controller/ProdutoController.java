@@ -19,18 +19,14 @@ public class ProdutoController {
     private ProdutoService produtoService ;
 
     @PostMapping
-    public ResponseEntity<Produto> cadastrarProduto(@Valid @RequestBody Produto produto) {
-        produtoService.cadastrarProduto(produto);
-        return ResponseEntity.accepted().body(produto);
+    public ResponseEntity<ProdutoDTO> cadastrarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {
+        return ResponseEntity.accepted().body(produtoService.cadastrarProduto(produtoDTO));
     }
 
     @GetMapping(path="/{idProduto}")
-    public ResponseEntity<ProdutoDTO> buscarProdutoPorId(@PathVariable int idProduto) {
+    public ResponseEntity<Produto> buscarProdutoPorId(@PathVariable int idProduto) {
         return ResponseEntity.ok().body( produtoService.buscarProdutoPorId(idProduto));
     }
-
-
-
 
     @GetMapping
     public List<Produto> listarProdutos() {
@@ -38,8 +34,8 @@ public class ProdutoController {
     }
 
     @PutMapping
-    public ResponseEntity<ProdutoDTO> atualizarProduto(@Valid @RequestBody Produto produto) {
-        produtoService.atualizarProduto(produto);
+    public ResponseEntity<ProdutoDTO> atualizarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {
+        produtoService.atualizarProduto(produtoDTO);
         return ResponseEntity.accepted().build();
     }
 

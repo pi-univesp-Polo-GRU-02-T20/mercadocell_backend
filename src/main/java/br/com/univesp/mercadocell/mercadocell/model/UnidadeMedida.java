@@ -16,4 +16,7 @@ public class UnidadeMedida {
         this.siglaUnidadeMedida =  siglaUnidadeMedida;
     }
 
+    public UnidadeMedida(Integer codigoUnidadeMedida) {
+        this.codUnidadeMedida = codigoUnidadeMedida;
+    }
 }

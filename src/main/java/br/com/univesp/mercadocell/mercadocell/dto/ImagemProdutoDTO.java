@@ -5,9 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ImagemDTO {
+public class ImagemProdutoDTO {
     private Integer codigoImagem;
-    private String nomeImagem;
-    private String tipoImagem;
-
+    private Integer codigoProduto;
 }

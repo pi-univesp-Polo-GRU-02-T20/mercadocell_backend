@@ -1,5 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
+import br.com.univesp.mercadocell.mercadocell.dto.ImagemProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.repository.ImagemRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
@@ -21,7 +22,7 @@ public class ImagemService {
     @Autowired
     private ImagemRepository imagemRepository;
 
-    public void cadastrarImagem(MultipartFile arqImagem) {
+    public int cadastrarImagem(MultipartFile arqImagem) {
         Imagem img = null;
         Optional<MultipartFile> optImg = Optional.ofNullable(arqImagem);
         if (optImg.isPresent()){
@@ -37,6 +38,7 @@ public class ImagemService {
         }else{
             throw new FileHandleException("Imagem não enviada na requisição!");
         }
+        return imagemRepository.getCodImagemCadastrado();
     }
 
     public void atualizarImagem(MultipartFile arqImagem) {
@@ -97,6 +99,17 @@ public class ImagemService {
             throw new EntityIntegrityViolationException(
                     "Imagem utilizada em cadastros do sistema: "+ idImagem);
         }
+    }
+
+    public void vincularImagemProduto(ImagemProdutoDTO imagemProdutoDTO) {
+        try{
+            imagemRepository.vincularImagemProduto(imagemProdutoDTO);
+        }catch(DataIntegrityViolationException e ){
+            throw new EntityIntegrityViolationException(
+                    "Imagem ou Produto não cadastrado na base: " + imagemProdutoDTO.toString());
+        }
+
+
     }
 }
 

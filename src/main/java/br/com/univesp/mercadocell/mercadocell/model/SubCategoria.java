@@ -15,4 +15,7 @@ public class SubCategoria {
         this.nomeSubCategoria = nomeSubCategoria;
     }
 
+    public SubCategoria(Integer codSubCategoria) {
+        this.codSubCategoria = codSubCategoria;
+    }
 }

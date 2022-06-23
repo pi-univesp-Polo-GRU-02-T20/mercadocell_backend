@@ -28,6 +28,8 @@ public class ProdutoRepository {
             " INNER JOIN SUBCATEGORIA SC ON PR.COD_SUBCATEGORIA = SC.COD_SUBCATEGORIA "+
             " INNER JOIN CATEGORIA CT ON CT.COD_CATEGORIA = SC.COD_CATEGORIA "+
             " INNER JOIN UNIDADE_MEDIDA UM ON UM.COD_UNIDADE_MEDIDA = PR.COD_UNIDADE_MEDIDA ";
+    private static final String GET_INSERTED_ID = " SELECT MAX(COD_PRODUTO) COD_PRODUTO FROM PRODUTO ";
+
     private static final String FILTRO_COD_PRODUTO = " WHERE COD_PRODUTO = ?";
     private static final String FILTRO_NOME_PRODUTO = " WHERE NME_PRODUTO = ?";
     private static final String  INSERT_PRODUTO =   "INSERT INTO PRODUTO " +
@@ -36,6 +38,7 @@ public class ProdutoRepository {
                                                     " VALUES (?, ?, ?, ?, ?)";
     private static final String  UPDATE_PRODUTO = "UPDATE PRODUTO SET NME_PRODUTO = ? , DSC_PRODUTO = ? " +
                                                   " COD_SUBCATEGORIA = ? , COD_UNIDADE_MEDIDA = ? ";
+
     private static final String  DELETE_PRODUTO = "DELETE FROM PRODUTO ";
     private static final String COL_COD_SUBCATEGORIA = "COD_SUBCATEGORIA";
     private static final String COL_NME_SUBCATEGORIA = "NME_SUBCATEGORIA";
@@ -62,6 +65,11 @@ public class ProdutoRepository {
                 produto.getQuantidadeEstoqueMaxima(),
                 produto.getQuantidadeEstoqueAtual()
         );
+    }
+
+    public int getCodProdutoCadastrado() throws EntityIntegrityViolationException {
+        Integer codImagem =  jdbcTemplate.queryForObject(GET_INSERTED_ID, Integer.class);
+        return  codImagem == null? 0: codImagem;
     }
 
     public Produto buscarProdutoPorId(int idProduto){

@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
@@ -60,6 +61,17 @@ public class ControllerExceptionHandler {
         err.setTimestamp(Instant.now());
         err.setStatus(HttpStatus.BAD_REQUEST.value());
         err.setError("Problema no manipulação da imagem");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<StandardError> fileRequestException(MultipartException e, HttpServletRequest request){
+        StandardError err = new StandardError();
+        err.setTimestamp(Instant.now());
+        err.setStatus(HttpStatus.BAD_REQUEST.value());
+        err.setError("Requisição de imagem inválida!");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
