@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-
-public class ProdutoRelatorioFaturamentoSMO {
+public class ProdutoRelatorioFaturamentoDetalhadoDTO {
 
     private Integer codigoProduto;
+    private String nomeProduto;
     private Double valorCustoVenda;
     private Double valorFaturado;
     private Double valorLiquido;

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 
-public class ProdutoRelatorioFaturamentoDTO {
+public class ProdutoRelatorioFaturamentoSumarizadoDTO {
 
     private Integer codigoProduto;
     private String nomeProduto;

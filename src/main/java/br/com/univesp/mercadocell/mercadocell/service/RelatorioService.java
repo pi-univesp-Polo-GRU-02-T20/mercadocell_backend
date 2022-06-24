@@ -1,7 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
-import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoDTO;
-import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoSMO;
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoSumarizadoDTO;
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoDetalhadoDTO;
 import br.com.univesp.mercadocell.mercadocell.repository.RelatorioRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class RelatorioService {
     private RelatorioRepository relatorioRepository;
     private String anoFaturamento;
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoDiario() {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoDiario() {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoDetalhadoDiario();
         }catch (EmptyResultDataAccessException e ){
@@ -27,7 +27,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoDiarioPeriodo
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoDiarioPeriodo
             (LocalDate dataInicio, LocalDate dataTermino) {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoDetalhadoDiarioPeriodo(dataInicio, dataTermino);
@@ -38,7 +38,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoMensalNull() {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoMensalNull() {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoDetalhadoMensalNull();
         } catch(EmptyResultDataAccessException e){
@@ -48,7 +48,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoMensal(String anoMesFaturamento) {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoMensal(String anoMesFaturamento) {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoDetalhadoMensal(anoMesFaturamento);
         } catch(EmptyResultDataAccessException e){
@@ -58,7 +58,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoMensalPeriodo
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoMensalPeriodo
             (String anoMesInicio, String anoMesTermino) {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoDetalhadoMensalPeriodo(anoMesInicio, anoMesTermino);
@@ -69,7 +69,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoAnualNull() {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoAnualNull() {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoDetalhadoAnualNull();
         } catch(EmptyResultDataAccessException e){
@@ -79,7 +79,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoAnual(String anoFaturamento) {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoAnual(String anoFaturamento) {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoDetalhadoAnual(anoFaturamento);
         } catch(EmptyResultDataAccessException e){
@@ -89,7 +89,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoAnualPeriodo
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoAnualPeriodo
             (String anoInicial, String anoTermino) {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoDetalhadoAnualPeriodo(anoInicial, anoTermino);
@@ -100,7 +100,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoDiario() {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoDiario() {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoSumarizadoDiario();
         }catch (EmptyResultDataAccessException e ){
@@ -110,7 +110,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoDiarioPeriodo
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoDiarioPeriodo
             (LocalDate dataInicio, LocalDate dataTermino) {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoSumarizadoDiarioPeriodo(dataInicio, dataTermino);
@@ -121,7 +121,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoMensalNull() {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoMensalNull() {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoSumarizadoMensalNull();
         } catch(EmptyResultDataAccessException e){
@@ -131,7 +131,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoMensal(String anoMesFaturamento) {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoMensal(String anoMesFaturamento) {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoSumarizadoMensal(anoMesFaturamento);
         } catch(EmptyResultDataAccessException e){
@@ -141,7 +141,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoMensalPeriodo
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoMensalPeriodo
             (String anoMesInicial, String anoMesTermino) {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoSumarizadoMensalPeriodo(anoMesInicial, anoMesTermino);
@@ -152,7 +152,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoAnualNull() {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoAnualNull() {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoSumarizadoAnualNull();
         } catch(EmptyResultDataAccessException e){
@@ -163,7 +163,7 @@ public class RelatorioService {
     }
 
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoAnual(String anoFaturamento) {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoAnual(String anoFaturamento) {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoSumarizadoAnual(anoFaturamento);
         } catch(EmptyResultDataAccessException e){
@@ -173,7 +173,7 @@ public class RelatorioService {
         }
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoAnualPeriodo
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoAnualPeriodo
             (String anoInicial, String anoTermino) {
         try{
             return relatorioRepository.carregarRelatorioFaturamentoSumarizadoAnualPeriodo(anoInicial, anoTermino);

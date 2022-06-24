@@ -1,7 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
-import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoDTO;
-import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoSMO;
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoSumarizadoDTO;
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoDetalhadoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -31,19 +31,19 @@ public class RelatorioRepository {
             ;
 
     private static final String SELECT_FATURAMENTO_SUMARIZADO_DIARIO =
-            "SELECT COD_PRODUTO, VLR_CUSTO_VENDA, VLR_FATURADO, " +
+            "SELECT COD_PRODUTO,  NME_PRODUTO, VLR_CUSTO_VENDA, VLR_FATURADO, " +
                     "VLR_LIQUIDO, QTD_ITEM_ESTOQUE_ENTRADA, QTD_ITEM_ESTOQUE_SAIDA, DSC_PERIODO " +
                     "FROM VW_FATURAMENTO_SUMARIZADO_DIARIO "
             ;
 
     private static final String SELECT_FATURAMENTO_SUMARIZADO_MENSAL =
-            "SELECT COD_PRODUTO, VLR_CUSTO_VENDA, VLR_FATURADO, " +
+            "SELECT COD_PRODUTO,  NME_PRODUTO, VLR_CUSTO_VENDA, VLR_FATURADO, " +
                     "VLR_LIQUIDO, QTD_ITEM_ESTOQUE_ENTRADA, QTD_ITEM_ESTOQUE_SAIDA, DSC_PERIODO " +
                     "FROM VW_FATURAMENTO_SUMARIZADO_MENSAL "
             ;
 
     private static final String SELECT_FATURAMENTO_SUMARIZADO_ANUAL =
-            "SELECT COD_PRODUTO, VLR_CUSTO_VENDA, VLR_FATURADO, " +
+            "SELECT COD_PRODUTO, NME_PRODUTO, VLR_CUSTO_VENDA, VLR_FATURADO, " +
                     "VLR_LIQUIDO, QTD_ITEM_ESTOQUE_ENTRADA, QTD_ITEM_ESTOQUE_SAIDA, DSC_PERIODO " +
                     "FROM VW_FATURAMENTO_SUMARIZADO_ANUAL "
             ;
@@ -67,11 +67,11 @@ public class RelatorioRepository {
     private static final String COLUNA_QTD_ITEM_ESTOQUE_ENTRADA = "QTD_ITEM_ESTOQUE_ENTRADA";
     private static final String COLUNA_QTD_ITEM_ESTOQUE_SAIDA = "QTD_ITEM_ESTOQUE_SAIDA";
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoDiario() {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoDiario() {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_DETALHADO_DIARIO
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoDTO(
+                        new ProdutoRelatorioFaturamentoSumarizadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
                                 resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getInt(COLUNA_QTD_ITEM),
@@ -81,12 +81,12 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoDiarioPeriodo
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoDiarioPeriodo
             (LocalDate dataInicio, LocalDate dataTermino) {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_DETALHADO_DIARIO + FILTRO_PERIODO_DSC_PERIODO
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoDTO(
+                        new ProdutoRelatorioFaturamentoSumarizadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
                                 resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getInt(COLUNA_QTD_ITEM),
@@ -97,11 +97,11 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoMensalNull() {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoMensalNull() {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_DETALHADO_MENSAL
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoDTO(
+                        new ProdutoRelatorioFaturamentoSumarizadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
                                 resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getInt(COLUNA_QTD_ITEM),
@@ -112,11 +112,11 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoMensal(String anoMesFaturamento) {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoMensal(String anoMesFaturamento) {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_DETALHADO_MENSAL + FILTRO_DSC_PERIODO
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoDTO(
+                        new ProdutoRelatorioFaturamentoSumarizadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
                                 resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getInt(COLUNA_QTD_ITEM),
@@ -128,12 +128,12 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoMensalPeriodo
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoMensalPeriodo
             (String anoMesInicio, String anoMesTermino) {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_DETALHADO_MENSAL + FILTRO_PERIODO_DSC_PERIODO
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoDTO(
+                        new ProdutoRelatorioFaturamentoSumarizadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
                                 resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getInt(COLUNA_QTD_ITEM),
@@ -144,11 +144,11 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoAnualNull() {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoAnualNull() {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_DETALHADO_ANUAL
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoDTO(
+                        new ProdutoRelatorioFaturamentoSumarizadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
                                 resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getInt(COLUNA_QTD_ITEM),
@@ -158,11 +158,11 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoAnual(String anoFaturamento) {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoAnual(String anoFaturamento) {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_DETALHADO_ANUAL + FILTRO_DSC_PERIODO
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoDTO(
+                        new ProdutoRelatorioFaturamentoSumarizadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
                                 resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getInt(COLUNA_QTD_ITEM),
@@ -173,12 +173,12 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoAnualPeriodo
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoAnualPeriodo
             (String anoInicial, String anoTermino) {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_DETALHADO_ANUAL + FILTRO_PERIODO_DSC_PERIODO
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoDTO(
+                        new ProdutoRelatorioFaturamentoSumarizadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
                                 resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getInt(COLUNA_QTD_ITEM),
@@ -189,12 +189,13 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoDiario() {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoDiario() {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_SUMARIZADO_DIARIO
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoSMO(
+                        new ProdutoRelatorioFaturamentoDetalhadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
+                                resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getDouble(COLUNA_VLR_CUSTO_VENDA),
                                 resultSet.getDouble(COLUNA_VLR_FATURADO),
                                 resultSet.getDouble(COLUNA_VLR_LIQUIDO),
@@ -205,13 +206,14 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoDiarioPeriodo
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoDiarioPeriodo
             (LocalDate dataInicio, LocalDate dataTermino) {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_SUMARIZADO_DIARIO+ FILTRO_PERIODO_DSC_PERIODO
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoSMO(
+                        new ProdutoRelatorioFaturamentoDetalhadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
+                                resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getDouble(COLUNA_VLR_CUSTO_VENDA),
                                 resultSet.getDouble(COLUNA_VLR_FATURADO),
                                 resultSet.getDouble(COLUNA_VLR_LIQUIDO),
@@ -223,12 +225,13 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoMensalNull() {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoMensalNull() {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_SUMARIZADO_MENSAL
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoSMO(
+                        new ProdutoRelatorioFaturamentoDetalhadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
+                                resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getDouble(COLUNA_VLR_CUSTO_VENDA),
                                 resultSet.getDouble(COLUNA_VLR_FATURADO),
                                 resultSet.getDouble(COLUNA_VLR_LIQUIDO),
@@ -239,30 +242,32 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoMensal(String anoMesFaturamento) {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoMensal(String anoMesFaturamento) {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_SUMARIZADO_MENSAL + FILTRO_DSC_PERIODO
                     , (resultSet, rowNum) ->
-                    new ProdutoRelatorioFaturamentoSMO(
-                            resultSet.getInt(COLUNA_COD_PRODUTO),
-                            resultSet.getDouble(COLUNA_VLR_CUSTO_VENDA),
-                            resultSet.getDouble(COLUNA_VLR_FATURADO),
-                            resultSet.getDouble(COLUNA_VLR_LIQUIDO),
-                            resultSet.getDouble(COLUNA_QTD_ITEM_ESTOQUE_ENTRADA),
-                            resultSet.getDouble(COLUNA_QTD_ITEM_ESTOQUE_SAIDA),
-                            resultSet.getString(COLUNA_DSC_PERIODO)
-                    ),
+                        new ProdutoRelatorioFaturamentoDetalhadoDTO(
+                                resultSet.getInt(COLUNA_COD_PRODUTO),
+                                resultSet.getString(COLUNA_NME_PRODUTO),
+                                resultSet.getDouble(COLUNA_VLR_CUSTO_VENDA),
+                                resultSet.getDouble(COLUNA_VLR_FATURADO),
+                                resultSet.getDouble(COLUNA_VLR_LIQUIDO),
+                                resultSet.getDouble(COLUNA_QTD_ITEM_ESTOQUE_ENTRADA),
+                                resultSet.getDouble(COLUNA_QTD_ITEM_ESTOQUE_SAIDA),
+                                resultSet.getString(COLUNA_DSC_PERIODO)
+                        ),
                 anoMesFaturamento
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoMensalPeriodo
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoMensalPeriodo
             (String anoMesInicial, String anoMesTermino) {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_SUMARIZADO_MENSAL + FILTRO_PERIODO_DSC_PERIODO
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoSMO(
+                        new ProdutoRelatorioFaturamentoDetalhadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
+                                resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getDouble(COLUNA_VLR_CUSTO_VENDA),
                                 resultSet.getDouble(COLUNA_VLR_FATURADO),
                                 resultSet.getDouble(COLUNA_VLR_LIQUIDO),
@@ -274,12 +279,13 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoAnualNull() {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoAnualNull() {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_SUMARIZADO_ANUAL
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoSMO(
+                        new ProdutoRelatorioFaturamentoDetalhadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
+                                resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getDouble(COLUNA_VLR_CUSTO_VENDA),
                                 resultSet.getDouble(COLUNA_VLR_FATURADO),
                                 resultSet.getDouble(COLUNA_VLR_LIQUIDO),
@@ -290,30 +296,32 @@ public class RelatorioRepository {
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoAnual(String anoFaturamento) {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoAnual(String anoFaturamento) {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_SUMARIZADO_ANUAL + FILTRO_DSC_PERIODO
                     , (resultSet, rowNum) ->
-                    new ProdutoRelatorioFaturamentoSMO(
-                            resultSet.getInt(COLUNA_COD_PRODUTO),
-                            resultSet.getDouble(COLUNA_VLR_CUSTO_VENDA),
-                            resultSet.getDouble(COLUNA_VLR_FATURADO),
-                            resultSet.getDouble(COLUNA_VLR_LIQUIDO),
-                            resultSet.getDouble(COLUNA_QTD_ITEM_ESTOQUE_ENTRADA),
-                            resultSet.getDouble(COLUNA_QTD_ITEM_ESTOQUE_SAIDA),
-                            resultSet.getString(COLUNA_DSC_PERIODO)
-                    ),
+                        new ProdutoRelatorioFaturamentoDetalhadoDTO(
+                                resultSet.getInt(COLUNA_COD_PRODUTO),
+                                resultSet.getString(COLUNA_NME_PRODUTO),
+                                resultSet.getDouble(COLUNA_VLR_CUSTO_VENDA),
+                                resultSet.getDouble(COLUNA_VLR_FATURADO),
+                                resultSet.getDouble(COLUNA_VLR_LIQUIDO),
+                                resultSet.getDouble(COLUNA_QTD_ITEM_ESTOQUE_ENTRADA),
+                                resultSet.getDouble(COLUNA_QTD_ITEM_ESTOQUE_SAIDA),
+                                resultSet.getString(COLUNA_DSC_PERIODO)
+                        ),
                 anoFaturamento
         );
     }
 
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoAnualPeriodo
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoAnualPeriodo
             (String anoInicial, String anoTermino) {
         return jdbcTemplate.query(
                 SELECT_FATURAMENTO_SUMARIZADO_ANUAL + FILTRO_PERIODO_DSC_PERIODO
                 , (resultSet, rowNum) ->
-                        new ProdutoRelatorioFaturamentoSMO(
+                        new ProdutoRelatorioFaturamentoDetalhadoDTO(
                                 resultSet.getInt(COLUNA_COD_PRODUTO),
+                                resultSet.getString(COLUNA_NME_PRODUTO),
                                 resultSet.getDouble(COLUNA_VLR_CUSTO_VENDA),
                                 resultSet.getDouble(COLUNA_VLR_FATURADO),
                                 resultSet.getDouble(COLUNA_VLR_LIQUIDO),

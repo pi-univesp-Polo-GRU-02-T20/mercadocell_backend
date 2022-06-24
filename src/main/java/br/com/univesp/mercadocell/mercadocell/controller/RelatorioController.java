@@ -1,8 +1,8 @@
 package br.com.univesp.mercadocell.mercadocell.controller;
 
 
-import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoDTO;
-import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoSMO;
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoSumarizadoDTO;
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoRelatorioFaturamentoDetalhadoDTO;
 import br.com.univesp.mercadocell.mercadocell.service.RelatorioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,12 +21,12 @@ public class RelatorioController {
     private RelatorioService relatorioService;
 
     @GetMapping(path="/detalhadoDiario/")
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoDiario() {
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoDiario() {
         return relatorioService.carregarRelatorioFaturamentoDetalhadoDiario();
     }
 
     @GetMapping(path="/detalhadoDiario/periodo/{dataInicio, dataTermino}")
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoDiarioPeriodo
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoDiarioPeriodo
             (@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                      LocalDate dataInicio,
              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -35,56 +35,56 @@ public class RelatorioController {
     }
 
     @GetMapping(path="/detalhadoMensal/")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoDTO>> carregarRelatorioFaturamentoDetalhadoMensalNull() {
-        List<ProdutoRelatorioFaturamentoDTO> produtoRelatorioFaturamentoDTO =
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoSumarizadoDTO>> carregarRelatorioFaturamentoDetalhadoMensalNull() {
+        List<ProdutoRelatorioFaturamentoSumarizadoDTO> produtoRelatorioFaturamentoSumarizadoDTO =
                 relatorioService.carregarRelatorioFaturamentoDetalhadoMensalNull();
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDTO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSumarizadoDTO);
     }
 
     @GetMapping(path="/detalhadoMensal/{anoMesFaturamento}")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoDTO>> carregarRelatorioFaturamentoDetalhadoMensal
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoSumarizadoDTO>> carregarRelatorioFaturamentoDetalhadoMensal
             (@PathVariable String anoMesFaturamento) {
-        List<ProdutoRelatorioFaturamentoDTO> produtoRelatorioFaturamentoDTO =
+        List<ProdutoRelatorioFaturamentoSumarizadoDTO> produtoRelatorioFaturamentoSumarizadoDTO =
                 relatorioService.carregarRelatorioFaturamentoDetalhadoMensal(anoMesFaturamento);
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDTO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSumarizadoDTO);
     }
 
     @GetMapping(path="/detalhadoMensal/periodo/{anoMesInicio, anoMesTermino}")
-    public List<ProdutoRelatorioFaturamentoDTO> carregarRelatorioFaturamentoDetalhadoMensalPeriodo
+    public List<ProdutoRelatorioFaturamentoSumarizadoDTO> carregarRelatorioFaturamentoDetalhadoMensalPeriodo
             (String anoMesInicio, String anoMesTermino) {
         return relatorioService.carregarRelatorioFaturamentoDetalhadoMensalPeriodo(anoMesInicio, anoMesTermino);
     }
 
     @GetMapping(path="/detalhadoAnual/")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoDTO>> carregarRelatorioFaturamentoDetalhadoAnualNull() {
-        List<ProdutoRelatorioFaturamentoDTO> produtoRelatorioFaturamentoDTO =
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoSumarizadoDTO>> carregarRelatorioFaturamentoDetalhadoAnualNull() {
+        List<ProdutoRelatorioFaturamentoSumarizadoDTO> produtoRelatorioFaturamentoSumarizadoDTO =
                 relatorioService.carregarRelatorioFaturamentoDetalhadoAnualNull();
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDTO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSumarizadoDTO);
     }
 
     @GetMapping(path="/detalhadoAnual/{anoFaturamento}")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoDTO>> carregarRelatorioFaturamentoDetalhadoAnual
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoSumarizadoDTO>> carregarRelatorioFaturamentoDetalhadoAnual
             (@PathVariable String anoFaturamento) {
-        List<ProdutoRelatorioFaturamentoDTO> produtoRelatorioFaturamentoDTO =
+        List<ProdutoRelatorioFaturamentoSumarizadoDTO> produtoRelatorioFaturamentoSumarizadoDTO =
                 relatorioService.carregarRelatorioFaturamentoDetalhadoAnual(anoFaturamento);
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDTO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSumarizadoDTO);
     }
 
     @GetMapping(path="/detalhadoAnual/periodo/{anoInicial, anoTermino}")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoDTO>> carregarRelatorioFaturamentoDetalhadoAnualPeriodo
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoSumarizadoDTO>> carregarRelatorioFaturamentoDetalhadoAnualPeriodo
             (String anoInicial, String anoTermino) {
-        List<ProdutoRelatorioFaturamentoDTO> produtoRelatorioFaturamentoDTO =
+        List<ProdutoRelatorioFaturamentoSumarizadoDTO> produtoRelatorioFaturamentoSumarizadoDTO =
                 relatorioService.carregarRelatorioFaturamentoDetalhadoAnualPeriodo(anoInicial, anoTermino);
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDTO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSumarizadoDTO);
     }
 
     @GetMapping(path="/sumarizadoDiario/")
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioSumarizadoDetalhadoDiario() {
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioSumarizadoDetalhadoDiario() {
         return relatorioService.carregarRelatorioFaturamentoSumarizadoDiario();
     }
 
     @GetMapping(path="/sumarizadoDiario/periodo/{dataInicio, dataTermino}")
-    public List<ProdutoRelatorioFaturamentoSMO> carregarRelatorioFaturamentoSumarizadoDiarioPeriodo
+    public List<ProdutoRelatorioFaturamentoDetalhadoDTO> carregarRelatorioFaturamentoSumarizadoDiarioPeriodo
             (@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                      LocalDate dataInicio,
              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -93,48 +93,48 @@ public class RelatorioController {
     }
 
     @GetMapping(path="/sumarizadoMensal/")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoSMO>> carregarRelatorioSumarizadoDetalhadoMensalNull() {
-        List<ProdutoRelatorioFaturamentoSMO> produtoRelatorioFaturamentoSMO =
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoDetalhadoDTO>> carregarRelatorioSumarizadoDetalhadoMensalNull() {
+        List<ProdutoRelatorioFaturamentoDetalhadoDTO> produtoRelatorioFaturamentoDetalhadoDTO =
                 relatorioService.carregarRelatorioFaturamentoSumarizadoMensalNull();
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSMO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDetalhadoDTO);
     }
 
     @GetMapping(path="/sumarizadoMensal/{anoMesFaturamento}")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoSMO>> carregarRelatorioSumarizadoDetalhadoMensal
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoDetalhadoDTO>> carregarRelatorioSumarizadoDetalhadoMensal
             (@PathVariable String anoMesFaturamento) {
-        List<ProdutoRelatorioFaturamentoSMO> produtoRelatorioFaturamentoSMO =
+        List<ProdutoRelatorioFaturamentoDetalhadoDTO> produtoRelatorioFaturamentoDetalhadoDTO =
                 relatorioService.carregarRelatorioFaturamentoSumarizadoMensal(anoMesFaturamento);
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSMO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDetalhadoDTO);
     }
 
     @GetMapping(path="/sumarizadoAnual/")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoSMO>> carregarRelatorioSumarizadoDetalhadoAnualNull() {
-        List<ProdutoRelatorioFaturamentoSMO> produtoRelatorioFaturamentoSMO =
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoDetalhadoDTO>> carregarRelatorioSumarizadoDetalhadoAnualNull() {
+        List<ProdutoRelatorioFaturamentoDetalhadoDTO> produtoRelatorioFaturamentoDetalhadoDTO =
                 relatorioService.carregarRelatorioFaturamentoSumarizadoAnualNull();
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSMO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDetalhadoDTO);
     }
 
     @GetMapping(path="/sumarizadoMensal/periodo/{anoMesInicial, anoMesTermino}")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoSMO>> carregarRelatorioSumarizadoDetalhadoMensalPeriodo
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoDetalhadoDTO>> carregarRelatorioSumarizadoDetalhadoMensalPeriodo
             (String anoMesInicial, String anoMesTermino) {
-        List<ProdutoRelatorioFaturamentoSMO> produtoRelatorioFaturamentoSMO =
+        List<ProdutoRelatorioFaturamentoDetalhadoDTO> produtoRelatorioFaturamentoDetalhadoDTO =
                 relatorioService.carregarRelatorioFaturamentoSumarizadoMensalPeriodo(anoMesInicial, anoMesTermino);
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSMO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDetalhadoDTO);
     }
 
     @GetMapping(path="/sumarizadoAnual/{anoFaturamento}")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoSMO>> carregarRelatorioSumarizadoDetalhadoAnual
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoDetalhadoDTO>> carregarRelatorioSumarizadoDetalhadoAnual
             (@PathVariable String anoFaturamento) {
-        List<ProdutoRelatorioFaturamentoSMO> produtoRelatorioFaturamentoSMO =
+        List<ProdutoRelatorioFaturamentoDetalhadoDTO> produtoRelatorioFaturamentoDetalhadoDTO =
                 relatorioService.carregarRelatorioFaturamentoSumarizadoAnual(anoFaturamento);
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSMO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDetalhadoDTO);
     }
 
     @GetMapping(path="/sumarizadoAnual/periodo/{anoInicial, anoTermino}")
-    public ResponseEntity<List<ProdutoRelatorioFaturamentoSMO>> carregarRelatorioSumarizadoDetalhadoAnualPeriodo
+    public ResponseEntity<List<ProdutoRelatorioFaturamentoDetalhadoDTO>> carregarRelatorioSumarizadoDetalhadoAnualPeriodo
             (String anoInicial, String anoTermino) {
-        List<ProdutoRelatorioFaturamentoSMO> produtoRelatorioFaturamentoSMO =
+        List<ProdutoRelatorioFaturamentoDetalhadoDTO> produtoRelatorioFaturamentoDetalhadoDTO =
                 relatorioService.carregarRelatorioFaturamentoSumarizadoAnualPeriodo(anoInicial, anoTermino);
-        return ResponseEntity.ok().body(produtoRelatorioFaturamentoSMO);
+        return ResponseEntity.ok().body(produtoRelatorioFaturamentoDetalhadoDTO);
     }
 }
