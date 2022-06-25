@@ -5,18 +5,10 @@ import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class ImagemRepository {
@@ -40,7 +32,7 @@ public class ImagemRepository {
     // VINCULO IMAGEM
     private static final String INSERT_IMAGEM_VINCULO_PRODUTO = " INSERT INTO IMAGEM_PRODUTO " +
             " (COD_IMAGEM, COD_PRODUTO)" +
-            " VALUES (?, ?,) ";
+            " VALUES (?, ?) ";
 
 
     private static final String DELETE_VINCULO_IMAGEM_PRODUTO = "DELETE FROM IMAGEM_PRODUTO " +
