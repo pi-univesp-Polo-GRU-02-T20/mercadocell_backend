@@ -1,7 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.controller;
 
 import br.com.univesp.mercadocell.mercadocell.dto.ImagemDTO;
-import br.com.univesp.mercadocell.mercadocell.dto.ImagemProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.message.ResponseFile;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.service.ImagemService;
@@ -25,6 +24,7 @@ public class ImagemController {
     private ImagemService imagemService;
     private static final String URL_IMAGENS_PRODUTO = "imagem/";
 
+
     @GetMapping(path="/{idImagem}")
     public ResponseEntity<byte[]> buscarImagemPorId(@PathVariable Integer idImagem) {
         Imagem img = imagemService.buscarImagemPorId(idImagem.intValue());
@@ -37,7 +37,7 @@ public class ImagemController {
     @PostMapping("/cadastrarImagem")
     public ResponseEntity<ImagemDTO> cadastrarImagem(@RequestParam("arqImagem") MultipartFile arqImagem ) {
         int idImagem = 0;
-        idImagem = imagemService.cadastrarImagem(arqImagem);
+        imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(arqImagem));
         return ResponseEntity.accepted().
                 body(   new ImagemDTO(
                         idImagem,
@@ -46,15 +46,17 @@ public class ImagemController {
                 );
     }
 
+/* Método desativado para vinculo de imagem e produto por meio do método de cadastro de imagem
     @PostMapping("/vincularImagemProduto")
     public ResponseEntity<ImagemProdutoDTO> vincularImagemProduto( @RequestBody ImagemProdutoDTO imagemProdutoDTO) {
         imagemService.vincularImagemProduto(imagemProdutoDTO);
         return ResponseEntity.accepted().build();
     }
+ */
 
     @PutMapping
     public ResponseEntity<ImagemDTO> atualizarImagem( @RequestBody MultipartFile arqImagem) {
-        imagemService.atualizarImagem(arqImagem);
+        imagemService.atualizarImagem(imagemService.converteMultipartFileParaImagem(arqImagem));
         return ResponseEntity.accepted().build();
     }
 
@@ -73,7 +75,6 @@ public class ImagemController {
                             .path(URL_IMAGENS_PRODUTO)
                             .path(imagem.getCodigoImagem().toString())
                             .toUriString();
-
                     return new ResponseFile(
                             imagem.getNomeImagem(),
                             fileDownloadUri,

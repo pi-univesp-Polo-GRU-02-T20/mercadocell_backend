@@ -19,6 +19,7 @@ public class Imagem {
         this.binarioImagem = binarioImagem;
         this.tipoImagem = tipoImagem;
     }
+
 }
 
 

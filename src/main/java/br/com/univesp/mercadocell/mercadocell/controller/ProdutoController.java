@@ -1,6 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.controller;
 
 import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoImagemDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Produto;
 import br.com.univesp.mercadocell.mercadocell.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,17 @@ public class ProdutoController {
 
     @PostMapping
     public ResponseEntity<ProdutoDTO> cadastrarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {
-        return ResponseEntity.accepted().body(produtoService.cadastrarProduto(produtoDTO));
+        produtoService.cadastrarProduto(produtoDTO);
+        return ResponseEntity.accepted().body(produtoDTO);
     }
 
     @GetMapping(path="/{idProduto}")
-    public ResponseEntity<Produto> buscarProdutoPorId(@PathVariable int idProduto) {
+    public ResponseEntity<ProdutoDTO> buscarProdutoPorId(@PathVariable int idProduto) {
         return ResponseEntity.ok().body( produtoService.buscarProdutoPorId(idProduto));
     }
 
     @GetMapping
-    public List<Produto> listarProdutos() {
+    public List<ProdutoDTO> listarProdutos() {
         return produtoService.listarProdutos();
     }
 

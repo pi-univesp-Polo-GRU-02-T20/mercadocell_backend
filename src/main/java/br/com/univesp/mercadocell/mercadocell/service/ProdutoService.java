@@ -1,5 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
+import br.com.univesp.mercadocell.mercadocell.dto.ImagemProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.model.Produto;
@@ -14,6 +15,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,8 +27,7 @@ public class ProdutoService {
     private ImagemService imagemService;
 
     @Transactional
-    public ProdutoDTO cadastrarProduto(ProdutoDTO produtoDTO) {
-
+    public void cadastrarProduto(ProdutoDTO produtoDTO) {
        try {
             produtoRepository.buscarProdutoPorNome(produtoDTO.getNomeProduto());
             throw new EntityIntegrityViolationException("Produto já cadastrado: " + produtoDTO.toString());
@@ -38,20 +39,99 @@ public class ProdutoService {
                    "Dados de Produto Inconsistentes:" + produtoDTO.toString());
             }
        }
-        produtoDTO.setCodProduto(produtoRepository.getCodProdutoCadastrado());
-       return produtoDTO;
+       imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(produtoDTO.getArqImagem()));
+       imagemService.vincularImagemProduto(
+                    new ImagemProdutoDTO(
+                                            imagemService.getCodImagemProdutoCadastrada(),
+                                            produtoRepository.getCodProdutoCadastrado()
+                                        )
+       );
     }
 
-    public Produto buscarProdutoPorId(int  idProduto) {
+    @Transactional
+    public ProdutoDTO buscarProdutoPorId(int  idProduto) {
+       ProdutoDTO produtoDTO = null;
+       Produto produto = null;
        try{
-            //Produto produto =  produtoRepository.buscarProdutoPorId(idProduto);
-           return  produtoRepository.buscarProdutoPorId(idProduto);
+           produto = produtoRepository.buscarProdutoPorId(idProduto);
            //return converteProdutoParaProdutoDTO(produto);
        } catch(EmptyResultDataAccessException e){
             throw  new EntityNotFoundException("Código de produto não encontrado: " + idProduto);
-        }
+       }
+       produtoDTO.setListaImagem(imagemService.buscarImagemProdutoPorId(idProduto));
+       return produtoDTO;
     }
 
+    public List<ProdutoDTO> listarProdutos() {
+        List<ProdutoDTO> listaProdutosDTO = new ArrayList<ProdutoDTO>();
+        try{
+            List<Produto> listaProdutos = produtoRepository.listarProdutos();
+            System.out.println(listaProdutos.toString());
+            for (Produto produto : listaProdutos ){
+                ProdutoDTO produtoDTO = converteProdutoParaProdutoDTO(produto);
+                produtoDTO.setListaImagem(imagemService.buscarImagemProdutoPorId(produto.getCodProduto()));
+                listaProdutosDTO.add(produtoDTO);
+            }
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException("Nenhum registro encontrado");
+        }
+        return listaProdutosDTO ;
+    }
+
+    /*
+    *   @Transactional
+    public void incluirItensOperacao(@Valid List<ItemOperacao> listaItensOperacao) {
+        for (ItemOperacao item : listaItensOperacao) {
+            try {
+                itemOperacaoRepository.incluirItemOperacao(item);
+            } catch (DataIntegrityViolationException e) {
+                throw new EntityIntegrityViolationException(
+                        "Dados de Item de Operação de compra ou venda inconsistentes: " + item.toString());
+            }
+        }
+    }
+    * */
+
+
+    @Transactional
+    public void atualizarProduto(ProdutoDTO produtoDTO) {
+        try{
+            produtoRepository.atualizarProduto(converteProdutoDTOParaProduto(produtoDTO));
+
+        }catch(DataIntegrityViolationException e ){
+            throw new EntityIntegrityViolationException(
+                    "Subcategoria ou Unidade de medida não cadastrada na base: " + produtoDTO.toString());
+        }
+        // produto  1:1 imagem
+        //TODO mudar cardinalidade produto 1:N imagem
+        imagemService.atualizarImagem(imagemService.converteMultipartFileParaImagem(produtoDTO.getArqImagem()));
+    }
+
+    @Transactional
+    public void deletarProduto(int idProduto) {
+        List<Imagem> listaImg = imagemService.buscarImagemProdutoPorId(idProduto);
+        for (Imagem  img : listaImg) {
+            try {
+                imagemService.removerImagemProduto(idProduto, img);
+            } catch (DataIntegrityViolationException e) {
+                throw new EntityIntegrityViolationException(
+                        "Erro ao desvincular imagens do produto: " +
+                                img.toString()+ " "+
+                                e.getMessage()
+                );
+            }
+        }
+        try {
+            produtoRepository.deletarProduto(idProduto);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityIntegrityViolationException(
+                    "Produto utilizado no registro de compra ou venda: " + idProduto
+            );
+        }
+
+    }
+
+    // métodos de apoio
     public static ProdutoDTO converteProdutoParaProdutoDTO(Produto produto) {
         return new ProdutoDTO(
                 produto.getCodProduto(),
@@ -76,50 +156,10 @@ public class ProdutoService {
                         produtoDTO.getCodigoUnidadeMedida()
                 ),
                 produtoDTO.getCodigoUnidadeMedida(),
-                produtoDTO.getQuantidadeEstoqueMinima(),
+                produtoDTO.getQuantidadeEstoqueMinimo(),
                 produtoDTO.getQuantidadeEstoqueAtual()
         );
     }
 
-
-    public List<Produto> listarProdutos() {
-        try{
-            return produtoRepository.listarProdutos();
-        }catch (EmptyResultDataAccessException e ){
-            throw  new EntityNotFoundException("Nenhum registro encontrado");
-        }
-    }
-
-    public void atualizarProduto(ProdutoDTO produtoDTO) {
-        try{
-            produtoRepository.atualizarProduto(converteProdutoDTOParaProduto(produtoDTO));
-        }catch(DataIntegrityViolationException e ){
-            throw new EntityIntegrityViolationException(
-                    "Subcategoria ou Unidade de medida não cadastrada na base: " + produtoDTO.toString());
-        }
-    }
-
-    @Transactional
-    public void deletarProduto(int idProduto) {
-        List<Imagem> listaImg = imagemService.buscarImagemProdutoPorId(idProduto);
-        for (Imagem  img : listaImg) {
-            try {
-                imagemService.removerImagemProduto(idProduto, img);
-            } catch (DataIntegrityViolationException e) {
-                throw new EntityIntegrityViolationException(
-                        "Erro ao desvincular imagens do produto: " +
-                                img.toString()+ " "+
-                                e.getMessage()
-                );
-            }
-        }
-        try {
-            produtoRepository.deletarProduto(idProduto);
-        } catch (DataIntegrityViolationException e) {
-            throw new EntityIntegrityViolationException(
-                    "Produto utilizado no registro de compra ou venda: " + idProduto
-            );
-        }
-    }
 }
 

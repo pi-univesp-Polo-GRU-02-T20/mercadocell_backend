@@ -1,5 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
+import br.com.univesp.mercadocell.mercadocell.dto.ImagemDTO;
 import br.com.univesp.mercadocell.mercadocell.dto.ImagemProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.repository.ImagemRepository;
@@ -22,39 +23,19 @@ public class ImagemService {
     @Autowired
     private ImagemRepository imagemRepository;
 
-    public int cadastrarImagem(MultipartFile arqImagem) {
-        Imagem img = null;
-        Optional<MultipartFile> optImg = Optional.ofNullable(arqImagem);
-        if (optImg.isPresent()){
-            try {
-                img = converteMultipartFileParaImagem(arqImagem);
-                imagemRepository.buscarImagemPorNome(img.getNomeImagem());
-            }catch( IOException ioException){
-                throw new FileHandleException(
-                        "Erro no tratamento da imagem:" + img.toString());
-            }catch(EmptyResultDataAccessException emptyResultDataAccessException){
-                imagemRepository.cadastrarImagem(img);
-            }
-        }else{
-            throw new FileHandleException("Imagem não enviada na requisição!");
+    public void cadastrarImagem(Imagem imagem) {
+        //Imagem img =  converteMultipartFileParaImagem(arqImagem);
+        try{
+            imagemRepository.buscarImagemPorNome(imagem.getNomeImagem());
+        }catch(EmptyResultDataAccessException emptyResultDataAccessException){
+            imagemRepository.cadastrarImagem(imagem);
         }
-        return imagemRepository.getCodImagemCadastrado();
     }
 
-    public void atualizarImagem(MultipartFile arqImagem) {
-        Imagem img = null;
-        Optional<MultipartFile> optImg = Optional.ofNullable(arqImagem);
-        if (optImg.isPresent()){
-            try {
-                img = converteMultipartFileParaImagem(arqImagem);
-                imagemRepository.atualizarImagem(img);
-            }catch( IOException ioException) {
-                throw new FileHandleException(
-                        "Erro no tratamento da imagem:" + img.toString());
-            }
-        } else{
-        throw new FileHandleException("Imagem não enviada na requisição!");
-        }
+
+
+    public void atualizarImagem(Imagem imagem) {
+            imagemRepository.atualizarImagem(imagem);
     }
 
     public Imagem buscarImagemPorId(int  idImagem) {
@@ -65,18 +46,11 @@ public class ImagemService {
         }
     }
 
-
-    public static Imagem converteMultipartFileParaImagem(MultipartFile imagem) throws IOException {
-        return new Imagem( StringUtils.cleanPath(imagem.getOriginalFilename()),
-                imagem.getContentType(), imagem.getBytes());
-    }
-
-
     public List<Imagem> buscarImagemProdutoPorId(int  idProduto) {
         try {
             return imagemRepository.buscarImagemProdutoPorId(idProduto);
         }catch(EmptyResultDataAccessException e) {
-            throw  new EntityNotFoundException("Nenhuma imagem fioi encontrada para o produto: " + idProduto);
+            throw  new EntityNotFoundException("Nenhuma imagem foi encontrada para o produto: " + idProduto);
         }
     }
 
@@ -108,8 +82,32 @@ public class ImagemService {
             throw new EntityIntegrityViolationException(
                     "Imagem ou Produto não cadastrado na base: " + imagemProdutoDTO.toString());
         }
-
-
     }
+
+    public int getCodImagemProdutoCadastrada(){
+        return imagemRepository.getCodImagemCadastrado();
+    }
+
+    public Imagem converteMultipartFileParaImagem(MultipartFile arqImagem) {
+        Optional<MultipartFile> optImg = Optional.ofNullable(arqImagem);
+        if (optImg.isPresent()){
+            try {
+                return new Imagem( StringUtils.cleanPath(arqImagem.getOriginalFilename()),
+                        arqImagem.getContentType(), arqImagem.getBytes());
+            }catch( IOException ioException){
+                throw new FileHandleException(
+                        "Erro no tratamento da imagem:" + arqImagem.toString());
+            }
+        }else{
+            throw new FileHandleException("Imagem não enviada na requisição!");
+        }
+    }
+
+
+    public MultipartFile converteImagemParaMultipartFile(Imagem imagem) {
+
+      return null;
+    }
+
 }
 

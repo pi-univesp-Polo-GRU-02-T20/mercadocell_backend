@@ -56,20 +56,6 @@ public class ImagemRepository {
     // VINCULOS
     private static final String COL_COD_PRODUTO = "COD_PRODUTO";
 
-   /* public int cadastrarImagem(Imagem imagem) throws EntityIntegrityViolationException {
-      KeyHolder keyHolder = new GeneratedKeyHolder();
-       return  jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement statement = con.prepareStatement(INSERT_IMAGEM + GET_INSERTED_ID,
-                        new String[]{COL_COD_IMAGEM});
-                statement.setString(1, imagem.getNomeImagem());
-                statement.setString(2, imagem.getTipoImagem());
-                statement.setBytes(3, imagem.getBinarioImagem());
-                return statement;
-            }
-        }, keyHolder);
-    }*/
 
     public void cadastrarImagem(Imagem imagem) throws EntityIntegrityViolationException {
         jdbcTemplate.update(
@@ -82,7 +68,7 @@ public class ImagemRepository {
 
     public int getCodImagemCadastrado() throws EntityIntegrityViolationException {
         Integer codImagem =  jdbcTemplate.queryForObject(GET_INSERTED_ID, Integer.class);
-        return  codImagem == null? 0: codImagem;
+        return  codImagem == null ? 0: codImagem;
     }
 
     public Imagem buscarImagemPorId(int idImagem){
