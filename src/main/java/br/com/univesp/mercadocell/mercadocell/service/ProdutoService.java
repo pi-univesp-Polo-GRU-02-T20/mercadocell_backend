@@ -1,7 +1,8 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.dto.ImagemProdutoDTO;
-import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoConsultaDTO;
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoInputDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.model.Produto;
 import br.com.univesp.mercadocell.mercadocell.model.SubCategoria;
@@ -27,19 +28,19 @@ public class ProdutoService {
     private ImagemService imagemService;
 
     @Transactional
-    public void cadastrarProduto(ProdutoDTO produtoDTO) {
+    public void cadastrarProduto(ProdutoInputDTO produtoInputDTO) {
        try {
-            produtoRepository.buscarProdutoPorNome(produtoDTO.getNomeProduto());
-            throw new EntityIntegrityViolationException("Produto já cadastrado: " + produtoDTO.toString());
+            produtoRepository.buscarProdutoPorNome(produtoInputDTO.getNomeProduto());
+            throw new EntityIntegrityViolationException("Produto já cadastrado: " + produtoInputDTO.toString());
         }catch (EmptyResultDataAccessException e){
             try {
-                produtoRepository.cadastrarProduto(converteProdutoDTOParaProduto(produtoDTO));
+                produtoRepository.cadastrarProduto(converteProdutoDTOParaProduto(produtoInputDTO));
             } catch (DataIntegrityViolationException dataIntegrityViolationException) {
                     throw new EntityIntegrityViolationException(
-                   "Dados de Produto Inconsistentes:" + produtoDTO.toString());
+                   "Dados de Produto Inconsistentes:" + produtoInputDTO.toString());
             }
        }
-       imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(produtoDTO.getArqImagem()));
+       imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(produtoInputDTO.getArqImagem()));
        imagemService.vincularImagemProduto(
                     new ImagemProdutoDTO(
                                             imagemService.getCodImagemProdutoCadastrada(),
@@ -49,8 +50,8 @@ public class ProdutoService {
     }
 
     @Transactional
-    public ProdutoDTO buscarProdutoPorId(int  idProduto) {
-       ProdutoDTO produtoDTO = null;
+    public ProdutoConsultaDTO buscarProdutoPorId(int  idProduto) {
+       ProdutoConsultaDTO produtoConsultaDTO = null;
        Produto produto = null;
        try{
            produto = produtoRepository.buscarProdutoPorId(idProduto);
@@ -58,19 +59,19 @@ public class ProdutoService {
        } catch(EmptyResultDataAccessException e){
             throw  new EntityNotFoundException("Código de produto não encontrado: " + idProduto);
        }
-       produtoDTO.setListaImagem(imagemService.buscarImagemProdutoPorId(idProduto));
-       return produtoDTO;
+        produtoConsultaDTO.setListaImagem(imagemService.buscarImagemProdutoPorId(idProduto));
+       return produtoConsultaDTO;
     }
 
-    public List<ProdutoDTO> listarProdutos() {
-        List<ProdutoDTO> listaProdutosDTO = new ArrayList<ProdutoDTO>();
+    public List<ProdutoConsultaDTO> listarProdutos() {
+        List<ProdutoConsultaDTO> listaProdutosDTO = new ArrayList<ProdutoConsultaDTO>();
         try{
             List<Produto> listaProdutos = produtoRepository.listarProdutos();
             System.out.println(listaProdutos.toString());
             for (Produto produto : listaProdutos ){
-                ProdutoDTO produtoDTO = converteProdutoParaProdutoDTO(produto);
-                produtoDTO.setListaImagem(imagemService.buscarImagemProdutoPorId(produto.getCodProduto()));
-                listaProdutosDTO.add(produtoDTO);
+                ProdutoConsultaDTO produtoConsultaDTO = converteProdutoParaProdutoConsultaDTO(produto);
+                produtoConsultaDTO.setListaImagem(imagemService.buscarImagemProdutoPorId(produto.getCodProduto()));
+                listaProdutosDTO.add(produtoConsultaDTO);
             }
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException("Nenhum registro encontrado");
@@ -94,17 +95,17 @@ public class ProdutoService {
 
 
     @Transactional
-    public void atualizarProduto(ProdutoDTO produtoDTO) {
+    public void atualizarProduto(ProdutoInputDTO produtoInputDTO) {
         try{
-            produtoRepository.atualizarProduto(converteProdutoDTOParaProduto(produtoDTO));
+            produtoRepository.atualizarProduto(converteProdutoDTOParaProduto(produtoInputDTO));
 
         }catch(DataIntegrityViolationException e ){
             throw new EntityIntegrityViolationException(
-                    "Subcategoria ou Unidade de medida não cadastrada na base: " + produtoDTO.toString());
+                    "Subcategoria ou Unidade de medida não cadastrada na base: " + produtoInputDTO.toString());
         }
         // produto  1:1 imagem
         //TODO mudar cardinalidade produto 1:N imagem
-        imagemService.atualizarImagem(imagemService.converteMultipartFileParaImagem(produtoDTO.getArqImagem()));
+        imagemService.atualizarImagem(imagemService.converteMultipartFileParaImagem(produtoInputDTO.getArqImagem()));
     }
 
     @Transactional
@@ -132,8 +133,8 @@ public class ProdutoService {
     }
 
     // métodos de apoio
-    public static ProdutoDTO converteProdutoParaProdutoDTO(Produto produto) {
-        return new ProdutoDTO(
+    public static ProdutoInputDTO converteProdutoParaProdutoDTO(Produto produto) {
+        return new ProdutoInputDTO(
                 produto.getCodProduto(),
                 produto.getNomeProduto(),
                 produto.getDescricaoProduto(),
@@ -144,20 +145,38 @@ public class ProdutoService {
                 produto.getQuantidadeEstoqueAtual()
         );
     }
-    public static Produto converteProdutoDTOParaProduto(ProdutoDTO produtoDTO) {
+
+
+    // métodos de apoio
+    public static ProdutoConsultaDTO converteProdutoParaProdutoConsultaDTO(Produto produto) {
+        return new ProdutoConsultaDTO(
+                produto.getCodProduto(),
+                produto.getNomeProduto(),
+                produto.getDescricaoProduto(),
+                produto.getSubCategoria().getCodSubCategoria(),
+                produto.getUnidadeMedida().getCodUnidadeMedida(),
+                produto.getQuantidadeEstoqueMinima(),
+                produto.getQuantidadeEstoqueMaxima(),
+                produto.getQuantidadeEstoqueAtual()
+        );
+    }
+
+    public static Produto converteProdutoDTOParaProduto(ProdutoInputDTO produtoInputDTO) {
         return new Produto(
-                produtoDTO.getCodProduto(),
-                produtoDTO.getNomeProduto(),
-                produtoDTO.getDescricaoProduto(),
+                produtoInputDTO.getCodProduto(),
+                produtoInputDTO.getNomeProduto(),
+                produtoInputDTO.getDescricaoProduto(),
                 new SubCategoria(
-                        produtoDTO.getCodigoSubcategoria()
+                            produtoInputDTO.getCodigoSubCategoria(),
+                        null
+                )
+                ,new UnidadeMedida(
+                        produtoInputDTO.getCodigoUnidadeMedida(),
+                        null
                 ),
-                new UnidadeMedida(
-                        produtoDTO.getCodigoUnidadeMedida()
-                ),
-                produtoDTO.getCodigoUnidadeMedida(),
-                produtoDTO.getQuantidadeEstoqueMinimo(),
-                produtoDTO.getQuantidadeEstoqueAtual()
+                produtoInputDTO.getQuantidadeEstoqueMinima(),
+                produtoInputDTO.getQuantidadeEstoqueMaxima(),
+                produtoInputDTO.getQuantidadeEstoqueAtual()
         );
     }
 

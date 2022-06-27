@@ -1,7 +1,5 @@
 package br.com.univesp.mercadocell.mercadocell.dto;
 
-import br.com.univesp.mercadocell.mercadocell.model.Operacao;
-import br.com.univesp.mercadocell.mercadocell.model.Produto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,6 +11,6 @@ public class ItemOperacaoDTO {
     private Float quantidadeItem;
     private Double valorItem;
     private OperacaoDTO operacao;
-    private ProdutoDTO produto;
+    private ProdutoInputDTO produto;
 
 }
