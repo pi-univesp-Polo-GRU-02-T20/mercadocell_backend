@@ -1,21 +1,54 @@
 package br.com.univesp.mercadocell.mercadocell.dto;
 
-import lombok.AllArgsConstructor;
+import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
-@AllArgsConstructor
-public class ProdutoDTO  {
-
+public class ProdutoDTO {
     private Integer codProduto;
     private String nomeProduto;
     private String descricaoProduto;
-    private Integer codigoSubCategoria;
+    private Integer codigoSubcategoria;
     private Integer codigoUnidadeMedida;
-    private Integer quantidadeEstoqueMinima;
-    private Integer quantidadeEstoqueMaxima;
+    private Integer quantidadeEstoqueMinimo;
+    private Integer quantidadeEstoqueMaximo;
     private Integer quantidadeEstoqueAtual;
-    ProdutoDTO(){
+    //TODO mudar cardinalidade produto 1:N imagem
+    private MultipartFile arqImagem;
+    private List<Imagem> listaImagem;
 
+    public ProdutoDTO(Integer codProduto,String nomeProduto,String descricaoProduto,
+                        Integer codigoSubcategoria,Integer codigoUnidadeMedida,
+                        Integer quantidadeEstoqueMaximo,Integer quantidadeEstoqueMinimo,
+                        Integer quantidadeEstoqueAtual)
+    {
+        this.codProduto = codProduto;
+        this.nomeProduto = nomeProduto;
+        this.descricaoProduto= descricaoProduto;
+        this.codigoSubcategoria = codigoSubcategoria;
+        this.codigoUnidadeMedida = codigoUnidadeMedida;
+        this.quantidadeEstoqueAtual = quantidadeEstoqueAtual;
+        this.quantidadeEstoqueMinimo = quantidadeEstoqueMinimo;
+        this.quantidadeEstoqueMaximo = quantidadeEstoqueMaximo;
     }
+
+    public ProdutoDTO(Integer codProduto,String nomeProduto,String descricaoProduto,
+                      Integer codigoSubcategoria,Integer codigoUnidadeMedida,
+                      Integer quantidadeEstoqueMaximo,Integer quantidadeEstoqueMinimo,
+                      Integer quantidadeEstoqueAtual, List<Imagem> listaImagem)
+    {
+        this.codProduto = codProduto;
+        this.nomeProduto = nomeProduto;
+        this.descricaoProduto= descricaoProduto;
+        this.codigoSubcategoria = codigoSubcategoria;
+        this.codigoUnidadeMedida = codigoUnidadeMedida;
+        this.quantidadeEstoqueAtual = quantidadeEstoqueAtual;
+        this.quantidadeEstoqueMinimo = quantidadeEstoqueMinimo;
+        this.quantidadeEstoqueMaximo = quantidadeEstoqueMaximo;
+        this.listaImagem = listaImagem;
+    }
+
 }
