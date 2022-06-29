@@ -1,12 +1,14 @@
 package br.com.univesp.mercadocell.mercadocell.dto;
 
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class ProdutoDTO {
     private Integer codProduto;
     private String nomeProduto;
@@ -17,9 +19,9 @@ public class ProdutoDTO {
     private Integer quantidadeEstoqueMaximo;
     private Integer quantidadeEstoqueAtual;
     //TODO mudar cardinalidade produto 1:N imagem
-    private MultipartFile arqImagem;
-    private List<Imagem> listaImagem;
-
+    //private MultipartFile arqImagem;
+    //private List<Imagem> listaImagem;
+/*
     public ProdutoDTO(Integer codProduto,String nomeProduto,String descricaoProduto,
                         Integer codigoSubcategoria,Integer codigoUnidadeMedida,
                         Integer quantidadeEstoqueMaximo,Integer quantidadeEstoqueMinimo,
@@ -50,5 +52,5 @@ public class ProdutoDTO {
         this.quantidadeEstoqueMaximo = quantidadeEstoqueMaximo;
         this.listaImagem = listaImagem;
     }
-
+*/
 }

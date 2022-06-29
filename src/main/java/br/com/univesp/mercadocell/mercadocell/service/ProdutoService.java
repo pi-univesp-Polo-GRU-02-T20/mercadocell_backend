@@ -41,6 +41,7 @@ public class ProdutoService {
                    "Dados de Produto Inconsistentes:" + produtoDTO.toString());
             }
        }
+      /*
         Optional<MultipartFile> optArqImagem = Optional.ofNullable(produtoDTO.getArqImagem());
        if (optArqImagem.isPresent()){
             imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(produtoDTO.getArqImagem()));
@@ -51,6 +52,8 @@ public class ProdutoService {
                     )
             );
         }
+
+       */
     }
 
     @Transactional
@@ -63,14 +66,22 @@ public class ProdutoService {
        } catch(EmptyResultDataAccessException e){
             throw  new EntityNotFoundException("Código de produto não encontrado: " + idProduto);
        }
+       /*
        produtoDTO.setListaImagem(imagemService.buscarImagemProdutoPorId(idProduto));
+
+        */
        return produtoDTO;
     }
 
     public List<ProdutoDTO> listarProdutos() {
         List<ProdutoDTO> listaProdutosDTO = new ArrayList<ProdutoDTO>();
+        for (Produto produto :  produtoRepository.listarProdutos() ){
+            ProdutoDTO produtoDTO = converteProdutoParaProdutoDTO(produto);
+            listaProdutosDTO.add(produtoDTO);
+        }
+        /*
         try{
-            List<Produto> listaProdutos = produtoRepository.listarProdutos();
+
             System.out.println(listaProdutos.toString());
             for (Produto produto : listaProdutos ){
                 ProdutoDTO produtoDTO = converteProdutoParaProdutoDTO(produto);
@@ -80,6 +91,7 @@ public class ProdutoService {
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException("Nenhum registro encontrado");
         }
+         */
         return listaProdutosDTO ;
     }
 
@@ -108,8 +120,8 @@ public class ProdutoService {
                     "Subcategoria ou Unidade de medida não cadastrada na base: " + produtoDTO.toString());
         }
         // produto  1:1 imagem
-        //TODO mudar cardinalidade produto 1:N imagem
-        imagemService.atualizarImagem(imagemService.converteMultipartFileParaImagem(produtoDTO.getArqImagem()));
+        //TODO: add imagem e mudar cardinalidade produto 1:N imagem;
+      //  imagemService.atualizarImagem(imagemService.converteMultipartFileParaImagem(produtoDTO.getArqImagem()));
     }
 
     @Transactional
