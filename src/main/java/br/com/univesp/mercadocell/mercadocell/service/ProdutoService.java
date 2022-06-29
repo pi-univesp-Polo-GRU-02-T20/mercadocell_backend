@@ -15,9 +15,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProdutoService {
@@ -40,13 +42,16 @@ public class ProdutoService {
                    "Dados de Produto Inconsistentes:" + produtoInputDTO.toString());
             }
        }
-       imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(produtoInputDTO.getArqImagem()));
-       imagemService.vincularImagemProduto(
+        Optional<MultipartFile> optArqImagem = Optional.ofNullable(produtoInputDTO.getArqImagem());
+       if (optArqImagem.isPresent()){
+            imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(produtoInputDTO.getArqImagem()));
+            imagemService.vincularImagemProduto(
                     new ImagemProdutoDTO(
-                                            imagemService.getCodImagemProdutoCadastrada(),
-                                            produtoRepository.getCodProdutoCadastrado()
-                                        )
-       );
+                            imagemService.getCodImagemProdutoCadastrada(),
+                            produtoRepository.getCodProdutoCadastrado()
+                    )
+            );
+        }
     }
 
     @Transactional
