@@ -41,12 +41,10 @@ public class ProdutoService {
                    "Dados de Produto Inconsistentes:" + produtoDTO.toString());
             }
        }
-        Optional<MultipartFile> optArqImagem = Optional.ofNullable(produtoInputDTO.getArqImagem());
+        Optional<MultipartFile> optArqImagem = Optional.ofNullable(produtoDTO.getArqImagem());
        if (optArqImagem.isPresent()){
-            imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(produtoInputDTO.getArqImagem()));
+            imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(produtoDTO.getArqImagem()));
             imagemService.vincularImagemProduto(
-       imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(produtoDTO.getArqImagem()));
-       imagemService.vincularImagemProduto(
                     new ImagemProdutoDTO(
                             imagemService.getCodImagemProdutoCadastrada(),
                             produtoRepository.getCodProdutoCadastrado()
