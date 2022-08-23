@@ -16,9 +16,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@RestController
-//@CrossOrigin
-//@RequestMapping("imagem")
+@RestController
+@CrossOrigin
+@RequestMapping("imagem")
 public class ImagemController {
     @Autowired
     private ImagemService imagemService;
