@@ -6,8 +6,15 @@ import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityV
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -64,12 +71,40 @@ public class ImagemRepository {
                 imagem.getTipoImagem(),
                 imagem.getBinarioImagem()
         );
+   }
+
+
+    // cadastro de imagem modelo 1:N
+    public int cadastrarImagem(Integer produtoId, Imagem imagem) throws EntityIntegrityViolationException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+           @Override
+           public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+               PreparedStatement statement = con.prepareStatement(INSERT_IMAGEM,
+                       new String[]{COL_NOME_IMAGEM, COL_TIPO_IMAGEM, COL_BINARIO_IMAGEM});
+               statement.setString(1, imagem.getNomeImagem());
+               statement.setString(2, imagem.getTipoImagem());
+               statement.setBytes(3, imagem.getBinarioImagem());
+               return statement;
+           }
+       }, keyHolder);
+        return keyHolder.getKey().intValue();//nosonar
+   /*
+        ImagemProdutoDTO imagemProdutoDTO = new ImagemProdutoDTO(
+                keyHolder.getKey().intValue(),//nosonar
+               produtoId
+       );
+        System.out.println(imagemProdutoDTO.toString());
+        vincularImagemProduto(imagemProdutoDTO   );
+
+    */
     }
 
-    public int getCodImagemCadastrado() throws EntityIntegrityViolationException {
+    public int getCodImagemCadastrada() throws EntityIntegrityViolationException {
         Integer codImagem =  jdbcTemplate.queryForObject(GET_INSERTED_ID, Integer.class);
         return  codImagem == null ? 0: codImagem;
     }
+
 
     public Imagem buscarImagemPorId(int idImagem){
         return jdbcTemplate.queryForObject(
@@ -84,6 +119,8 @@ public class ImagemRepository {
                 idImagem
         );
     }
+
+
 
     public Imagem buscarImagemPorNome(String nomeImagem){
         return jdbcTemplate.queryForObject(
@@ -138,8 +175,8 @@ public class ImagemRepository {
     public void vincularImagemProduto(ImagemProdutoDTO imagemProdutoDTO)
                 throws EntityIntegrityViolationException {
             jdbcTemplate.update(INSERT_IMAGEM_VINCULO_PRODUTO,
-                    imagemProdutoDTO.getCodigoProduto(),
-                    imagemProdutoDTO.getCodigoImagem()
+                    imagemProdutoDTO.getCodigoImagem(),
+                    imagemProdutoDTO.getCodigoProduto()
             );
     }
 

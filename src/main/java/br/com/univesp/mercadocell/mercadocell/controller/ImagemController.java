@@ -1,18 +1,23 @@
 package br.com.univesp.mercadocell.mercadocell.controller;
 
 import br.com.univesp.mercadocell.mercadocell.dto.ImagemDTO;
+import br.com.univesp.mercadocell.mercadocell.dto.ImagemProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.message.ResponseFile;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.service.ImagemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,25 +30,30 @@ public class ImagemController {
     private static final String URL_IMAGENS_PRODUTO = "imagem/";
 
 
-    @GetMapping(path="/{idImagem}")
-    public ResponseEntity<byte[]> buscarImagemPorId(@PathVariable Integer idImagem) {
-        Imagem img = imagemService.buscarImagemPorId(idImagem.intValue());
-        return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"" + img.getNomeImagem() + "\"")
-                .body(img.getBinarioImagem());
+    @GetMapping(path="/{imagemId}")
+    public ResponseEntity<InputStreamResource> buscarImagemPorId(@PathVariable Integer imagemId) {
+        Imagem img = imagemService.buscarImagemPorId(imagemId.intValue());
+
+        MediaType mediaTypeFoto = MediaType.parseMediaType(img.getTipoImagem());
+        return ResponseEntity.ok()
+                .contentType(mediaTypeFoto)
+                //.header(HttpHeaders.CONTENT_DISPOSITION,
+                //        "attachment; filename=\"" + img.getNomeImagem() + "\"")
+                .body(new InputStreamResource(new ByteArrayInputStream(img.getBinarioImagem())));
     }
 
-    @PostMapping("/cadastrarImagem")
-    public ResponseEntity<ImagemDTO> cadastrarImagem(@RequestParam("arqImagem") MultipartFile arqImagem ) {
-        int idImagem = 0;
-        imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(arqImagem));
+    @PostMapping(path="/produto/{produtoId}")
+    public ResponseEntity<ImagemDTO> cadastrarImagem(@PathVariable Integer produtoId,
+                                                        @RequestParam("arqImagem") MultipartFile arqImagem ) {
+        imagemService.cadastrarImagem(produtoId, imagemService.converteMultipartFileParaImagem(arqImagem));
         return ResponseEntity.accepted().
                 body(   new ImagemDTO(
-                        idImagem,
-                        StringUtils.cleanPath(arqImagem.getOriginalFilename()),
-                        arqImagem.getContentType())
+                            null,
+                            StringUtils.cleanPath(arqImagem.getOriginalFilename()),
+                            arqImagem.getContentType()
+                        )
                 );
+
     }
 
 /* Método desativado para vinculo de imagem e produto por meio do método de cadastro de imagem
@@ -53,6 +63,10 @@ public class ImagemController {
         return ResponseEntity.accepted().build();
     }
  */
+    private void vincularImagemProduto( Integer imagemId, Integer produtoId) {
+        imagemService.vincularImagemProduto( new ImagemProdutoDTO(imagemId, produtoId));
+    }
+
 
     @PutMapping
     public ResponseEntity<ImagemDTO> atualizarImagem( @RequestBody MultipartFile arqImagem) {
@@ -82,6 +96,6 @@ public class ImagemController {
                             imagem.getBinarioImagem().length);
                 }).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(arquivosImagem);
-
     }
+
 }

@@ -1,6 +1,5 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
-import br.com.univesp.mercadocell.mercadocell.dto.ImagemDTO;
 import br.com.univesp.mercadocell.mercadocell.dto.ImagemProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.repository.ImagemRepository;
@@ -32,6 +31,20 @@ public class ImagemService {
         }
     }
 
+    public int cadastrarImagem(Integer produtoId,  Imagem imagem) {
+       // Imagem img =  converteMultipartFileParaImagem(arqImagem);
+        int imagemId = 0;
+        try{
+            imagemRepository.buscarImagemPorNome(imagem.getNomeImagem());
+        }catch(EmptyResultDataAccessException emptyResultDataAccessException){
+            imagemId = imagemRepository.cadastrarImagem(produtoId, imagem);
+            ImagemProdutoDTO imagemProdutoDTO = new ImagemProdutoDTO(
+                    imagemId, produtoId
+            );
+            vincularImagemProduto(imagemProdutoDTO   );
+        }
+        return imagemId;
+    }
 
 
     public void atualizarImagem(Imagem imagem) {
@@ -53,6 +66,8 @@ public class ImagemService {
             throw  new EntityNotFoundException("Nenhuma imagem foi encontrada para o produto: " + idProduto);
         }
     }
+
+
 
     public void removerImagemProduto(int  idProduto, Imagem imagem){
         try {
@@ -85,7 +100,7 @@ public class ImagemService {
     }
 
     public int getCodImagemProdutoCadastrada(){
-        return imagemRepository.getCodImagemCadastrado();
+        return imagemRepository.getCodImagemCadastrada();
     }
 
     public Imagem converteMultipartFileParaImagem(MultipartFile arqImagem) {
