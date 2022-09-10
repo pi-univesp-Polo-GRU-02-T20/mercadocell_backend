@@ -31,19 +31,18 @@ public class ImagemService {
         }
     }
 
-    public int cadastrarImagem(Integer produtoId,  Imagem imagem) {
+    public void cadastrarImagemProduto(Integer produtoId,  Imagem imagem) {
        // Imagem img =  converteMultipartFileParaImagem(arqImagem);
-        int imagemId = 0;
+
         try{
             imagemRepository.buscarImagemPorNome(imagem.getNomeImagem());
         }catch(EmptyResultDataAccessException emptyResultDataAccessException){
-            imagemId = imagemRepository.cadastrarImagem(produtoId, imagem);
+            int imagemId  = imagemRepository.cadastrarImagem(produtoId, imagem);
             ImagemProdutoDTO imagemProdutoDTO = new ImagemProdutoDTO(
                     imagemId, produtoId
             );
-            vincularImagemProduto(imagemProdutoDTO   );
+            vincularImagemProduto(imagemProdutoDTO);
         }
-        return imagemId;
     }
 
 
@@ -99,7 +98,7 @@ public class ImagemService {
         }
     }
 
-    public int getCodImagemProdutoCadastrada(){
+    public int getCodImagemProdutoCadastrado(){
         return imagemRepository.getCodImagemCadastrada();
     }
 

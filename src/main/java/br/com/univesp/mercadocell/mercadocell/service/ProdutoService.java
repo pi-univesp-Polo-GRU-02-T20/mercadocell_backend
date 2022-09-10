@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProdutoService {
@@ -28,49 +27,45 @@ public class ProdutoService {
     @Autowired
     private ImagemService imagemService;
 
-    @Transactional
     public void cadastrarProduto(ProdutoDTO produtoDTO) {
-       try {
+        try {
             produtoRepository.buscarProdutoPorNome(produtoDTO.getNomeProduto());
             throw new EntityIntegrityViolationException("Produto já cadastrado: " + produtoDTO.toString());
         }catch (EmptyResultDataAccessException e){
             try {
                 produtoRepository.cadastrarProduto(converteProdutoDTOParaProduto(produtoDTO));
             } catch (DataIntegrityViolationException dataIntegrityViolationException) {
-                    throw new EntityIntegrityViolationException(
-                   "Dados de Produto Inconsistentes:" + produtoDTO.toString());
+                throw new EntityIntegrityViolationException(
+                        "Dados de Produto Inconsistentes:" + produtoDTO.toString());
             }
-       }
-      /*
-        Optional<MultipartFile> optArqImagem = Optional.ofNullable(produtoDTO.getArqImagem());
-       if (optArqImagem.isPresent()){
-            imagemService.cadastrarImagem(imagemService.converteMultipartFileParaImagem(produtoDTO.getArqImagem()));
-            imagemService.vincularImagemProduto(
-                    new ImagemProdutoDTO(
-                            imagemService.getCodImagemProdutoCadastrada(),
-                            produtoRepository.getCodProdutoCadastrado()
-                    )
-            );
         }
-
-       */
     }
 
     @Transactional
+    public void cadastrarProdutoComImagem(ProdutoDTO produtoDTO, MultipartFile arqImagem) {
+       try {
+            produtoRepository.buscarProdutoPorNome(produtoDTO.getNomeProduto());
+            throw new EntityIntegrityViolationException("Produto já cadastrado: " + produtoDTO.toString());
+        }catch (EmptyResultDataAccessException e){
+            try {
+                int codProduto = produtoRepository.cadastrarProduto(converteProdutoDTOParaProduto(produtoDTO));
+                produtoDTO.setCodProduto(codProduto);
+                imagemService.cadastrarImagemProduto(codProduto, imagemService.converteMultipartFileParaImagem(arqImagem));
+            } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+                    throw new EntityIntegrityViolationException(
+                   "Dados de Produto ou Imagem Inconsistentes:" + produtoDTO.toString());
+            }
+       }
+
+    }
+
     public ProdutoDTO buscarProdutoPorId(int  idProduto) {
-       ProdutoDTO produtoDTO = null;
-       Produto produto = null;
        try{
-           produto = produtoRepository.buscarProdutoPorId(idProduto);
-           //return converteProdutoParaProdutoDTO(produto);
+           Produto produto = produtoRepository.buscarProdutoPorId(idProduto);
+           return converteProdutoParaProdutoDTO(produto);
        } catch(EmptyResultDataAccessException e){
             throw  new EntityNotFoundException("Código de produto não encontrado: " + idProduto);
        }
-       /*
-       produtoDTO.setListaImagem(imagemService.buscarImagemProdutoPorId(idProduto));
-
-        */
-       return produtoDTO;
     }
 
     public List<ProdutoDTO> listarProdutos() {

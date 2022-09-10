@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +44,7 @@ public class ImagemController {
     @PostMapping(path="/produto/{produtoId}")
     public ResponseEntity<ImagemDTO> cadastrarImagem(@PathVariable Integer produtoId,
                                                         @RequestParam("arqImagem") MultipartFile arqImagem ) {
-        imagemService.cadastrarImagem(produtoId, imagemService.converteMultipartFileParaImagem(arqImagem));
+        imagemService.cadastrarImagemProduto(produtoId.intValue(), imagemService.converteMultipartFileParaImagem(arqImagem));
         return ResponseEntity.accepted().
                 body(   new ImagemDTO(
                             null,
@@ -74,15 +73,15 @@ public class ImagemController {
         return ResponseEntity.accepted().build();
     }
 
-    @DeleteMapping("/{idImagem}")
-    public ResponseEntity<ImagemDTO> deletarImagem(@PathVariable int idImagem) {
-        imagemService.deletarImagem(idImagem);
+    @DeleteMapping("/{imagemId}")
+    public ResponseEntity<ImagemDTO> deletarImagem(@PathVariable int imagemId) {
+        imagemService.deletarImagem(imagemId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(path="/produto/{idProduto}")
-    public ResponseEntity<List<ResponseFile>> buscarImagemProdutoPorId(@PathVariable Integer idProduto) {
-        List<ResponseFile> arquivosImagem = imagemService.buscarImagemProdutoPorId(idProduto.intValue()).stream()
+    @GetMapping(path="/produto/{produtoId}")
+    public ResponseEntity<List<ResponseFile>> buscarImagemProdutoPorId(@PathVariable Integer produtoId) {
+        List<ResponseFile> arquivosImagem = imagemService.buscarImagemProdutoPorId(produtoId.intValue()).stream()
                 .map(imagem -> {
                     String fileDownloadUri = ServletUriComponentsBuilder
                             .fromCurrentContextPath()

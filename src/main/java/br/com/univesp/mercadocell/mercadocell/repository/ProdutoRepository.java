@@ -8,13 +8,18 @@ import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityV
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
 public class ProdutoRepository {
-
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -47,6 +52,7 @@ public class ProdutoRepository {
     private static final String COL_COD_PRODUTO = "COD_PRODUTO";
     private static final String COL_DSC_PRODUTO = "DSC_PRODUTO";
     private static final String COL_NME_PRODUTO = "NME_PRODUTO";
+    private static final String COL_COD_UNIDADE_MEDIDA = "COD_UNIDADE_MEDIDA";
     private static final String COL_NME_UNIDADE_MEDIDA = "NME_UNIDADE_MEDIDA";
     private static final String COL_SGL_UNIDADE_MEDIDA = "SGL_UNIDADE_MEDIDA";
     private static final String COL_QTD_ESTOQUE_MIN ="QTD_ESTOQUE_MIN";
@@ -55,16 +61,26 @@ public class ProdutoRepository {
 
 
 
-    public void cadastrarProduto(Produto produto) throws EntityIntegrityViolationException {
-        jdbcTemplate.update(INSERT_PRODUTO,
-                produto.getNomeProduto(),
-                produto.getDescricaoProduto(),
-                produto.getSubCategoria().getCodSubCategoria(),
-                produto.getUnidadeMedida().getCodUnidadeMedida(),
-                produto.getQuantidadeEstoqueMinima(),
-                produto.getQuantidadeEstoqueMaxima(),
-                produto.getQuantidadeEstoqueAtual()
-        );
+    public int cadastrarProduto(Produto produto) throws EntityIntegrityViolationException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement statement = con.prepareStatement(INSERT_PRODUTO,
+                        new String[]{COL_NME_PRODUTO, COL_DSC_PRODUTO, COL_COD_SUBCATEGORIA, COL_COD_UNIDADE_MEDIDA,
+                                COL_QTD_ESTOQUE_MIN, COL_QTD_ESTOQUE_MAX, COL_QTD_ESTOQUE_ATUAL
+                        });
+                statement.setString(1, produto.getNomeProduto());
+                statement.setString(2, produto.getDescricaoProduto());
+                statement.setInt(3, produto.getSubCategoria().getCodSubCategoria());
+                statement.setInt(4, produto.getUnidadeMedida().getCodUnidadeMedida());
+                statement.setInt(5, produto.getQuantidadeEstoqueMinima());
+                statement.setInt(6, produto.getQuantidadeEstoqueMaxima());
+                statement.setInt(7, produto.getQuantidadeEstoqueAtual());
+                return statement;
+            }
+        }, keyHolder);
+        return keyHolder.getKey().intValue();//nosonar
     }
 
     public int getCodProdutoCadastrado() throws EntityIntegrityViolationException {
