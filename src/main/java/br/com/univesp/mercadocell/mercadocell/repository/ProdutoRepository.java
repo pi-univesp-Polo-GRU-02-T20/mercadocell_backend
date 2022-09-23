@@ -7,6 +7,7 @@ import br.com.univesp.mercadocell.mercadocell.model.UnidadeMedida;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -146,7 +147,7 @@ public class ProdutoRepository {
                 nomeProduto
         );
     }
-    public List<Produto> listarProdutos(){
+    public List<Produto> listarProdutos() throws EmptyResultDataAccessException {
         return jdbcTemplate.query(SELECT_PRODUTO
                 , (rs, rowNum) ->
                         new Produto(

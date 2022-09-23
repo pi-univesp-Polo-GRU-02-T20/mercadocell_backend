@@ -1,6 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
-import br.com.univesp.mercadocell.mercadocell.dto.ImagemProdutoDTO;
+import br.com.univesp.mercadocell.mercadocell.dto.CatalogoProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import br.com.univesp.mercadocell.mercadocell.model.Produto;
@@ -68,26 +68,31 @@ public class ProdutoService {
        }
     }
 
-    public List<ProdutoDTO> listarProdutos() {
-        List<ProdutoDTO> listaProdutosDTO = new ArrayList<ProdutoDTO>();
-        for (Produto produto :  produtoRepository.listarProdutos() ){
-            ProdutoDTO produtoDTO = converteProdutoParaProdutoDTO(produto);
-            listaProdutosDTO.add(produtoDTO);
-        }
-        /*
+    public List<CatalogoProdutoDTO> listarCatalogoProdutos() {
         try{
-
-            System.out.println(listaProdutos.toString());
-            for (Produto produto : listaProdutos ){
-                ProdutoDTO produtoDTO = converteProdutoParaProdutoDTO(produto);
-                produtoDTO.setListaImagem(imagemService.buscarImagemProdutoPorId(produto.getCodProduto()));
-                listaProdutosDTO.add(produtoDTO);
+            List<CatalogoProdutoDTO> listaCatalogoProdutosDTO = new ArrayList<CatalogoProdutoDTO>();
+            for (Produto produto :  produtoRepository.listarProdutos() ){
+                CatalogoProdutoDTO catalogoProdutoDTO = converteProdutoParaProdutoCatalogoDTO(produto);
+                listaCatalogoProdutosDTO.add(catalogoProdutoDTO);
             }
+            return listaCatalogoProdutosDTO;
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException("Nenhum registro encontrado");
         }
-         */
-        return listaProdutosDTO ;
+    }
+
+    public List<ProdutoDTO> listarProdutos() {
+        try{
+
+            List<ProdutoDTO> listaProdutosDTO = new ArrayList<ProdutoDTO>();
+            for (Produto produto :  produtoRepository.listarProdutos() ){
+                ProdutoDTO produtoDTO = converteProdutoParaProdutoDTO(produto);
+                listaProdutosDTO.add(produtoDTO);
+            }
+            return listaProdutosDTO ;
+        }catch (EmptyResultDataAccessException e ){
+            throw  new EntityNotFoundException("Nenhum registro encontrado");
+        }
     }
 
     /*
@@ -156,6 +161,18 @@ public class ProdutoService {
                 produto.getQuantidadeEstoqueAtual()
         );
     }
+
+    public static CatalogoProdutoDTO converteProdutoParaProdutoCatalogoDTO(Produto produto) {
+        return new CatalogoProdutoDTO(
+                produto.getNomeProduto(),
+                produto.getDescricaoProduto(),
+                produto.getSubCategoria().getNomeSubCategoria(),
+                produto.getSubCategoria().getCategoria().getNomeCategoria(),
+                produto.getUnidadeMedida().getNomeUnidadeMedida()
+        );
+    }
+
+
     public static Produto converteProdutoDTOParaProduto(ProdutoDTO produtoDTO) {
         return new Produto(
                 produtoDTO.getCodProduto(),
