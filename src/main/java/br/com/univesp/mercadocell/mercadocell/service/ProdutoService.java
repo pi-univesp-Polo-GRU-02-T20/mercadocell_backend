@@ -2,10 +2,7 @@ package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.dto.CatalogoProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
-import br.com.univesp.mercadocell.mercadocell.model.Imagem;
-import br.com.univesp.mercadocell.mercadocell.model.Produto;
-import br.com.univesp.mercadocell.mercadocell.model.SubCategoria;
-import br.com.univesp.mercadocell.mercadocell.model.UnidadeMedida;
+import br.com.univesp.mercadocell.mercadocell.model.*;
 import br.com.univesp.mercadocell.mercadocell.repository.ProdutoRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
@@ -68,14 +65,15 @@ public class ProdutoService {
        }
     }
 
-    public List<CatalogoProdutoDTO> listarCatalogoProdutos() {
+    public List<CatalogoProduto> listarCatalogoProdutos() {
         try{
-            List<CatalogoProdutoDTO> listaCatalogoProdutosDTO = new ArrayList<CatalogoProdutoDTO>();
+            List<CatalogoProduto> listaCatalogoProdutos = new ArrayList<CatalogoProduto>();
             for (Produto produto :  produtoRepository.listarProdutos() ){
-                CatalogoProdutoDTO catalogoProdutoDTO = converteProdutoParaProdutoCatalogoDTO(produto);
-                listaCatalogoProdutosDTO.add(catalogoProdutoDTO);
+                List<Imagem> listaImagensProduto = imagemService.buscarImagemProdutoPorId(produto.getCodProduto());
+                CatalogoProduto catalogoProduto = converteProdutoParaProdutoCatalogoDTO(produto, listaImagensProduto);
+                listaCatalogoProdutos.add(catalogoProduto);
             }
-            return listaCatalogoProdutosDTO;
+            return listaCatalogoProdutos;
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException("Nenhum registro encontrado");
         }
@@ -162,13 +160,14 @@ public class ProdutoService {
         );
     }
 
-    public static CatalogoProdutoDTO converteProdutoParaProdutoCatalogoDTO(Produto produto) {
-        return new CatalogoProdutoDTO(
+    public static CatalogoProduto converteProdutoParaProdutoCatalogoDTO(Produto produto, List<Imagem> listaImagensProduto) {
+        return new CatalogoProduto(
                 produto.getNomeProduto(),
                 produto.getDescricaoProduto(),
                 produto.getSubCategoria().getNomeSubCategoria(),
                 produto.getSubCategoria().getCategoria().getNomeCategoria(),
-                produto.getUnidadeMedida().getNomeUnidadeMedida()
+                produto.getUnidadeMedida().getNomeUnidadeMedida(),
+                listaImagensProduto
         );
     }
 

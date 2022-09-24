@@ -1,6 +1,5 @@
-package br.com.univesp.mercadocell.mercadocell.dto;
+package br.com.univesp.mercadocell.mercadocell.model;
 
-import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,12 +9,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CatalogoProdutoDTO {
-
+public class CatalogoProduto {
     private String nomeProduto;
     private String descricaoProduto;
     private String nomeSubCategoria;
     private String nomeCategoria;
     private String nomeUnidadeMedida;
-    private List<String> listaImagens;
+    private List<Imagem> listaImagens;
 }

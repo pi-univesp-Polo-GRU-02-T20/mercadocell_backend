@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class ImagemController {
     @Autowired
     private ImagemService imagemService;
-    private static final String URL_IMAGENS_PRODUTO = "imagem/";
+    public static final String URL_IMAGENS_PRODUTO = "imagem/";
 
 
     @GetMapping(path="/{imagemId}")
