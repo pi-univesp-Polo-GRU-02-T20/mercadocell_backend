@@ -17,7 +17,7 @@ public class ProdutoComImagemDTO {
     private Integer quantidadeEstoqueMinimo;
     private Integer quantidadeEstoqueMaximo;
     private Integer quantidadeEstoqueAtual;
-    private List<String> listaImagem;
+    private List<String> listaImagens;
 /*
     public ProdutoDTO(Integer codProduto,String nomeProduto,String descricaoProduto,
                         Integer codigoSubcategoria,Integer codigoUnidadeMedida,

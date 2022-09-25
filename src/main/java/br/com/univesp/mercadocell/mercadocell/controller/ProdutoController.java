@@ -64,7 +64,7 @@ public class ProdutoController {
 
     @GetMapping
     public List<ProdutoComImagemDTO> listarProdutos() {
-        List<ProdutoComImagemDTO> listaProdutosComImagemDto = new ArrayList<>();
+        List<ProdutoComImagemDTO> listaProdutosComImagemDTO = new ArrayList<>();
         for (ProdutoDTO produtoDTO : produtoService.listarProdutos()){
             List<String> urlProdutos = new ArrayList<String>();
             for(Imagem imagem: imagemService.buscarImagemProdutoPorId(produtoDTO.getCodProduto()) ){
@@ -75,7 +75,7 @@ public class ProdutoController {
                         .toUriString();
                 urlProdutos.add(fileDownloadUri);
             }
-            listaProdutosComImagemDto.add(
+            listaProdutosComImagemDTO.add(
                     new ProdutoComImagemDTO(
                             produtoDTO.getCodProduto(),
                             produtoDTO.getNomeProduto(),
@@ -89,7 +89,7 @@ public class ProdutoController {
                     )
             );
         }
-        return listaProdutosComImagemDto;
+        return listaProdutosComImagemDTO;
     }
 
     @PutMapping
