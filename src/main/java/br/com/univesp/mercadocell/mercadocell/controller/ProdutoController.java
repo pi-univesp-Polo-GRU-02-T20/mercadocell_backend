@@ -1,13 +1,18 @@
 package br.com.univesp.mercadocell.mercadocell.controller;
 
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoComImagemDTO;
 import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
+import br.com.univesp.mercadocell.mercadocell.model.Imagem;
+import br.com.univesp.mercadocell.mercadocell.service.ImagemService;
 import br.com.univesp.mercadocell.mercadocell.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,13 +23,16 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService ;
 
+    @Autowired
+    private ImagemService imagemService;
+
     @PostMapping
     public ResponseEntity<ProdutoDTO> cadastrarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {
         produtoService.cadastrarProduto(produtoDTO);
         return ResponseEntity.accepted().body(produtoDTO);
     }
 
-    @PostMapping("/comImagem")
+    @PostMapping("/cadastrarProdutoComImagem")
     public ResponseEntity<ProdutoDTO> cadastrarProdutoComImgem(  @RequestParam("nomeProduto")	String 			nomeProduto				,
                                                                @RequestParam("descricaoProduto")	String 			descricaoProduto		,
                                                                @RequestParam("codigoSubcategoria")	Integer 		codigoSubcategoria		,
@@ -55,8 +63,33 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public List<ProdutoDTO> listarProdutos() {
-        return produtoService.listarProdutos();
+    public List<ProdutoComImagemDTO> listarProdutos() {
+        List<ProdutoComImagemDTO> listaProdutosComImagemDto = new ArrayList<>();
+        for (ProdutoDTO produtoDTO : produtoService.listarProdutos()){
+            List<String> urlProdutos = new ArrayList<String>();
+            for(Imagem imagem: imagemService.buscarImagemProdutoPorId(produtoDTO.getCodProduto()) ){
+                String fileDownloadUri = ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path(ImagemController.URL_IMAGENS_PRODUTO)
+                        .path(imagem.getCodigoImagem().toString())
+                        .toUriString();
+                urlProdutos.add(fileDownloadUri);
+            }
+            listaProdutosComImagemDto.add(
+                    new ProdutoComImagemDTO(
+                            produtoDTO.getCodProduto(),
+                            produtoDTO.getNomeProduto(),
+                            produtoDTO.getDescricaoProduto(),
+                            produtoDTO.getCodigoSubcategoria(),
+                            produtoDTO.getCodigoUnidadeMedida(),
+                            produtoDTO.getQuantidadeEstoqueMinimo(),
+                            produtoDTO.getQuantidadeEstoqueMaximo(),
+                            produtoDTO.getQuantidadeEstoqueAtual(),
+                            urlProdutos
+                    )
+            );
+        }
+        return listaProdutosComImagemDto;
     }
 
     @PutMapping

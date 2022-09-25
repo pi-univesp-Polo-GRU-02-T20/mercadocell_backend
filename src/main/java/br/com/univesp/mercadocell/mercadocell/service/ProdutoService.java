@@ -1,6 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.dto.CatalogoProdutoDTO;
+import br.com.univesp.mercadocell.mercadocell.dto.ProdutoComImagemDTO;
 import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.*;
 import br.com.univesp.mercadocell.mercadocell.repository.ProdutoRepository;
@@ -159,6 +160,21 @@ public class ProdutoService {
                 produto.getQuantidadeEstoqueAtual()
         );
     }
+
+    public static ProdutoComImagemDTO converteProdutoParaProdutoComImagemDTO(Produto produto, List<String> listaImagens) {
+        return new ProdutoComImagemDTO(
+                produto.getCodProduto(),
+                produto.getNomeProduto(),
+                produto.getDescricaoProduto(),
+                produto.getSubCategoria().getCodSubCategoria(),
+                produto.getUnidadeMedida().getCodUnidadeMedida(),
+                produto.getQuantidadeEstoqueMinima(),
+                produto.getQuantidadeEstoqueMaxima(),
+                produto.getQuantidadeEstoqueAtual(),
+                listaImagens
+        );
+    }
+
 
     public static CatalogoProduto converteProdutoParaProdutoCatalogoDTO(Produto produto, List<Imagem> listaImagensProduto) {
         return new CatalogoProduto(

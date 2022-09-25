@@ -18,9 +18,6 @@ public class ProdutoDTO {
     private Integer quantidadeEstoqueMinimo;
     private Integer quantidadeEstoqueMaximo;
     private Integer quantidadeEstoqueAtual;
-    //TODO mudar cardinalidade produto 1:N imagem
-    //private MultipartFile arqImagem;
-    //private List<Imagem> listaImagem;
 /*
     public ProdutoDTO(Integer codProduto,String nomeProduto,String descricaoProduto,
                         Integer codigoSubcategoria,Integer codigoUnidadeMedida,

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class ProdutoComImagemDTO {
@@ -15,9 +17,7 @@ public class ProdutoComImagemDTO {
     private Integer quantidadeEstoqueMinimo;
     private Integer quantidadeEstoqueMaximo;
     private Integer quantidadeEstoqueAtual;
-    //TODO mudar cardinalidade produto 1:N imagem
-    private MultipartFile arqImagem;
-    //private List<Imagem> listaImagem;
+    private List<String> listaImagem;
 /*
     public ProdutoDTO(Integer codProduto,String nomeProduto,String descricaoProduto,
                         Integer codigoSubcategoria,Integer codigoUnidadeMedida,
