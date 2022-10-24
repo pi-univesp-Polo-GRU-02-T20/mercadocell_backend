@@ -47,7 +47,7 @@ public class UsuarioRepository {
                                             rs.getInt(COLUNA_COD_PESSOA),
                                             rs.getString(COLUNA_NME_PESSOA),
                                             rs.getString(COLUNA_DSC_LOGIN),
-                                            MASCARA_SENHA,
+                                            rs.getString(COLUNA_DSC_SENHA),
                                             rs.getBoolean(COLUNA_FLG_ATIVO),
                                             rs.getInt(COLUNA_COD_PESSOA)
                                 ),
@@ -78,7 +78,7 @@ public class UsuarioRepository {
                                 resultSet.getInt(COLUNA_COD_USUARIO),
                                 resultSet.getString(COLUNA_NME_PESSOA),
                                 resultSet.getString(COLUNA_DSC_LOGIN),
-                                MASCARA_SENHA,
+                                resultSet.getString(COLUNA_DSC_SENHA),
                                 resultSet.getBoolean(COLUNA_FLG_ATIVO),
                                 resultSet.getInt(COLUNA_COD_PESSOA)
                         )

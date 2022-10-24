@@ -1,5 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ public class Usuario extends Pessoa{
 
     private Integer codUsuario;
     private String login;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
     private Boolean ativo;
     private String complementoSenha;
