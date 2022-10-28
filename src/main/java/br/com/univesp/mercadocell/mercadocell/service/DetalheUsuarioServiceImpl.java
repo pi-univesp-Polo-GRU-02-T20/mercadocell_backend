@@ -1,5 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
+import br.com.univesp.mercadocell.mercadocell.model.Usuario;
 import br.com.univesp.mercadocell.mercadocell.security.DetalheUsuarioAcesso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,8 @@ public class DetalheUsuarioServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new DetalheUsuarioAcesso(usuarioService.buscarUsuarioPorLogin(username));
+        Usuario usuario = usuarioService.buscarUsuarioPorLogin(username);
+
+        return new DetalheUsuarioAcesso(usuario);
     }
 }

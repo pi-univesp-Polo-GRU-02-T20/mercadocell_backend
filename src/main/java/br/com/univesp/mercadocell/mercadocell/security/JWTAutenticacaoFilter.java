@@ -1,5 +1,6 @@
 package br.com.univesp.mercadocell.mercadocell.security;
 
+import br.com.univesp.mercadocell.mercadocell.dto.UsuarioDTOLogin;
 import br.com.univesp.mercadocell.mercadocell.model.Usuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -17,27 +18,30 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class JWTAutenticacaoFilter extends UsernamePasswordAuthenticationFilter {
     public static final int TOKEN_EXPIRACAO = 600_000;
     public static final String TOKEN_SENHA = "630bcc5d-177b-40f2-94cd-5f4773157f08";
 
-    @Autowired
     private AuthenticationManager authenticationManager;
+
+    public JWTAutenticacaoFilter(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
-            Usuario usuario = new ObjectMapper()
-                    .readValue(request.getInputStream(), Usuario.class);
+            UsuarioDTOLogin usuarioDTOLogin = new ObjectMapper()
+                    .readValue(request.getInputStream(), UsuarioDTOLogin.class);
 
-            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    usuario.getLogin(),
-                    usuario.getSenha(),
+            UsernamePasswordAuthenticationToken tokenUser = new UsernamePasswordAuthenticationToken(
+                    usuarioDTOLogin.getLogin(),
+                    usuarioDTOLogin.getSenha(),
                     new ArrayList<>()
-            ));
+            );
+            return authenticationManager.authenticate(tokenUser);
 
         } catch (IOException e) {
             throw new RuntimeException("Falha ao autenticar usuario", e);

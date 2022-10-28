@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
-                .addFilter(new JWTAutenticacaoFilter())
+                .addFilter(new JWTAutenticacaoFilter(authenticationManager()))
                 .addFilter(new JWTValidacaoFilter(authenticationManager()))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

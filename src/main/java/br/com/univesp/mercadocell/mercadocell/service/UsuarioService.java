@@ -25,8 +25,9 @@ public class UsuarioService {
             usuarioRepository.buscarUsuarioPorLogin(usuario.getLogin());
             throw new EntityIntegrityViolationException("Usuário já cadastrado: " + usuario.toString());
         }catch (EmptyResultDataAccessException emptyResultDataAccessException) {
-            usuario.setComplementoSenha(String.valueOf(System.currentTimeMillis()));
-            usuario.setSenha(psEncoder.encode(usuario.getSenha().concat(usuario.getComplementoSenha()))); // encriptação da senha
+            //usuario.setComplementoSenha(String.valueOf(System.currentTimeMillis()));
+            //usuario.setSenha(psEncoder.encode(usuario.getSenha().concat(usuario.getComplementoSenha()))); // encriptação da senha
+            usuario.setSenha(psEncoder.encode(usuario.getSenha())); // encriptação da senha
             try {
                 usuarioRepository.cadastrarUsuario(usuario);
             } catch (DataIntegrityViolationException dataIntegrityViolationException) {
@@ -81,7 +82,8 @@ public class UsuarioService {
 
     public Boolean validarSenha(Usuario usuario){
        Usuario usuarioBD = buscarUsuarioPorLogin(usuario.getLogin());
-        return psEncoder.matches( usuario.getSenha().concat(usuarioBD.getComplementoSenha()), usuarioBD.getSenha());
+        //return psEncoder.matches( usuario.getSenha().concat(usuarioBD.getComplementoSenha()), usuarioBD.getSenha());
+        return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
        // return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
     }
 }
