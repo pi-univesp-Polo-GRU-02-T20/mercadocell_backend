@@ -6,11 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.GrantType;
-import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
-import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.Arrays;
@@ -25,6 +23,8 @@ public class SpringFoxConfig {
                         .title("MercadoCell API")
                         .build())
     //          .securitySchemes(Arrays.asList(securityScheme()))
+                .securityContexts(Arrays.asList(securityContext()))
+                .securitySchemes(Arrays.asList(apiKey()))
                 .select().apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .build();
     }
@@ -44,5 +44,20 @@ public class SpringFoxConfig {
         return Arrays.asList(new AuthorizationScope("READ", "Acesso de leitura"),
                 new AuthorizationScope("WRITE", "Acesso de edição")
         );
+    }
+
+    private ApiKey apiKey() {
+        return new ApiKey("JWT", "Authorization", "header");
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder().securityReferences(defaultAuth()).build();
+    }
+
+    private List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
     }
 }
