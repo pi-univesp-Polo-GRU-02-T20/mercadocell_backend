@@ -22,6 +22,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DetalheUsuarioServiceImpl detalheUsuarioService;
 
+    public static final String AUTHENTICATION_PATH = "/login";
+    public static final String AUTHORIZATION_SCOPE_READ = "READ";
+    public static final String AUTHORIZATION_SCOPE_READ_DESCRIPTION = "Acesso de leitura";
+    public static final String AUTHORIZATION_SCOPE_WRITE = "WRITE";
+    public static final String AUTHORIZATION_SCOPE_WRITE_DESCRIPTION = "Acesso de gravação";
     private static final String[] AUTH_WHITELIST = {
             // -- Swagger UI v2
             "/v2/api-docs",
@@ -46,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.POST, AUTHENTICATION_PATH).permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/**").authenticated()
                 .and()

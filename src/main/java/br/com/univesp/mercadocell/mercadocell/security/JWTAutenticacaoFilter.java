@@ -1,7 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.security;
 
+import br.com.univesp.mercadocell.mercadocell.dto.ResponseTokenJWTDTO;
 import br.com.univesp.mercadocell.mercadocell.dto.UsuarioDTOLogin;
-import br.com.univesp.mercadocell.mercadocell.model.Usuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class JWTAutenticacaoFilter extends UsernamePasswordAuthenticationFilter {
-    public static final int TOKEN_EXPIRACAO = 600_000;
+    public static final int TOKEN_EXPIRACAO = 1_800_000; //30 min;
     public static final String TOKEN_SENHA = "630bcc5d-177b-40f2-94cd-5f4773157f08";
 
     private AuthenticationManager authenticationManager;
@@ -60,8 +60,9 @@ public class JWTAutenticacaoFilter extends UsernamePasswordAuthenticationFilter 
                 withSubject(usuarioData.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRACAO))
                 .sign(Algorithm.HMAC512(TOKEN_SENHA));
+        ResponseTokenJWTDTO tkn  = new ResponseTokenJWTDTO(token);
 
-        response.getWriter().write(token);
+        response.getWriter().write( new ObjectMapper ().writeValueAsString(tkn));
         response.getWriter().flush();
     }
 
