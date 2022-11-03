@@ -1,9 +1,9 @@
 package br.com.univesp.mercadocell.mercadocell.dto;
 
-import lombok.Data;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-@Data
+@Setter
 public class ProdutoInputDTO extends ProdutoDTO {
 
     //TODO mudar cardinalidade produto 1:N imagem

@@ -1,7 +1,5 @@
 package br.com.univesp.mercadocell.mercadocell.dto;
 
-import br.com.univesp.mercadocell.mercadocell.model.Pessoa;
-import br.com.univesp.mercadocell.mercadocell.model.TipoPagamento;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

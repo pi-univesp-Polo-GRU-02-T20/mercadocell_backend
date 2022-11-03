@@ -1,5 +1,8 @@
 package br.com.univesp.mercadocell.mercadocell.model;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,6 +1,8 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
-import br.com.univesp.mercadocell.mercadocell.model.*;
+import br.com.univesp.mercadocell.mercadocell.model.Operacao;
+import br.com.univesp.mercadocell.mercadocell.model.PagamentoOperacao;
+import br.com.univesp.mercadocell.mercadocell.model.TipoPagamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;

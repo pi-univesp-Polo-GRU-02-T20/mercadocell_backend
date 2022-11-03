@@ -1,11 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.dto;
 
-import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
