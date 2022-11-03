@@ -1,10 +1,8 @@
 package br.com.univesp.mercadocell.mercadocell.repository;
 
 import br.com.univesp.mercadocell.mercadocell.model.Bairro;
-import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 

@@ -2,9 +2,10 @@ package br.com.univesp.mercadocell.mercadocell.dto;
 
 import br.com.univesp.mercadocell.mercadocell.model.Imagem;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
-@Data
+@Getter
 public class ProdutoConsultaDTO  extends ProdutoDTO{
 
     private List<Imagem> listaImagem;

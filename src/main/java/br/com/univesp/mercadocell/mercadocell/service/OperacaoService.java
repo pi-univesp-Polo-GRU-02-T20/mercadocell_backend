@@ -1,9 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
 import br.com.univesp.mercadocell.mercadocell.dto.OperacaoDTO;
-import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Operacao;
-import br.com.univesp.mercadocell.mercadocell.model.Produto;
 import br.com.univesp.mercadocell.mercadocell.repository.OperacaoRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;

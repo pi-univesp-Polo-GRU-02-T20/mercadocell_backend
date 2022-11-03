@@ -1,6 +1,5 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
-import br.com.univesp.mercadocell.mercadocell.dto.CatalogoProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.dto.ProdutoComImagemDTO;
 import br.com.univesp.mercadocell.mercadocell.dto.ProdutoDTO;
 import br.com.univesp.mercadocell.mercadocell.model.*;
