@@ -1,7 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.security;
 
-import br.com.univesp.mercadocell.mercadocell.dto.jwt.JwtResponseDTO;
-import br.com.univesp.mercadocell.mercadocell.dto.jwt.UsuarioDTOLogin;
+import br.com.univesp.mercadocell.mercadocell.dto.ResponseTokenJWTDTO;
+import br.com.univesp.mercadocell.mercadocell.dto.UsuarioDTOLogin;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,10 +19,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class JWTAutenticacaoFilter /*extends UsernamePasswordAuthenticationFilter*/ {
+public class JWTAutenticacaoFilter extends UsernamePasswordAuthenticationFilter {
     public static final int TOKEN_EXPIRACAO = 1_800_000; //30 min;
     public static final String TOKEN_SENHA = "630bcc5d-177b-40f2-94cd-5f4773157f08";
-
 
     private AuthenticationManager authenticationManager;
 
@@ -30,7 +29,7 @@ public class JWTAutenticacaoFilter /*extends UsernamePasswordAuthenticationFilte
         this.authenticationManager = authenticationManager;
     }
 
-    //@Override
+    @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
@@ -49,7 +48,7 @@ public class JWTAutenticacaoFilter /*extends UsernamePasswordAuthenticationFilte
         }
     }
 
-    //@Override
+    @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
@@ -61,7 +60,7 @@ public class JWTAutenticacaoFilter /*extends UsernamePasswordAuthenticationFilte
                 withSubject(usuarioData.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRACAO))
                 .sign(Algorithm.HMAC512(TOKEN_SENHA));
-        JwtResponseDTO tkn  = new JwtResponseDTO(token);
+        ResponseTokenJWTDTO tkn  = new ResponseTokenJWTDTO(token);
 
         response.getWriter().write( new ObjectMapper ().writeValueAsString(tkn));
         response.getWriter().flush();

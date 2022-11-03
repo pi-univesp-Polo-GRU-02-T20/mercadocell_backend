@@ -1,11 +1,11 @@
-package br.com.univesp.mercadocell.mercadocell.dto.jwt;
+package br.com.univesp.mercadocell.mercadocell.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class JwtResponseDTO {
+public class ResponseTokenJWTDTO {
 
     private String jwtToken;
 
