@@ -1,4 +1,4 @@
-package br.com.univesp.mercadocell.mercadocell.dto;
+package br.com.univesp.mercadocell.mercadocell.dto.jwt;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
