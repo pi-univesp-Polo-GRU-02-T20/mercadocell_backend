@@ -5,6 +5,7 @@ import br.com.univesp.mercadocell.mercadocell.security.jwt.service.UserDetailsSe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -82,7 +83,7 @@ public class WebSecurityConfig  {// extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
+/*
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().and().csrf().disable()
       .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
@@ -94,14 +95,28 @@ public class WebSecurityConfig  {// extends WebSecurityConfigurerAdapter {
 
    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
   }
+*/
+/*
+*     @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(AUTH_WHITELIST).permitAll()
+                .antMatchers("/**").authenticated()
+                .and()
+                .addFilter(new JWTAutenticacaoFilter(authenticationManager()))
+                .addFilter(new JWTValidacaoFilter(authenticationManager()))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    }
+* */
+
 
 
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+            http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/auth/**").permitAll()
-                .antMatchers("/test/**").permitAll()
+                .authorizeRequests().antMatchers(HttpMethod.POST, "/auth/**").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated();
 
