@@ -1,5 +1,7 @@
 package br.com.univesp.mercadocell.mercadocell.controller;
 
+import br.com.univesp.mercadocell.mercadocell.dto.PessoaFisicaDTO;
+import br.com.univesp.mercadocell.mercadocell.model.Pessoa;
 import br.com.univesp.mercadocell.mercadocell.model.PessoaFisica;
 import br.com.univesp.mercadocell.mercadocell.service.PessoaFisicaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 @RestController
 @CrossOrigin
@@ -35,9 +38,23 @@ public class PessoaFisicaController {
     }
 
     @GetMapping
-    public List<PessoaFisica> listarPessoasFisicas() {
-        return pessoaFisicaService.listarPessoasFisicas();
+    public List<PessoaFisicaDTO> listarPessoasFisicas() {
+        List<PessoaFisicaDTO> listaPessoasFisicasDTO = new ArrayList<PessoaFisicaDTO>();
+        for(PessoaFisica pessoaFisica : pessoaFisicaService.listarPessoasFisicas()){
+            listaPessoasFisicasDTO.add(convertePessoaFisicaParaPessoaFisicaDTO(pessoaFisica));
+        }
+        return listaPessoasFisicasDTO;
     }
+
+    private PessoaFisicaDTO convertePessoaFisicaParaPessoaFisicaDTO(PessoaFisica pessoa) {
+        return new PessoaFisicaDTO(
+                pessoa.getCodPessoa(),
+                pessoa.getNomePessoa(),
+                pessoa.getDataNascimento(),
+                pessoa.getEstadoNaturalidade()
+        );
+    }
+
 
     @PutMapping
     public ResponseEntity<PessoaFisica> atualizarPessoaFisica(@Valid @RequestBody PessoaFisica pessoaFisica) {

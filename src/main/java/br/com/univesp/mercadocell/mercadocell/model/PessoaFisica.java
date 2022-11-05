@@ -15,6 +15,7 @@ public class PessoaFisica extends Pessoa {
 
     private LocalDate dataNascimento;
     private String estadoNaturalidade;
+    private Endereco endereco;
    // @NotEmpty(message = "O sexo da pessoa Física deve ser preenchido")
 
     private String tipoSexo;
@@ -27,11 +28,12 @@ public class PessoaFisica extends Pessoa {
     private List<Operacao> listaOperacao;
 */
     public PessoaFisica(final Integer codPessoa,final  String nomePessoa, final LocalDate dataNascimento,
-                        final String estadoNaturalidade,final  String tipoSexo) {
-        super(codPessoa, nomePessoa);
+                        final String estadoNaturalidade,final  String tipoSexo, final Boolean flgConsentimentoDados) {
+        super(codPessoa, nomePessoa, flgConsentimentoDados);
         this.dataNascimento = dataNascimento;
         this.estadoNaturalidade = estadoNaturalidade;
         this.tipoSexo = tipoSexo;
+        this.flgConsentimentoDados = flgConsentimentoDados;
     }
 
     public PessoaFisica(final Integer codPessoa,final  String nomePessoa) {

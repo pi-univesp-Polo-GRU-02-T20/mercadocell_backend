@@ -16,6 +16,7 @@ public class PessoaFisicaService {
 
     @Autowired
     private PessoaFisicaRepository pessoaFisicaRepository;
+    private EnderecoService enderecoService;
 
     public void cadastrarPessoaFisica(PessoaFisica pessoaFisica) {
         try {
@@ -24,6 +25,7 @@ public class PessoaFisicaService {
         }catch (EmptyResultDataAccessException e) {
                 try{
                     pessoaFisicaRepository.cadastrarPessoaFisica(pessoaFisica);
+                    enderecoService.cadastrarEndereco(pessoaFisica.getEndereco());
                 }catch (DataIntegrityViolationException dataIntegrityViolationException) {
                     throw new EntityIntegrityViolationException(
                             "Dados de Pessoa Física inconsistentes:" + pessoaFisica.toString());
@@ -33,16 +35,21 @@ public class PessoaFisicaService {
 
     public PessoaFisica buscarPessoaFisicaPorId(int idPessoaFisica) {
         try{
-            return pessoaFisicaRepository.buscarPessoaFisicaPorId(idPessoaFisica);
+            PessoaFisica pessoa = pessoaFisicaRepository.buscarPessoaFisicaPorId(idPessoaFisica);
+            pessoa.setEndereco(enderecoService.buscarEnderecoPorCodPessoa(pessoa.getCodPessoa()));
+            return pessoa;
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException(
                     "Código de Pessoa Física não encontrado: " + idPessoaFisica
             );
         }
     }
+
     public PessoaFisica buscarPessoaFisicaPorNome(String nomePessoaFisica) {
         try{
-            return pessoaFisicaRepository.buscarPessoaFisicaPorNome(nomePessoaFisica);
+            PessoaFisica pessoa = pessoaFisicaRepository.buscarPessoaFisicaPorNome(nomePessoaFisica);
+            pessoa.setEndereco(enderecoService.buscarEnderecoPorCodPessoa(pessoa.getCodPessoa()));
+            return pessoa;
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException(
                     "Nome de Pessoa Física não encontrado: " + nomePessoaFisica
