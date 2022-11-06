@@ -36,8 +36,9 @@ public class PessoaJuridicaController {
 
     @GetMapping(path="/buscar/{nomePessoaJuridica}")
     public ResponseEntity<PessoaJuridicaDTO> buscarPessoaJuridicaPorNome(@PathVariable String nomePessoaJuridica) {
-        PessoaJuridicaDTO pessoaJuridicaDTO = convertePessoaJuridicaParaPessoaJuridicaDTO(
-                pessoaJuridicaService.buscarPessoaJuridicaPorNome(nomePessoaJuridica)
+        PessoaJuridicaDTO pessoaJuridicaDTO =
+                convertePessoaJuridicaParaPessoaJuridicaDTO(
+                    pessoaJuridicaService.buscarPessoaJuridicaPorNome(nomePessoaJuridica)
                 );
         return ResponseEntity.ok().body(pessoaJuridicaDTO);
     }

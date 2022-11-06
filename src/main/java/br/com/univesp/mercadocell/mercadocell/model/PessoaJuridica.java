@@ -16,11 +16,15 @@ public class PessoaJuridica extends Pessoa {
     private String codCNPJ;
     private Endereco endereco;
 
-    public PessoaJuridica(Integer codPessoa, String nomePessoa,
-                          String nomeRazaoSocial, String codCNPJ) {
-        super(codPessoa, nomePessoa);
+    public PessoaJuridica(final Integer codPessoa, final String nomePessoa,
+                          final String nomeRazaoSocial, final String codCNPJ, final Boolean flgConsentimentoDados) {
+        super(codPessoa, nomePessoa, flgConsentimentoDados);
         this.nomeRazaoSocial = nomeRazaoSocial;
         this.codCNPJ = codCNPJ;
+        this.flgConsentimentoDados = flgConsentimentoDados;
     }
 
+    public PessoaJuridica(final Integer codPessoa,final  String nomePessoa) {
+        super(codPessoa, nomePessoa);
+    }
 }
