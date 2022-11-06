@@ -11,9 +11,9 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class Estado {
     private Integer codEstado;
-    @NotEmpty(message = "O nome do Estado deve ser preenchido")
+   // @NotEmpty(message = "O nome do Estado deve ser preenchido")
     private String nomeEstado;
-    @NotEmpty(message = "A Sigla deve ser preenchida")
+  //  @NotEmpty(message = "A Sigla deve ser preenchida")
     private String siglaUF;
 
     public Estado(Integer codEstado, String nomeEstado) {

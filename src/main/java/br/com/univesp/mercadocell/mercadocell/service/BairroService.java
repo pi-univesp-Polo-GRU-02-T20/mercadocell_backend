@@ -52,7 +52,8 @@ public class BairroService {
             bairroRepository.atualizarBairro(bairro);
         }catch(DataIntegrityViolationException e){
             throw  new EntityIntegrityViolationException(
-                "O Municipio informado não foi cadastrado na base: " +  bairro.getCodMunicipio());
+                "Dados de Municipio inconsistentes: " +  bairro.toString()
+            );
         }
     }
 

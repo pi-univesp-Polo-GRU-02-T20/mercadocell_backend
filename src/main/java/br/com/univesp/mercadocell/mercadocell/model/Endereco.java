@@ -10,10 +10,10 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class Endereco {
     private Integer codEndereco;
-    private Logradouro logradouro;
     private String descricaoComplemento;
     @NotEmpty(message = "O número deve ser preenchido")
     private Integer numeroEndereco;
     private String descricaoPontoReferencia;
-
+    private Integer codPessoa;
+    private Logradouro logradouro;
 }

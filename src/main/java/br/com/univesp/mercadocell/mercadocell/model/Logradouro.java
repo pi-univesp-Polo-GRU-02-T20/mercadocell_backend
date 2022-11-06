@@ -7,14 +7,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-
 public class Logradouro {
-    public Logradouro(int i, String string) {
-    }
+
     private Integer codCEP;
-    private Integer codBairro;
     private String descricaoLogradouro;
     private String descricaoComplemento;
+    private Bairro bairro;
 
 }
 

@@ -8,7 +8,7 @@ public  class Pessoa {
 
     protected Integer codPessoa;
     protected String nomePessoa;
-    protected Boolean flgConsentimentoDados;
+    protected Boolean flgConsentimentoDados = true;
 
     public Pessoa(Integer codPessoa, String nomePessoa) {
         this.codPessoa = codPessoa;

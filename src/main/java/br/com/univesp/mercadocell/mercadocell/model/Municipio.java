@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class Municipio {
     private Integer codMunicipio;
-    @NotEmpty(message = "O nome do município deve ser preenchido")
+    //@NotEmpty(message = "O nome do município deve ser preenchido")
     private String nomeMunicipio;
-    private Integer codEstado;
+    private Estado estado;
 }

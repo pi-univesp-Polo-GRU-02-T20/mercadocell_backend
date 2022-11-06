@@ -12,9 +12,9 @@ public class EstadoRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-    private static final String COLUNA_COD_ESTADO = "COD_ESTADO";
-    private static final String COLUNA_NME_ESTADO = "NME_ESTADO";
-    private static final String COLUNA_SGL_UF = "SGL_UF";
+    static final String COLUNA_COD_ESTADO = "COD_ESTADO";
+    static final String COLUNA_NME_ESTADO = "NME_ESTADO";
+    static final String COLUNA_SGL_UF = "SGL_UF";
 
     public void cadastrarEstado(Estado estado) {
        jdbcTemplate.update("INSERT INTO ESTADO ( COD_ESTADO , NME_ESTADO, SGL_UF ) " +
@@ -69,8 +69,8 @@ public class EstadoRepository {
 
     public Estado buscarEstadoPorUF(String siglaUF) {
         return jdbcTemplate.queryForObject(
-                "SELECT COD_ESTADO, NME_ESTADO, SGL_UF FROM " +
-                        "ESTADO WHERE SGL_UF = ?"
+                "SELECT COD_ESTADO, NME_ESTADO, SGL_UF " +
+                        "FROM ESTADO WHERE SGL_UF = ?"
                 , (rs, rowNum) ->
                         new Estado(
                                 rs.getInt(COLUNA_COD_ESTADO),

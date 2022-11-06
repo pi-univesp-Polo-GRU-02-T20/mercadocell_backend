@@ -20,6 +20,7 @@ public class PessoaFisicaService {
 
     public void cadastrarPessoaFisica(PessoaFisica pessoaFisica) {
         try {
+            System.out.println(pessoaFisica.toString());
             pessoaFisicaRepository.buscarPessoaFisicaPorNome(pessoaFisica.getNomePessoa());
             throw new EntityIntegrityViolationException("Pessoa física já cadastrada");
         }catch (EmptyResultDataAccessException e) {
@@ -48,7 +49,6 @@ public class PessoaFisicaService {
     public PessoaFisica buscarPessoaFisicaPorNome(String nomePessoaFisica) {
         try{
             PessoaFisica pessoa = pessoaFisicaRepository.buscarPessoaFisicaPorNome(nomePessoaFisica);
-            pessoa.setEndereco(enderecoService.buscarEnderecoPorCodPessoa(pessoa.getCodPessoa()));
             return pessoa;
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException(

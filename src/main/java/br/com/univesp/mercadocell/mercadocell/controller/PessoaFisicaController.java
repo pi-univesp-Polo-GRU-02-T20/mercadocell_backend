@@ -26,15 +26,20 @@ public class PessoaFisicaController {
     }
 
     @GetMapping(path="/{idPessoaFisica}")
-    public ResponseEntity<PessoaFisica> buscarPessoaFisicaPorId(@PathVariable int idPessoaFisica) {
-        PessoaFisica pessoaFisica = pessoaFisicaService.buscarPessoaFisicaPorId(idPessoaFisica);
-        return ResponseEntity.ok().body(pessoaFisica);
+    public ResponseEntity<PessoaFisicaDTO> buscarPessoaFisicaPorId(@PathVariable int idPessoaFisica) {
+        PessoaFisicaDTO pessoaFisicaDTO = convertePessoaFisicaParaPessoaFisicaDTO(
+                        pessoaFisicaService.buscarPessoaFisicaPorId(idPessoaFisica)
+        );
+        return ResponseEntity.ok().body(pessoaFisicaDTO);
     }
 
     @GetMapping(path="/buscar/{nomePessoaFisica}")
-    public ResponseEntity<PessoaFisica> buscarPessoaFisicaPorNome(@PathVariable String nomePessoaFisica) {
-        PessoaFisica pessoaFisica = pessoaFisicaService.buscarPessoaFisicaPorNome(nomePessoaFisica);
-        return ResponseEntity.ok().body(pessoaFisica);
+    public ResponseEntity<PessoaFisicaDTO> buscarPessoaFisicaPorNome(@PathVariable String nomePessoaFisica) {
+        PessoaFisicaDTO pessoaFisicaDTO =
+                convertePessoaFisicaParaPessoaFisicaDTO(
+                    pessoaFisicaService.buscarPessoaFisicaPorNome(nomePessoaFisica)
+                );
+        return ResponseEntity.ok().body(pessoaFisicaDTO);
     }
 
     @GetMapping
