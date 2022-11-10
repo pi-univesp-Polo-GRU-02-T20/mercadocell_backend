@@ -66,9 +66,6 @@ public class UsuarioService {
     public void atualizarUsuario(Usuario usuario) {
         try{
             Usuario usuarioBD = buscarUsuarioPorLogin(usuario.getLogin());
-            System.out.println("Senha: " + usuario.getSenha());
-            System.out.println("Complemento: " + usuarioBD.getComplementoSenha());
-            System.out.println("string encriptada: " + usuario.getSenha());
             usuario.setSenha(psEncoder.encode(usuario.getSenha())); // encriptação da senha
             usuarioRepository.atualizarUsuario(usuario);
         } catch(EmptyResultDataAccessException e){
@@ -84,38 +81,28 @@ public class UsuarioService {
         usuarioRepository.deletarUsuario(idUsuario);
     }
 
-    public Boolean validarSenhaString(Usuario usuario){
-       Usuario usuarioBD = buscarUsuarioPorLogin(usuario.getLogin());
-        //return psEncoder.matches( usuario.getSenha().concat(usuarioBD.getComplementoSenha()), usuarioBD.getSenha());
-
-        return usuario.getSenha().equals(usuarioBD.getSenha());
-       // return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
-    }
-
     public Boolean validarSenha(Usuario usuario){
         Usuario usuarioBD = buscarUsuarioPorLogin(usuario.getLogin());
         //return psEncoder.matches( usuario.getSenha().concat(usuarioBD.getComplementoSenha()), usuarioBD.getSenha());
-        System.out.print( "Senha informada: "+usuario.getSenha());
-        System.out.print( "Senha DB: "+usuarioBD.getSenha());
         return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
-        // return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
     }
 
     public void atualizarSenha(UsuarioSenhaTrocaDTO usuarioSenhaTrocaDTO) {
         try{
             Usuario usuario = buscarUsuarioPorLogin(usuarioSenhaTrocaDTO.getLogin());
-           boolean valido = validarSenhaString(usuario);
-            if (valido){
+            if (psEncoder.matches(usuarioSenhaTrocaDTO.getSenha(), usuario.getSenha())){
                 usuario.setSenha(psEncoder.encode(usuarioSenhaTrocaDTO.getSenhaNova())); // encriptação da senha
-                usuarioRepository.atualizarUsuario(usuario);
+                try{
+                    usuarioRepository.atualizarUsuario(usuario);
+                }catch(DataIntegrityViolationException e ){
+                    throw new EntityIntegrityViolationException(
+                            "Dados de usuário inconsistentes:" + usuario.toString());
+                }
             }else {
                 throw new SenhaInvalidaException("Senha inválida");
             }
         } catch(EmptyResultDataAccessException e){
             throw  new EntityNotFoundException("Usuario não encontrado: " + usuarioSenhaTrocaDTO.toString());
-        }catch(DataIntegrityViolationException e ){
-            throw new EntityIntegrityViolationException(
-                    "Dados de usuário inconsistentes:" + usuarioSenhaTrocaDTO.toString());
         }
     }
 }
