@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,17 +17,25 @@ public class PessoaFisicaService {
 
     @Autowired
     private PessoaFisicaRepository pessoaFisicaRepository;
+    @Autowired
     private EnderecoService enderecoService;
 
+    @Transactional
     public void cadastrarPessoaFisica(PessoaFisica pessoaFisica) {
         try {
-            System.out.println(pessoaFisica.toString());
             pessoaFisicaRepository.buscarPessoaFisicaPorNome(pessoaFisica.getNomePessoa());
             throw new EntityIntegrityViolationException("Pessoa física já cadastrada");
         }catch (EmptyResultDataAccessException e) {
                 try{
-                    pessoaFisicaRepository.cadastrarPessoaFisica(pessoaFisica);
-                    enderecoService.cadastrarEndereco(pessoaFisica.getEndereco());
+                    int codPessoaFisica = pessoaFisicaRepository.cadastrarPessoaFisica(pessoaFisica);
+                    pessoaFisica.setCodPessoa(codPessoaFisica);
+                    pessoaFisica.getEndereco().setCodPessoa(codPessoaFisica);
+                    try{
+                        enderecoService.cadastrarEndereco(pessoaFisica.getEndereco());
+                    }catch (DataIntegrityViolationException dataIntegrityViolationException) {
+                        throw new EntityIntegrityViolationException(
+                                "Dados de Endereço da pessoa Física inconsistentes:" + pessoaFisica.toString());
+                    }
                 }catch (DataIntegrityViolationException dataIntegrityViolationException) {
                     throw new EntityIntegrityViolationException(
                             "Dados de Pessoa Física inconsistentes:" + pessoaFisica.toString());
@@ -37,7 +46,11 @@ public class PessoaFisicaService {
     public PessoaFisica buscarPessoaFisicaPorId(int idPessoaFisica) {
         try{
             PessoaFisica pessoa = pessoaFisicaRepository.buscarPessoaFisicaPorId(idPessoaFisica);
-            pessoa.setEndereco(enderecoService.buscarEnderecoPorCodPessoa(pessoa.getCodPessoa()));
+            try{
+                pessoa.setEndereco(enderecoService.buscarEnderecoPorCodPessoa(pessoa.getCodPessoa()));
+            }catch (EmptyResultDataAccessException e ){
+                // se a pessoa não tiver endereço cadastrado, retorna os dados somente da pessoa
+            }
             return pessoa;
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException(
@@ -64,11 +77,12 @@ public class PessoaFisicaService {
             throw  new EntityNotFoundException("Nenhum registro encontrado");
         }
     }
-
+    @Transactional
     public void atualizarPessoaFisica(PessoaFisica pessoaFisica) {
         pessoaFisicaRepository.atualizarPessoaFisica(pessoaFisica);
     }
 
+    @Transactional
     public void deletarPessoaFisica(int idPessoaFisica) {
         try {
             pessoaFisicaRepository.deletarPessoaFisica(idPessoaFisica);

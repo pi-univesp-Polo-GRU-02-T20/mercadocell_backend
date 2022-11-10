@@ -1,9 +1,11 @@
 package br.com.univesp.mercadocell.mercadocell.service;
 
+import br.com.univesp.mercadocell.mercadocell.dto.jwt.UsuarioSenhaTrocaDTO;
 import br.com.univesp.mercadocell.mercadocell.model.Usuario;
 import br.com.univesp.mercadocell.mercadocell.repository.UsuarioRepository;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityIntegrityViolationException;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
+import br.com.univesp.mercadocell.mercadocell.service.exception.SenhaInvalidaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -28,6 +30,7 @@ public class UsuarioService {
             //usuario.setComplementoSenha(String.valueOf(System.currentTimeMillis()));
             //usuario.setSenha(psEncoder.encode(usuario.getSenha().concat(usuario.getComplementoSenha()))); // encriptação da senha
             usuario.setSenha(psEncoder.encode(usuario.getSenha())); // encriptação da senha
+
             try {
                 usuarioRepository.cadastrarUsuario(usuario);
             } catch (DataIntegrityViolationException dataIntegrityViolationException) {
@@ -65,13 +68,14 @@ public class UsuarioService {
             Usuario usuarioBD = buscarUsuarioPorLogin(usuario.getLogin());
             System.out.println("Senha: " + usuario.getSenha());
             System.out.println("Complemento: " + usuarioBD.getComplementoSenha());
-            System.out.println("string encriptada: " + usuario.getSenha().concat(usuarioBD.getComplementoSenha()));
-
-            usuario.setSenha(psEncoder.encode(usuario.getSenha().concat(usuarioBD.getComplementoSenha()))); // encriptação da senha
+            System.out.println("string encriptada: " + usuario.getSenha());
+            usuario.setSenha(psEncoder.encode(usuario.getSenha())); // encriptação da senha
             usuarioRepository.atualizarUsuario(usuario);
+        } catch(EmptyResultDataAccessException e){
+            throw  new EntityNotFoundException("Usuario não encontrado: " + usuario.toString());
         }catch(DataIntegrityViolationException e ){
             throw new EntityIntegrityViolationException(
-                    "A pessoa informada não foi cadastrada na base:" + usuario.getCodPessoa());
+                    "Dados de usuário inconsistentes:" + usuario.toString());
         }
     }
 
@@ -80,10 +84,38 @@ public class UsuarioService {
         usuarioRepository.deletarUsuario(idUsuario);
     }
 
-    public Boolean validarSenha(Usuario usuario){
+    public Boolean validarSenhaString(Usuario usuario){
        Usuario usuarioBD = buscarUsuarioPorLogin(usuario.getLogin());
         //return psEncoder.matches( usuario.getSenha().concat(usuarioBD.getComplementoSenha()), usuarioBD.getSenha());
-        return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
+
+        return usuario.getSenha().equals(usuarioBD.getSenha());
        // return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
+    }
+
+    public Boolean validarSenha(Usuario usuario){
+        Usuario usuarioBD = buscarUsuarioPorLogin(usuario.getLogin());
+        //return psEncoder.matches( usuario.getSenha().concat(usuarioBD.getComplementoSenha()), usuarioBD.getSenha());
+        System.out.print( "Senha informada: "+usuario.getSenha());
+        System.out.print( "Senha DB: "+usuarioBD.getSenha());
+        return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
+        // return psEncoder.matches( usuario.getSenha(), usuarioBD.getSenha());
+    }
+
+    public void atualizarSenha(UsuarioSenhaTrocaDTO usuarioSenhaTrocaDTO) {
+        try{
+            Usuario usuario = buscarUsuarioPorLogin(usuarioSenhaTrocaDTO.getLogin());
+           boolean valido = validarSenhaString(usuario);
+            if (valido){
+                usuario.setSenha(psEncoder.encode(usuarioSenhaTrocaDTO.getSenhaNova())); // encriptação da senha
+                usuarioRepository.atualizarUsuario(usuario);
+            }else {
+                throw new SenhaInvalidaException("Senha inválida");
+            }
+        } catch(EmptyResultDataAccessException e){
+            throw  new EntityNotFoundException("Usuario não encontrado: " + usuarioSenhaTrocaDTO.toString());
+        }catch(DataIntegrityViolationException e ){
+            throw new EntityIntegrityViolationException(
+                    "Dados de usuário inconsistentes:" + usuarioSenhaTrocaDTO.toString());
+        }
     }
 }

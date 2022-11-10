@@ -38,7 +38,7 @@ public class PessoaJuridicaRepository {
     private static final String COL_FLG_CONSENTIMENTO_DADOS = "FLG_CONSENTIMENTO_DADOS";
 
     @Transactional
-    public void cadastrarPessoaJuridica(PessoaJuridica  pessoaJuridica) {
+    public int cadastrarPessoaJuridica(PessoaJuridica  pessoaJuridica) {
         final String INSERT_PESSOA_JURIDICA = "INSERT INTO PESSOA (NME_PESSOA, FLG_CONSENTIMENTO_DADOS) VALUES (?, ?) ";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
@@ -46,11 +46,9 @@ public class PessoaJuridicaRepository {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(INSERT_PESSOA_JURIDICA,
-                        new String[] {  COL_COD_PESSOA,
-                                        COL_FLG_CONSENTIMENTO_DADOS
-                        });
+                        new String[] {  COL_COD_PESSOA });
                 ps.setString(1, pessoaJuridica.getNomePessoa());
-                ps.setBoolean(1, pessoaJuridica.getFlgConsentimentoDados());
+                ps.setBoolean(2, pessoaJuridica.getFlgConsentimentoDados());
                 return ps;
             }
         }, keyHolder);
@@ -62,6 +60,7 @@ public class PessoaJuridicaRepository {
                 pessoaJuridica.getNomeRazaoSocial(),
                 pessoaJuridica.getCodCNPJ()
         );
+        return keyHolder.getKey().intValue();
     }
 
     public PessoaJuridica buscarPessoaJuridicaPorId(int idPessoaJuridica) {
@@ -139,11 +138,11 @@ public class PessoaJuridicaRepository {
     @Transactional
     public void deletarPessoaJuridica(int idPessoaJuridica) throws DataIntegrityViolationException {
         jdbcTemplate.update(
-                "DELETE FROM PESSOA_JURIDICA WHERE COD_PESSOA = ? ",
+                "DELETE FROM ENDERECO WHERE COD_PESSOA = ? ",
                 idPessoaJuridica
         );
         jdbcTemplate.update(
-                "DELETE FROM PESSOA WHERE COD_PESSOA = ? ",
+                "DELETE FROM PESSOA_JURIDICA WHERE COD_PESSOA = ? ",
                 idPessoaJuridica
         );
         jdbcTemplate.update(

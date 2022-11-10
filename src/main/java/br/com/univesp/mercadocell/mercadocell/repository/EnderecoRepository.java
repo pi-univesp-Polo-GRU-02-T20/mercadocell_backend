@@ -20,25 +20,24 @@ public class EnderecoRepository {
     static final String COL_COD_PESSOA              = "COD_PESSOA";
 
     static final String CONSULTA_ENDERECO =
-            "SELECT  ED.COD_ENDERECO, ED.DSC_COMPLEMENTO, ED.NRO_ENDERECO, ED.DSC_PONTO_REFERENCIA, ED.COD_CEP, ED.COD_PESSOA, " +
-                    " L.COD_CEP, L.DSC_LOGRADOURO, B.COD_BAIRRO, B.NME_BAIRRO, " +
-                    " M.COD_MUNICIPIO, M.NME_MUNICIPIO, E.COD_ESTADO, E.NME_ESTADO, E.SGL_UF " +
-                    " FROM LOGRADOURO L " +
-                    " INNER JOIN BAIRRO B  ON L.COD_BAIRRO = B.COD_BAIRRO " +
-                    " INNER JOIN MUNICIPIO M ON M.COD_BAIRRO = B.COD_BAIRRO " +
-                    " INNER JOIN ESTADO E  ON M.COD_ESTADO = E.COD_ESTADO " ;
+       "SELECT  ED.COD_ENDERECO, ED.DSC_COMPLEMENTO, ED.NRO_ENDERECO, ED.DSC_PONTO_REFERENCIA, ED.COD_CEP, ED.COD_PESSOA,"+
+        " L.COD_CEP, L.DSC_LOGRADOURO, B.COD_BAIRRO, B.NME_BAIRRO,  M.COD_MUNICIPIO, M.NME_MUNICIPIO, E.COD_ESTADO, E.NME_ESTADO, E.SGL_UF "+
+        " FROM ENDERECO ED "+
+        " INNER JOIN LOGRADOURO L  ON ED.COD_CEP = L.COD_CEP "+
+        " INNER JOIN BAIRRO B  ON L.COD_BAIRRO = B.COD_BAIRRO "+
+        " INNER JOIN MUNICIPIO M ON M.COD_MUNICIPIO = B.COD_MUNICIPIO "+
+        " INNER JOIN ESTADO E  ON M.COD_ESTADO = E.COD_ESTADO";
     static final String FILTRO_CODIGO_ENDERECO = " WHERE COD_ENDERECO = ?";
     static final String FILTRO_CODIGO_PESSOA = " WHERE COD_PESSOA = ?";
     static final String UPDATE_ENDERECO = " UPDATE ENDERECO SET DSC_COMPLEMENTO = ?, NRO_ENDERECO = ? ," +
                                                 " DSC_PONTO_REFERENCIA = ?, COD_CEP = ?, COD_PESSOA = ?" ;
     static final String DELETE_ENDERECO = " DELETE FROM ENDERECO " ;
-    static final String INSERT_ENDERECO = " INSERT INTO ENDERECO (COD_ENDERECO, DSC_COMPLEMENTO, NRO_ENDERECO," +
+    static final String INSERT_ENDERECO = " INSERT INTO ENDERECO ( DSC_COMPLEMENTO, NRO_ENDERECO," +
                                                     " DSC_PONTO_REFERENCIA, COD_CEP, COD_PESSOA) " +
-                                            " VALUES (?,?,?,?,?,?)";
+                                            " VALUES (?,?,?,?,?)";
 
     public void cadastrarEndereco(Endereco endereco) throws DataIntegrityViolationException{
         jdbcTemplate.update(INSERT_ENDERECO,
-                endereco.getCodEndereco(),
                 endereco.getDescricaoComplemento(),
                 endereco.getNumeroEndereco(),
                 endereco.getDescricaoPontoReferencia(),

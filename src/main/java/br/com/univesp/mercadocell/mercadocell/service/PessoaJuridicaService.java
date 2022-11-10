@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,17 +18,25 @@ public class PessoaJuridicaService {
 
     @Autowired
     private PessoaJuridicaRepository pessoaJuridicaRepository;
+    @Autowired
     private EnderecoService enderecoService;
 
+    @Transactional
     public void cadastrarPessoaJuridica(PessoaJuridica pessoaJuridica) {
         try {
-            System.out.println(pessoaJuridica.toString());
             pessoaJuridicaRepository.buscarPessoaJuridicaPorNome(pessoaJuridica.getNomePessoa());
             throw new EntityIntegrityViolationException("Pessoa jurídica já cadastrada");
         }catch (EmptyResultDataAccessException e) {
             try{
-                pessoaJuridicaRepository.cadastrarPessoaJuridica(pessoaJuridica);
-                enderecoService.cadastrarEndereco(pessoaJuridica.getEndereco());
+               int codPessoaJuridica = pessoaJuridicaRepository.cadastrarPessoaJuridica(pessoaJuridica);
+                pessoaJuridica.setCodPessoa(codPessoaJuridica);
+                pessoaJuridica.getEndereco().setCodPessoa(codPessoaJuridica);
+                try{
+                    enderecoService.cadastrarEndereco(pessoaJuridica.getEndereco());
+                }catch (DataIntegrityViolationException dataIntegrityViolationException) {
+                    throw new EntityIntegrityViolationException(
+                            "Dados de Endereço da pessoa Física inconsistentes:" + pessoaJuridica.toString());
+                }
             }catch (DataIntegrityViolationException dataIntegrityViolationException) {
                 throw new EntityIntegrityViolationException(
                         "Dados de Pessoa Jurídica inconsistentes:" + pessoaJuridica.toString());
@@ -38,7 +47,11 @@ public class PessoaJuridicaService {
     public PessoaJuridica buscarPessoaJuridicaPorId(int idPessoaJuridica) {
         try{
             PessoaJuridica pessoa = pessoaJuridicaRepository.buscarPessoaJuridicaPorId(idPessoaJuridica);
-            pessoa.setEndereco(enderecoService.buscarEnderecoPorCodPessoa(pessoa.getCodPessoa()));
+            try{
+                pessoa.setEndereco(enderecoService.buscarEnderecoPorCodPessoa(pessoa.getCodPessoa()));
+            }catch (EmptyResultDataAccessException e ){
+                // se a pessoa não tiver endereço cadastrado, retorna os dados somente da pessoa
+            }
             return pessoa;
         }catch (EmptyResultDataAccessException e ){
             throw  new EntityNotFoundException(
@@ -65,10 +78,12 @@ public class PessoaJuridicaService {
         }
     }
 
+    @Transactional
     public void atualizarPessoaJuridica(PessoaJuridica pessoaJuridica) {
         pessoaJuridicaRepository.atualizarPessoaJuridica(pessoaJuridica);
     }
 
+    @Transactional
     public void deletarPessoaJuridica(int idPessoaJuridica) {
         try {
             pessoaJuridicaRepository.deletarPessoaJuridica(idPessoaJuridica);

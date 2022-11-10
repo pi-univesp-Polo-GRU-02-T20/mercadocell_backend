@@ -39,18 +39,17 @@ public class PessoaFisicaRepository {
     private static final String COLUNA_FLG_CONSENTIMENTO_DADOS = "FLG_CONSENTIMENTO_DADOS";
 
     @Transactional
-    public void cadastrarPessoaFisica(PessoaFisica  pessoaFisica) {
+    public int cadastrarPessoaFisica(PessoaFisica  pessoaFisica) {
         final String INSERT_PESSOA_FISICA = "INSERT INTO PESSOA (NME_PESSOA, FLG_CONSENTIMENTO_DADOS) VALUES (?, ?); ";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 PreparedStatement statement = con.prepareStatement(INSERT_PESSOA_FISICA,
-                        new String[]{   COLUNA_COD_PESSOA,
-                                        COLUNA_FLG_CONSENTIMENTO_DADOS
+                        new String[]{   COLUNA_COD_PESSOA
                                     });
                 statement.setString(1, pessoaFisica.getNomePessoa());
-                statement.setBoolean(1, pessoaFisica.getFlgConsentimentoDados());
+                statement.setBoolean(2, pessoaFisica.getFlgConsentimentoDados());
                 return statement;
             }
         }, keyHolder);
@@ -63,6 +62,7 @@ public class PessoaFisicaRepository {
                         pessoaFisica.getDataNascimento().toString(),
                         pessoaFisica.getTipoSexo()
         );
+       return keyHolder.getKey().intValue();
     }
 
     public PessoaFisica buscarPessoaFisicaPorId(int idPessoaFisica) {
