@@ -62,6 +62,7 @@ public class AuthController {
                     jwt
             ));
         } catch (EntityNotFoundException | BadCredentialsException e) {
+
             StandardError err = new StandardError();
             err.setTimestamp(Instant.now());
             err.setStatus(HttpStatus.UNAUTHORIZED.value());

@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-
 public class ControllerExceptionHandler {
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<StandardError> entityNotFound(EntityNotFoundException e, HttpServletRequest request){
         StandardError err = new StandardError();
@@ -34,6 +34,7 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EntityIntegrityViolationException.class)
     public ResponseEntity<StandardError> entityIntegrityViolation(EntityIntegrityViolationException e, HttpServletRequest request){
         StandardError err = new StandardError();
@@ -57,6 +58,7 @@ public class ControllerExceptionHandler {
         return errors;
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(FileHandleException.class)
     public ResponseEntity<StandardError> fileHandleException(FileHandleException e, HttpServletRequest request){
         StandardError err = new StandardError();
@@ -68,6 +70,7 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MultipartException.class)
     public ResponseEntity<StandardError> fileRequestException(MultipartException e, HttpServletRequest request){
         StandardError err = new StandardError();
@@ -79,17 +82,19 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<StandardError> expiredTokenException(TokenExpiredException e, HttpServletRequest request){
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
-        err.setStatus(HttpStatus.BAD_REQUEST.value());
+        err.setStatus(HttpStatus.UNAUTHORIZED.value());
         err.setError("Token expirado!");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(err);
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(SenhaInvalidaException.class)
     public ResponseEntity<StandardError> senhaInvalidaException(SenhaInvalidaException e, HttpServletRequest request){
         StandardError err = new StandardError();
@@ -98,6 +103,6 @@ public class ControllerExceptionHandler {
         err.setError(HttpStatus.UNAUTHORIZED.toString());
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(err);
     }
 }
