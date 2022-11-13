@@ -40,7 +40,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
-    private static final List<String> allowedPaths = List.of("swagger", "api/docs", "api-docs", "/auth/");
+    private static final List<String> allowedPaths = List.of("swagger", "api/docs", "api-docs", "/auth/login");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
