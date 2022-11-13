@@ -14,9 +14,12 @@ public class UsuarioRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
     public static final String MASCARA_SENHA = "*******";
-    private static final String SELECT_USUARIO =
-            "SELECT U.COD_USUARIO, U.DSC_LOGIN, U.FLG_ATIVO, P.COD_PESSOA, P.NME_PESSOA,U.DSC_COMPLEMENTO_SENHA " +
+    private static final String SELECT_USUARIO_PESSOA =
+            "SELECT U.COD_USUARIO, U.DSC_LOGIN, U.DSC_COMPLEMENTO_SENHA, U.DSC_SENHA, U.FLG_ATIVO, P.COD_PESSOA, P.NME_PESSOA " +
             "FROM USUARIO U LEFT JOIN PESSOA P ON U.COD_PESSOA  = P.COD_PESSOA";
+    private static final String SELECT_USUARIO = "SELECT U.COD_USUARIO, U.DSC_LOGIN, U.DSC_SENHA, U.FLG_ATIVO, U.COD_PESSOA," +
+            " U.DSC_COMPLEMENTO_SENHA " +
+            "FROM USUARIO U ";
     private static final String COLUNA_COD_USUARIO = "COD_USUARIO";
     private static final String COLUNA_DSC_LOGIN = "DSC_LOGIN";
     private static final String COLUNA_FLG_ATIVO = "FLG_ATIVO";
@@ -24,6 +27,9 @@ public class UsuarioRepository {
     private static final String COLUNA_NME_PESSOA = "NME_PESSOA";
     private static final String COLUNA_DSC_SENHA = "DSC_SENHA";
     private static final String COLUNA_DSC_COMPLEMENTO_SENHA = "DSC_COMPLEMENTO_SENHA";
+    private static final String FILTRO_LOGIN = " WHERE U.DSC_LOGIN = ?";
+    private static final String FILTRO_COD_USUARIO = " WHERE U.COD_USUARIO = ?";
+
 
     public void cadastrarUsuario(Usuario usuario)
             throws DataIntegrityViolationException {
@@ -41,7 +47,7 @@ public class UsuarioRepository {
 
     public Usuario buscarUsuarioPorId(int idUsuario) {
             return jdbcTemplate.queryForObject(
-                    SELECT_USUARIO + " WHERE COD_USUARIO = ?;"
+                    SELECT_USUARIO_PESSOA + FILTRO_COD_USUARIO
                     , (rs, rowNum) ->
                             new Usuario(
                                             rs.getInt(COLUNA_COD_PESSOA),
@@ -56,8 +62,7 @@ public class UsuarioRepository {
     }
     public Usuario buscarUsuarioPorLogin(String loginUsuario) {
             return jdbcTemplate.queryForObject(
-                    "SELECT COD_USUARIO, DSC_LOGIN, DSC_SENHA, FLG_ATIVO, COD_PESSOA, DSC_COMPLEMENTO_SENHA " +
-                            " FROM USUARIO WHERE DSC_LOGIN = ?"
+                    SELECT_USUARIO + FILTRO_LOGIN
                     , (resultSet, rowNum) ->
                             new Usuario(
                                     resultSet.getInt(COLUNA_COD_USUARIO),
@@ -72,7 +77,7 @@ public class UsuarioRepository {
     }
 
     public List<Usuario> listarUsuarios() {
-        return jdbcTemplate.query(SELECT_USUARIO
+        return jdbcTemplate.query(SELECT_USUARIO_PESSOA
                 , (resultSet, rowNum) ->
                         new Usuario(
                                 resultSet.getInt(COLUNA_COD_USUARIO),

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Usuario extends Pessoa{
+public class Usuario {//extends Pessoa{
 
     private Integer codUsuario;
     private String login;
@@ -14,6 +14,7 @@ public class Usuario extends Pessoa{
     private String senha;
     private Boolean ativo;
     private String complementoSenha;
+    private Integer codPessoa;
 
     public Usuario(String login, String senha) {
         this.login = login;
@@ -21,13 +22,15 @@ public class Usuario extends Pessoa{
     }
 
     public Usuario(Integer codUsuario, String login) {
-        super.setCodPessoa(codUsuario);
+        //super.setCodPessoa(codUsuario);
+        this.codUsuario = codUsuario;
         this.login = login;
     }
 
     public Usuario(Integer codUsuario,  String nomePessoa,
                    String login, String senha, Boolean ativo, Integer codPessoa) {
-        super(codPessoa, nomePessoa);
+        //super(codPessoa, nomePessoa);
+        this.codPessoa = codPessoa;
         this.codUsuario = codUsuario;
         this.login = login;
         this.senha = senha;
@@ -36,7 +39,7 @@ public class Usuario extends Pessoa{
 
     public Usuario(Integer codUsuario, String login, String senha, Boolean ativo,
                     Integer codPessoa, String complementoSenha) {
-        super(codPessoa);
+        //super(codPessoa);
         this.codUsuario = codUsuario;
         this.login = login;
         this.senha = senha;
@@ -49,9 +52,12 @@ public class Usuario extends Pessoa{
         this.senha = senha;
         this.ativo = ativo;
     }
+    /*
     @Override
     public String toString() {
         return "Usuario(codUsuario=" + this.getCodUsuario() + ", login=" +   this.getLogin() +
                 ", ativo=" + this.getAtivo() + ", codPessoa="+ super.getCodPessoa() + ")";
     }
+    */
+
 }
