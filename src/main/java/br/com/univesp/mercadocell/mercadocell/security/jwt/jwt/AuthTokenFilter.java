@@ -1,11 +1,13 @@
 package br.com.univesp.mercadocell.mercadocell.security.jwt.jwt;
 
+import br.com.univesp.mercadocell.mercadocell.controller.exception.StandardError;
 import br.com.univesp.mercadocell.mercadocell.security.jwt.AuthenticationFailedException;
 import br.com.univesp.mercadocell.mercadocell.security.jwt.service.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
 
 
@@ -61,8 +64,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
                 filterChain.doFilter(request, response);
-            } catch (Exception e) {
-                resolver.resolveException(request, response, null, new AuthenticationFailedException("Bad JWT"));
+
+            }
+            catch (Exception e) {
+                resolver.resolveException(request, response, e.getMessage(), new AuthenticationFailedException("BAD JWT"));
             }
         }
     }
@@ -73,7 +78,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7, headerAuth.length());
         }
-
         throw new AuthenticationFailedException("Header Authorization not found");
     }
 
