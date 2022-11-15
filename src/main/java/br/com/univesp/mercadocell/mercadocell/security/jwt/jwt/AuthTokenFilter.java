@@ -1,13 +1,12 @@
 package br.com.univesp.mercadocell.mercadocell.security.jwt.jwt;
 
-import br.com.univesp.mercadocell.mercadocell.controller.exception.StandardError;
 import br.com.univesp.mercadocell.mercadocell.security.jwt.AuthenticationFailedException;
 import br.com.univesp.mercadocell.mercadocell.security.jwt.service.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +21,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.List;
 
 
@@ -45,7 +43,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (!isProtectedPath(request))
+        if (!isProtectedPath(request) || isOptionsRequest(request))
             filterChain.doFilter(request, response);
         else {
             try {
@@ -65,8 +63,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 }
                 filterChain.doFilter(request, response);
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 resolver.resolveException(request, response, e.getMessage(), new AuthenticationFailedException("BAD JWT"));
             }
         }
@@ -88,6 +85,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 isProtected = false;
         }
         return isProtected;
+    }
+
+    private boolean isOptionsRequest(HttpServletRequest request) {
+        return request.getMethod().equalsIgnoreCase(HttpMethod.OPTIONS.toString());
     }
 
 
