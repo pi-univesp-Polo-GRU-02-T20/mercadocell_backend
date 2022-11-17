@@ -11,6 +11,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,10 +25,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         // securedEnabled = true,
         // jsr250Enabled = true,
         prePostEnabled = true)
-public class WebSecurityConfig  {// extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig   {//extends WebSecurityConfigurerAdapter {
 
 
-    private static final String[] AUTH_WHITELIST = {
+    public static final String[] AUTH_WHITELIST = {
             // -- Swagger UI v2
             "/v2/api-docs",
             "/swagger-resources",
@@ -38,8 +40,9 @@ public class WebSecurityConfig  {// extends WebSecurityConfigurerAdapter {
             // -- Swagger UI v3 (OpenAPI)
             "/v3/api-docs/**",
             "/swagger-ui/**",
+            // Rotas abertas
             "/catalogo-produto/**",
-            "/imagem/"
+            "/imagem/**"
             // other public endpoints of your API may be appended to this array
     };
 
@@ -113,13 +116,17 @@ public class WebSecurityConfig  {// extends WebSecurityConfigurerAdapter {
 * */
 
 
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/authFailure");
+    }
 
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                .antMatchers(AUTH_WHITELIST).permitAll()
+                .authorizeRequests()
+                    .antMatchers(AUTH_WHITELIST).permitAll()
+                    .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());
