@@ -25,8 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         // securedEnabled = true,
         // jsr250Enabled = true,
         prePostEnabled = true)
-public class WebSecurityConfig   {//extends WebSecurityConfigurerAdapter {
-
+public class WebSecurityConfig   extends WebSecurityConfigurerAdapter {
 
     private static final String[] AUTH_WHITELIST = {
             // -- Swagger UI v2
@@ -126,7 +125,7 @@ public class WebSecurityConfig   {//extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                     .antMatchers(AUTH_WHITELIST).permitAll()
-                    .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                    .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());
