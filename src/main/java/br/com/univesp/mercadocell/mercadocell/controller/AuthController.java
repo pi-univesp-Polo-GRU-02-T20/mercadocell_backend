@@ -10,6 +10,7 @@ import br.com.univesp.mercadocell.mercadocell.service.UsuarioService;
 import br.com.univesp.mercadocell.mercadocell.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -78,7 +79,7 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponseDTO("Usuário cadastrado com sucesso!"));
     }
 
-    @PutMapping("/alterarSenha")
+    @PutMapping(value = "/alterarSenha", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> atualizarSenha( @RequestBody UsuarioSenhaTrocaDTO usuarioSenhaTrocaDTO) {
         usuarioService.atualizarSenha(usuarioSenhaTrocaDTO);
         return ResponseEntity.ok(new MessageResponseDTO("Senha alterada com sucesso!"));
