@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
