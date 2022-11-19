@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("pessoaJuridica")
 public class PessoaJuridicaController {
 

@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("unidadeMedida")
 public class UnidadeMedidaController {
 

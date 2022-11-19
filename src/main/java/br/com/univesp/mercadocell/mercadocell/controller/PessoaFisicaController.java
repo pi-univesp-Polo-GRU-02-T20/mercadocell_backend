@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("pessoaFisica")
 public class PessoaFisicaController {
 

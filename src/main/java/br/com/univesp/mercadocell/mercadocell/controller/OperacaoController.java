@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("operacao")
 public class OperacaoController {
 

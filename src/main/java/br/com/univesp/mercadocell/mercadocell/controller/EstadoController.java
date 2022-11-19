@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController // Anotação de Serviços Rest
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/estado") //Define a url que quando for requisitada chamará o método a seguir
 public class EstadoController {
 
