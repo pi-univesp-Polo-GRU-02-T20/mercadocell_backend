@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RestController
+// @RestController // DESABILITADO TEMPORARIAMENTE
 @RequestMapping("/auth")
 public class AuthController {
 

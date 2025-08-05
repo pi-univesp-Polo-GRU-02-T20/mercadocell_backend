@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-@Component
+// @Component // DESABILITADO TEMPORARIAMENTE
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
